@@ -8,6 +8,7 @@ import { ButtonModule } from 'primeng/button';
 import { BlockUIModule } from 'primeng/blockui';
 import { ToastModule } from 'primeng/toast';
 import { ProgressBarModule } from 'primeng/progressbar';
+import { MenubarModule } from 'primeng/menubar';
 
 
 import { AppRoutingModule } from './app-routing.module';
@@ -16,12 +17,16 @@ import { LoginComponent } from './Pages/login/login.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { HomeComponent } from './Pages/home/home.component';
+import { MenuComponent } from './Pages/menu/menu.component';
+import { UsuarioComponent } from './Pages/Cadastros/usuario/usuario.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    HomeComponent
+    HomeComponent,
+    MenuComponent,
+    UsuarioComponent
   ],
   imports: [
     BrowserModule,
@@ -36,6 +41,7 @@ import { HomeComponent } from './Pages/home/home.component';
     BlockUIModule,
     ToastModule,
     ProgressBarModule,
+    MenubarModule,
 
   ],
   providers: [],

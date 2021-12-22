@@ -36,8 +36,9 @@ export class LoginComponent implements OnInit {
     this.boolLoading = true;
     this.http.Login(this.objLogin).subscribe((response: UsuarioModel) => {
       if (response) {
-        // console.log(response);
         sessionStorage.setItem('usr', JSON.stringify(response));
+        sessionStorage.setItem('tkn', response.tokenAcesso);
+        this.http.RefreshToken();
         this.router.navigate(['/home']);
       }
       this.boolLoading = false;
@@ -47,6 +48,8 @@ export class LoginComponent implements OnInit {
       this.boolLoading = false;
       if(error.error ==='Erro: Usuário ou senha inválidos.') {
         this.messageService.add({severity:'error', summary:'Erro: ', detail: 'Usuário ou senha inválidos!'});
+      } else if(error.error ==='Parâmetros inválidos.') {
+        this.messageService.add({severity:'warn', summary:'Atenção: ', detail: 'Parâmetros inválidos!'});
       } else {
         this.messageService.add({severity:'error', summary:'Erro: ', detail: error.message});
       }

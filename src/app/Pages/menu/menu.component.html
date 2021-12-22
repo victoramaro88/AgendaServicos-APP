@@ -1,0 +1,9 @@
+<p-menubar [model]="items">
+  <!-- <ng-template pTemplate="start">
+    <button pButton pRipple type="button" icon="pi pi-home" class="p-button-rounded p-button-primary p-button-text"></button>
+  </ng-template> -->
+  <ng-template pTemplate="end">
+    <button (click)="Logout();" pButton pRipple type="button" icon="pi pi-power-off" class="p-button-rounded p-button-danger p-button-text"></button>
+    <!-- <button pButton pRipple type="button" icon="pi pi-power-off" class="p-button-rounded p-button-danger"></button> -->
+  </ng-template>
+</p-menubar>

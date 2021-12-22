@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { environment } from "src/environments/environment";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Observable } from "rxjs";
+import { Observable, Subject } from "rxjs";
 import { LoginModel } from "../Models/Login.Model";
 
 @Injectable({
@@ -9,6 +9,10 @@ import { LoginModel } from "../Models/Login.Model";
 })
 
 export class HttpService {
+
+  logado: boolean = false;
+  public link = new Subject<string>();
+
   constructor(private http: HttpClient) { }
 
   CarregaHeader() {
@@ -16,23 +20,25 @@ export class HttpService {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
         'Accept':  'application/json',
-        'Authorization': 'Bearer ' + sessionStorage.getItem('tknAcs')
+        'Authorization': 'Bearer ' + sessionStorage.getItem('tkn')
       })
     };
     return headerAcesso;
   }
 
-  // ->TOKEN DE ACESSO DO WSO DivTIC:
+  //-> Renovando o token
   idIntervaloTempo = 0;
   public RefreshToken() {
+    // console.log(sessionStorage.getItem('tkn'));
     this.idIntervaloTempo = window.setInterval(() => {
-        this.RenovaToken('"' + sessionStorage.getItem('tknAcs') + '"').subscribe((token: any) => {
-        sessionStorage.setItem('tknAcs', token.token);
+      this.RenovaToken().subscribe((token: any) => {
+        // console.log(token);
+        sessionStorage.setItem('tkn', token.token);
         // console.log('Token Renovado!');
         // console.log('Hora: ' + new Date().getHours() + ':' + new Date().getMinutes() + ':' + new Date().getSeconds());
-        // console.log('Token WSO DivTIC: ' + this.tokenAcesso);
+        // console.log('Token Renovado: ' + sessionStorage.getItem('tkn'));
       }, error => {
-        // console.log(error);
+        console.log(error);
         if(error.status === 0) {
           console.log('Tentando nova renovação do token...');
           this.RefreshToken();
@@ -46,8 +52,8 @@ export class HttpService {
     window.clearInterval(this.idIntervaloTempo);
   }
 
-  public RenovaToken(parametros: string) {
-    return this.http.post<any>(environment.urlAPI, parametros, this.CarregaHeader());
+  public RenovaToken() {
+    return this.http.get<any>(`${environment.urlAPI}/Agenda/RenovaToken`, this.CarregaHeader());
   }
 
   public Login(objLogin: LoginModel): Observable<any> {
