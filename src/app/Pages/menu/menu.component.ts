@@ -34,8 +34,12 @@ export class MenuComponent implements OnInit {
             routerLink: '/checkList'
           },
           {
-            label: 'Última Atualização',
-            routerLink: '/ultimaAtualizacao'
+            label: 'Máquinas',
+            routerLink: '/maquina'
+          },
+          {
+            label: 'Veículos',
+            routerLink: '/veiculo'
           }
         ]
       }

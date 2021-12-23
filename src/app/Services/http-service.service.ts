@@ -59,4 +59,12 @@ export class HttpService {
   public Login(objLogin: LoginModel): Observable<any> {
     return this.http.post(`${environment.urlAPI}/Agenda/Login`, objLogin);
   }
+
+  public ListaVeiculo(veicCod: number) {
+    return this.http.get<any>(`${environment.urlAPI}/Agenda/ListaVeiculo/${veicCod}`, this.CarregaHeader());
+  }
+
+  public ListaTipoVeiculo(tipVeicCod: number) {
+    return this.http.get<any>(`${environment.urlAPI}/Agenda/ListaTipoVeiculo/${tipVeicCod}`, this.CarregaHeader());
+  }
 }
