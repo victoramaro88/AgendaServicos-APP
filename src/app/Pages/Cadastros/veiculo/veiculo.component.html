@@ -9,7 +9,7 @@
 
 <h1>Veículos</h1>
 
-<div>
+<div *ngIf="listaVeiculo.length > 0">
   <p-table #dt1
   [value]="listaVeiculo"
   styleClass="p-datatable-striped p-datatable-sm"
@@ -45,8 +45,8 @@
         </td>
         <td><span class="p-column-title"><b>Ações</b></span>
           <button pTooltip="Editar" tooltipPosition="top" pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-info p-button-text"></button>
-          <button *ngIf="item.veicStatus" pTooltip="Desativar" tooltipPosition="top" pButton pRipple type="button" icon="pi pi-lock" class="p-button-rounded p-button-success p-button-text"></button>
-          <button *ngIf="!item.veicStatus" pTooltip="Ativar" tooltipPosition="top" pButton pRipple type="button" icon="pi pi-lock-open" class="p-button-rounded p-button-danger p-button-text"></button>
+          <button (click)="AlteraStatusVeiculo(item); item.veicStatus = !item.veicStatus;" *ngIf="item.veicStatus" pTooltip="Desativar" tooltipPosition="top" pButton pRipple type="button" icon="pi pi-lock" class="p-button-rounded p-button-success p-button-text"></button>
+          <button (click)="AlteraStatusVeiculo(item); item.veicStatus = !item.veicStatus;" *ngIf="!item.veicStatus" pTooltip="Ativar" tooltipPosition="top" pButton pRipple type="button" icon="pi pi-lock-open" class="p-button-rounded p-button-danger p-button-text"></button>
         </td>
       </tr>
     </ng-template>

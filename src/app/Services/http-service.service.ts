@@ -3,6 +3,9 @@ import { environment } from "src/environments/environment";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable, Subject } from "rxjs";
 import { LoginModel } from "../Models/Login.Model";
+import { UsuarioModel } from "../Models/Usuario.Model";
+import { VeiculoModel } from "../Models/Veiculo.model";
+import { TipoVeiculoModel } from "../Models/TipoVeiculo.model";
 
 @Injectable({
   providedIn: 'root'
@@ -56,15 +59,19 @@ export class HttpService {
     return this.http.get<any>(`${environment.urlAPI}/Agenda/RenovaToken`, this.CarregaHeader());
   }
 
-  public Login(objLogin: LoginModel): Observable<any> {
-    return this.http.post(`${environment.urlAPI}/Agenda/Login`, objLogin);
+  public Login(objLogin: LoginModel): Observable<UsuarioModel> {
+    return this.http.post<UsuarioModel>(`${environment.urlAPI}/Agenda/Login`, objLogin);
   }
 
-  public ListaVeiculo(veicCod: number) {
-    return this.http.get<any>(`${environment.urlAPI}/Agenda/ListaVeiculo/${veicCod}`, this.CarregaHeader());
+  public ListaVeiculo(veicCod: number): Observable<VeiculoModel[]> {
+    return this.http.get<VeiculoModel[]>(`${environment.urlAPI}/Agenda/ListaVeiculo/${veicCod}`, this.CarregaHeader());
   }
 
-  public ListaTipoVeiculo(tipVeicCod: number) {
-    return this.http.get<any>(`${environment.urlAPI}/Agenda/ListaTipoVeiculo/${tipVeicCod}`, this.CarregaHeader());
+  public ListaTipoVeiculo(tipVeicCod: number): Observable<TipoVeiculoModel[]> {
+    return this.http.get<TipoVeiculoModel[]>(`${environment.urlAPI}/Agenda/ListaTipoVeiculo/${tipVeicCod}`, this.CarregaHeader());
+  }
+
+  public AlteraStatusVeiculo(veicCod: number, veicStatus: boolean): Observable<string> {
+    return this.http.get<string>(`${environment.urlAPI}/Agenda/AlteraStatusVeiculo/${veicCod}/${veicStatus}`, this.CarregaHeader());
   }
 }

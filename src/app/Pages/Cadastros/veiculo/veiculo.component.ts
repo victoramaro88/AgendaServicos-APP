@@ -77,4 +77,25 @@ export class VeiculoComponent implements OnInit {
     let tipoVeiculo = this.listaTipoVeiculo.find(v => v.tipVeicCod === tipVeicCod);
     return tipoVeiculo?.tipVeicDesc;
   }
+
+  AlteraStatusVeiculo(ojbVeiculo: VeiculoModel) {
+    this.boolLoading = true;
+    this.http.AlteraStatusVeiculo(ojbVeiculo.veicCod, ojbVeiculo.veicStatus).subscribe((response: string) => {
+      if (response) {
+        this.messageService.add({severity:'success', summary:'Sucesso! ', detail: 'Veículo '+ (ojbVeiculo.veicStatus ? 'inativado' : 'ativado') + ' com sucesso!'});
+      }
+      this.boolLoading = false;
+    }, error => {
+      this.msgs = [];
+      console.log(error);
+      this.boolLoading = false;
+      if (error.status === 400) {
+        this.messageService.add({severity:'error', summary:'Erro: ', detail: 'Falha ao comunicar com o servidor.'});
+      } else if(error.error ==='Parâmetros inválidos.') {
+        this.messageService.add({severity:'warn', summary:'Atenção: ', detail: 'Parâmetros inválidos!'});
+      } else {
+        this.messageService.add({severity:'error', summary:'Erro: ', detail: error.message});
+      }
+    });
+  }
 }
