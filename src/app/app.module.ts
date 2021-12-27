@@ -4,6 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ButtonModule } from 'primeng/button';
 import { BlockUIModule } from 'primeng/blockui';
 import { ToastModule } from 'primeng/toast';
@@ -12,7 +13,10 @@ import { MenubarModule } from 'primeng/menubar';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
+import { SelectButtonModule } from 'primeng/selectbutton';
+import { DropdownModule } from 'primeng/dropdown';
 
+import { NgxMaskModule, IConfig } from 'ngx-mask'
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -24,6 +28,8 @@ import { MenuComponent } from './Pages/menu/menu.component';
 import { UsuarioComponent } from './Pages/Cadastros/usuario/usuario.component';
 import { MaquinaComponent } from './Pages/Cadastros/maquina/maquina.component';
 import { VeiculoComponent } from './Pages/Cadastros/veiculo/veiculo.component';
+
+export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
 
 @NgModule({
   declarations: [
@@ -42,6 +48,8 @@ import { VeiculoComponent } from './Pages/Cadastros/veiculo/veiculo.component';
     HttpClientModule,
     FormsModule,
 
+    NgxMaskModule.forRoot(),
+
     CheckboxModule,
     InputTextModule,
     ButtonModule,
@@ -52,6 +60,9 @@ import { VeiculoComponent } from './Pages/Cadastros/veiculo/veiculo.component';
     TableModule,
     TagModule,
     TooltipModule,
+    InputTextareaModule,
+    SelectButtonModule,
+    DropdownModule,
 
   ],
   providers: [],

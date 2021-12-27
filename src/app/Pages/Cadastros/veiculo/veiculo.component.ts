@@ -16,15 +16,32 @@ export class VeiculoComponent implements OnInit {
   versaoData: string[] = [];
   boolLoading = false;
   msgs: any[] = [];
+  opcoesStatus: any[] = [];
 
   listaVeiculo: VeiculoModel[] = [];
+  objVeiculo: VeiculoModel = {
+    veicCod: 0,
+    veicMarca: '',
+    veicModelo: '',
+    veicAno: 0,
+    veicPlaca: '',
+    veicObse: '',
+    veicStatus: true,
+    tipVeicCod: 0,
+  };
   listaTipoVeiculo: TipoVeiculoModel[] = [];
+  modoEdicao: boolean = false;
 
   constructor(
     private router: Router,
     private http: HttpService,
     private messageService: MessageService
-  ) { }
+  ) {
+    this.opcoesStatus = [
+      { label: "Inativo", value: false },
+      { label: "Ativo", value: true }
+    ];
+  }
 
   ngOnInit(): void {
     this.ListaTipoVeiculo(0);
@@ -42,9 +59,14 @@ export class VeiculoComponent implements OnInit {
       this.msgs = [];
       console.log(error);
       this.boolLoading = false;
-      if(error.error ==='Erro: Usuário ou senha inválidos.') {
+      if(error.error === 'Erro: Usuário ou senha inválidos.') {
         this.messageService.add({severity:'error', summary:'Erro: ', detail: 'Usuário ou senha inválidos!'});
-      } else if(error.error ==='Parâmetros inválidos.') {
+      } else if(error.status === 401) {
+        this.messageService.add({ severity: 'error', summary: 'Atenção: ', detail: 'Sessão expirada, faça o login novamente!' });
+        setTimeout(() => {
+          this.router.navigate(['/login']);
+        }, 2000);
+      } else if(error.error === 'Parâmetros inválidos.') {
         this.messageService.add({severity:'warn', summary:'Atenção: ', detail: 'Parâmetros inválidos!'});
       } else {
         this.messageService.add({severity:'error', summary:'Erro: ', detail: error.message});
@@ -65,6 +87,11 @@ export class VeiculoComponent implements OnInit {
       this.boolLoading = false;
       if(error.error ==='Erro: Usuário ou senha inválidos.') {
         this.messageService.add({severity:'error', summary:'Erro: ', detail: 'Usuário ou senha inválidos!'});
+      } else if(error.status === 401) {
+        this.messageService.add({ severity: 'error', summary: 'Atenção: ', detail: 'Sessão expirada, faça o login novamente!' });
+        setTimeout(() => {
+          this.router.navigate(['/login']);
+        }, 2000);
       } else if(error.error ==='Parâmetros inválidos.') {
         this.messageService.add({severity:'warn', summary:'Atenção: ', detail: 'Parâmetros inválidos!'});
       } else {
@@ -82,7 +109,7 @@ export class VeiculoComponent implements OnInit {
     this.boolLoading = true;
     this.http.AlteraStatusVeiculo(ojbVeiculo.veicCod, ojbVeiculo.veicStatus).subscribe((response: string) => {
       if (response) {
-        this.messageService.add({severity:'success', summary:'Sucesso! ', detail: 'Veículo '+ (ojbVeiculo.veicStatus ? 'inativado' : 'ativado') + ' com sucesso!'});
+        this.messageService.add({severity:'success', summary:'Sucesso! ', detail: 'Veículo '+ (ojbVeiculo.veicStatus ? 'ativado' : 'inativado') + ' com sucesso!'});
       }
       this.boolLoading = false;
     }, error => {
@@ -91,11 +118,42 @@ export class VeiculoComponent implements OnInit {
       this.boolLoading = false;
       if (error.status === 400) {
         this.messageService.add({severity:'error', summary:'Erro: ', detail: 'Falha ao comunicar com o servidor.'});
+      } else if(error.status === 401) {
+        this.messageService.add({ severity: 'error', summary: 'Atenção: ', detail: 'Sessão expirada, faça o login novamente!' });
+        setTimeout(() => {
+          this.router.navigate(['/login']);
+        }, 2000);
       } else if(error.error ==='Parâmetros inválidos.') {
         this.messageService.add({severity:'warn', summary:'Atenção: ', detail: 'Parâmetros inválidos!'});
       } else {
         this.messageService.add({severity:'error', summary:'Erro: ', detail: error.message});
       }
     });
+  }
+
+  IniciaEdicaoVeiculo(objVeiculo: VeiculoModel) {
+    this.objVeiculo = objVeiculo;
+    this.modoEdicao = true;
+  }
+
+  Cancelar() {
+    this.objVeiculo = {
+      veicCod: 0,
+      veicMarca: '',
+      veicModelo: '',
+      veicAno: 0,
+      veicPlaca: '',
+      veicObse: '',
+      veicStatus: true,
+      tipVeicCod: 0,
+    };
+    this.modoEdicao = false;
+  }
+
+  Salvar() {
+
+    //-> FAZER VALIDAÇÃO DE FORM!!!
+
+    console.log(this.objVeiculo);
   }
 }

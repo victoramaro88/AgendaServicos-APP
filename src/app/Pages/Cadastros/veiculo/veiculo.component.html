@@ -9,7 +9,45 @@
 
 <h1>Veículos</h1>
 
-<div *ngIf="listaVeiculo.length > 0">
+<div *ngIf="modoEdicao" class="card">
+  <div class="formgrid grid">
+      <div class="field col-12 lg:col-2 md:col-4 sm:col-6">
+          <label for="veicMarca">Marca</label><span class="campoObrigatorio">*</span>
+          <input [(ngModel)]="objVeiculo.veicMarca" id="veicMarca" type="text" class="p-inputtext-sm inputfield w-full" pInputText>
+      </div>
+      <div class="field col-12 lg:col-2 md:col-4 sm:col-6">
+        <label for="veicModelo">Modelo</label><span class="campoObrigatorio">*</span>
+        <input [(ngModel)]="objVeiculo.veicModelo" id="veicModelo" type="text" class="p-inputtext-sm inputfield w-full" pInputText>
+      </div>
+      <div class="field col-12 lg:col-2 md:col-4 sm:col-6">
+        <label for="veicAno">Ano</label><span class="campoObrigatorio">*</span>
+        <input [(ngModel)]="objVeiculo.veicAno" id="veicAno" type="text" class="p-inputtext-sm inputfield w-full" mask="0000" pInputText>
+      </div>
+      <div class="field col-12 lg:col-2 md:col-4 sm:col-6">
+        <label for="veicPlaca">Placa</label><span class="campoObrigatorio">*</span>
+        <input [(ngModel)]="objVeiculo.veicPlaca" id="veicPlaca" type="text" class="p-inputtext-sm inputfield w-full" pInputText [dropSpecialCharacters]="true" mask="AAA-0A00">
+      </div>
+      <div class="field col-12 lg:col-2 md:col-4 sm:col-6">
+        <label for="tipVeicCod">Tipo de veículo</label><span class="campoObrigatorio">*</span><br>
+        <p-dropdown id="tipVeicCod" [options]="listaTipoVeiculo" [(ngModel)]="objVeiculo.tipVeicCod" autoWidth="false" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="tipVeicDesc" optionValue="tipVeicCod" placeholder="Selecione um tipo" [showClear]="true"></p-dropdown>
+      </div>
+      <div class="field col-12 lg:col-2 md:col-4 sm:col-6">
+        <label for="veicPlaca">Status</label><span class="campoObrigatorio">*</span>
+        <p-selectButton [options]="opcoesStatus" [(ngModel)]="objVeiculo.veicStatus" optionLabel="label" optionValue="value"></p-selectButton>
+      </div>
+      <div class="field col-12">
+          <label for="veicObse">Observações</label>
+          <textarea [(ngModel)]="objVeiculo.veicObse" id="veicObse" pInputTextarea class="p-inputtext-sm inputfield w-full"></textarea>
+      </div>
+  </div>
+  <div class="text-right">
+    <small><span class="campoObrigatorio">*</span> Campos obrigarórios.</small><br><br>
+    <button (click)="Cancelar();" pButton pRipple type="button" label="Cancelar" class="p-button-raised p-button-danger"></button> &nbsp;
+    <button (click)="Salvar();" pButton pRipple type="button" label="Salvar" class="p-button-raised p-button-success"></button>
+  </div>
+</div>
+
+<div *ngIf="!modoEdicao && listaVeiculo.length > 0">
   <p-table #dt1
   [value]="listaVeiculo"
   styleClass="p-datatable-striped p-datatable-sm"
@@ -44,7 +82,7 @@
           <p-tag severity="{{item.veicStatus ? 'success' : 'danger'}}" value="{{item.veicStatus ? 'Ativo' : 'Inativo'}}"></p-tag>
         </td>
         <td><span class="p-column-title"><b>Ações</b></span>
-          <button pTooltip="Editar" tooltipPosition="top" pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-info p-button-text"></button>
+          <button (click)="IniciaEdicaoVeiculo(item);" pTooltip="Editar" tooltipPosition="top" pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-info p-button-text"></button>
           <button (click)="AlteraStatusVeiculo(item); item.veicStatus = !item.veicStatus;" *ngIf="item.veicStatus" pTooltip="Desativar" tooltipPosition="top" pButton pRipple type="button" icon="pi pi-lock" class="p-button-rounded p-button-success p-button-text"></button>
           <button (click)="AlteraStatusVeiculo(item); item.veicStatus = !item.veicStatus;" *ngIf="!item.veicStatus" pTooltip="Ativar" tooltipPosition="top" pButton pRipple type="button" icon="pi pi-lock-open" class="p-button-rounded p-button-danger p-button-text"></button>
         </td>
@@ -57,3 +95,4 @@
     </ng-template>
   </p-table>
 </div>
+
