@@ -25,7 +25,7 @@
       </div>
       <div class="field col-12 lg:col-2 md:col-4 sm:col-6">
         <label for="veicPlaca">Placa</label><span class="campoObrigatorio">*</span>
-        <input [(ngModel)]="objVeiculo.veicPlaca" id="veicPlaca" type="text" class="p-inputtext-sm inputfield w-full" pInputText [dropSpecialCharacters]="true" mask="AAA-0A00">
+        <input style="text-transform:uppercase" [(ngModel)]="objVeiculo.veicPlaca" id="veicPlaca" type="text" class="p-inputtext-sm inputfield w-full" pInputText [dropSpecialCharacters]="true" mask="AAA-0A00">
       </div>
       <div class="field col-12 lg:col-2 md:col-4 sm:col-6">
         <label for="tipVeicCod">Tipo de veículo</label><span class="campoObrigatorio">*</span><br>
@@ -56,6 +56,10 @@
   >
   <ng-template pTemplate="caption">
     <div class="p-d-flex text-right">
+      <span class="mb-3">
+        <button (click)="NovoRegistro()" pButton pRipple pTooltip="Novo Registro" tooltipPosition="left" type="button" label="Novo" class="p-button-raised"></button>
+      </span>
+      &nbsp;
       <span class="p-input-icon-left p-ml-auto">
         <i class="pi pi-search"></i>
         <input #Filtro pInputText type="text" (input)="dt1.filterGlobal(Filtro.value, 'contains')" placeholder="Pesquisa Global" class="p-inputtext-sm"/>

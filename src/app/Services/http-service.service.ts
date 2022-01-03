@@ -6,6 +6,7 @@ import { LoginModel } from "../Models/Login.Model";
 import { UsuarioModel } from "../Models/Usuario.Model";
 import { VeiculoModel } from "../Models/Veiculo.model";
 import { TipoVeiculoModel } from "../Models/TipoVeiculo.model";
+import { DiametroFuroModel } from "../Models/DiametroFuro.Model";
 
 @Injectable({
   providedIn: 'root'
@@ -73,5 +74,13 @@ export class HttpService {
 
   public AlteraStatusVeiculo(veicCod: number, veicStatus: boolean): Observable<string> {
     return this.http.get<string>(`${environment.urlAPI}/Agenda/AlteraStatusVeiculo/${veicCod}/${veicStatus}`, this.CarregaHeader());
+  }
+
+  public ManterVeiculo(objVeiculo: VeiculoModel): Observable<string> {
+    return this.http.post<string>(`${environment.urlAPI}/Agenda/ManterVeiculo`, objVeiculo, this.CarregaHeader());
+  }
+
+  public ListaDiametroFuro(diamCod: number): Observable<DiametroFuroModel[]> {
+    return this.http.get<DiametroFuroModel[]>(`${environment.urlAPI}/Agenda/ListaDiametroFuro/${diamCod}`, this.CarregaHeader());
   }
 }

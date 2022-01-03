@@ -1,0 +1,14 @@
+<app-menu></app-menu>
+
+<div *ngIf="boolLoading" class="text-center">
+  <p-progressBar mode="indeterminate"></p-progressBar>
+  <b><p>CARREGANDO...</p></b>
+</div>
+<p-blockUI [blocked]="boolLoading"></p-blockUI>
+<p-toast  position="top-center"></p-toast>
+
+<h1>Diâmetros</h1>
+
+<div *ngIf="modoEdicao" class="card">
+
+</div>

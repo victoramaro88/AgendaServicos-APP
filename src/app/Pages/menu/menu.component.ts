@@ -34,6 +34,10 @@ export class MenuComponent implements OnInit {
             routerLink: '/checkList'
           },
           {
+            label: 'Diâmetro',
+            routerLink: '/diametro'
+          },
+          {
             label: 'Máquinas',
             routerLink: '/maquina'
           },

@@ -1,5 +1,5 @@
 import { LoginModel } from './../../Models/Login.Model';
-import { environment } from './../../../environments/environment.prod';
+import { environment } from './../../../environments/environment';
 import { Component, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
@@ -18,7 +18,8 @@ export class LoginComponent implements OnInit {
   boolLoading = false;
   msgs: any[] = [];
 
-  objLogin: LoginModel = {usuLogin:'', usuSenha: ''};
+  objLogin: LoginModel = { usuLogin: '', usuSenha: '' };
+  anoAtual: number = (new Date()).getFullYear();
 
   constructor(
     private router: Router,
