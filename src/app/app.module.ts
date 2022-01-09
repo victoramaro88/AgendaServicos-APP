@@ -41,7 +41,7 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
     UsuarioComponent,
     MaquinaComponent,
     VeiculoComponent,
-    DiametroComponent
+    DiametroComponent,
   ],
   imports: [
     BrowserModule,

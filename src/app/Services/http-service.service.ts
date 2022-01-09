@@ -7,6 +7,7 @@ import { UsuarioModel } from "../Models/Usuario.Model";
 import { VeiculoModel } from "../Models/Veiculo.model";
 import { TipoVeiculoModel } from "../Models/TipoVeiculo.model";
 import { DiametroFuroModel } from "../Models/DiametroFuro.Model";
+import { MaquinaModel } from "../Models/Maquina.Model";
 
 @Injectable({
   providedIn: 'root'
@@ -82,5 +83,9 @@ export class HttpService {
 
   public ListaDiametroFuro(diamCod: number): Observable<DiametroFuroModel[]> {
     return this.http.get<DiametroFuroModel[]>(`${environment.urlAPI}/Agenda/ListaDiametroFuro/${diamCod}`, this.CarregaHeader());
+  }
+
+  public ListaMaquina(maqCod: number): Observable<MaquinaModel[]> {
+    return this.http.get<MaquinaModel[]>(`${environment.urlAPI}/Agenda/ListaMaquina/${maqCod}`, this.CarregaHeader());
   }
 }

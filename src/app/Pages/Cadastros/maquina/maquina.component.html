@@ -1,3 +1,68 @@
 <app-menu></app-menu>
 
+<div *ngIf="boolLoading" class="text-center">
+  <p-progressBar mode="indeterminate"></p-progressBar>
+  <b><p>CARREGANDO...</p></b>
+</div>
+<p-blockUI [blocked]="boolLoading"></p-blockUI>
+<p-toast  position="top-center"></p-toast>
+
 <h1>Máquinas</h1>
+
+<!-- LISTANDO NA GRID -->
+<div *ngIf="!modoEdicao && listaMaquina.length > 0">
+  <p-table #dt1
+  [value]="listaMaquina"
+  styleClass="p-datatable-striped p-datatable-sm"
+  [paginator]="true" [rows]="10"
+  [globalFilterFields]="['maqMarca','maqModelo']"
+  >
+  <ng-template pTemplate="caption">
+    <div class="p-d-flex text-right">
+      <span class="mb-3">
+        <button (click)="NovoRegistro()" pButton pRipple pTooltip="Novo Registro" tooltipPosition="left" type="button" label="Novo" class="p-button-raised"></button>
+      </span>
+      &nbsp;
+      <span class="p-input-icon-left p-ml-auto">
+        <i class="pi pi-search"></i>
+        <input #Filtro pInputText type="text" (input)="dt1.filterGlobal(Filtro.value, 'contains')" placeholder="Pesquisa Global" class="p-inputtext-sm"/>
+      </span>
+    </div>
+  </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="veicMarca">Marca <p-sortIcon field="veicMarca"></p-sortIcon></th>
+        <th pSortableColumn="veicModelo">Modelo <p-sortIcon field="veicModelo"></p-sortIcon></th>
+        <th pSortableColumn="veicModelo">Veículo <p-sortIcon field="veicModelo"></p-sortIcon></th>
+        <th pSortableColumn="veicStatus">Status <p-sortIcon field="veicStatus"></p-sortIcon></th>
+        <th>Ações</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-item>
+      <tr>
+        <td><span class="p-column-title"><b>Marca</b></span>{{item.maqMarca}}</td>
+        <td><span class="p-column-title"><b>Modelo</b></span>{{item.maqModelo}}</td>
+        <td><span class="p-column-title"><b>Modelo</b></span>VEÍCULO AQUI</td>
+        <td><span class="p-column-title"><b>Veículo</b></span>
+          {{SelecionaVeiculo(item.veiccodi)}}
+        </td>
+        <td><span class="p-column-title"><b>Status</b></span>
+          <p-tag severity="{{item.maqStatus ? 'success' : 'danger'}}" value="{{item.maqStatus ? 'Ativo' : 'Inativo'}}"></p-tag>
+        </td>
+        <td>
+          <span class="p-column-title"><b>Ações</b></span>
+          <div>
+            <button (click)="IniciaEdicao(item);" pTooltip="Editar" tooltipPosition="top" pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-info p-button-text"></button>
+            <button (click)="AlteraStatus(item); item.maqStatus = !item.maqStatus;" *ngIf="item.maqStatus" pTooltip="Desativar" tooltipPosition="top" pButton pRipple type="button" icon="pi pi-lock" class="p-button-rounded p-button-success p-button-text"></button>
+            <button (click)="AlteraStatus(item); item.maqStatus = !item.maqStatus;" *ngIf="!item.maqStatus" pTooltip="Ativar" tooltipPosition="top" pButton pRipple type="button" icon="pi pi-lock-open" class="p-button-rounded p-button-danger p-button-text"></button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td style="text-align: center;" colspan="6">Sem informações.</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
