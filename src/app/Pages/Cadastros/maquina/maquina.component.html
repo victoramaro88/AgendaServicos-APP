@@ -42,10 +42,7 @@
       <tr>
         <td><span class="p-column-title"><b>Marca</b></span>{{item.maqMarca}}</td>
         <td><span class="p-column-title"><b>Modelo</b></span>{{item.maqModelo}}</td>
-        <td><span class="p-column-title"><b>Modelo</b></span>VEÍCULO AQUI</td>
-        <td><span class="p-column-title"><b>Veículo</b></span>
-          {{SelecionaVeiculo(item.veiccodi)}}
-        </td>
+        <td><span class="p-column-title"><b>Modelo</b></span>{{SelecionaVeiculo(item.veicCod)}}</td>
         <td><span class="p-column-title"><b>Status</b></span>
           <p-tag severity="{{item.maqStatus ? 'success' : 'danger'}}" value="{{item.maqStatus ? 'Ativo' : 'Inativo'}}"></p-tag>
         </td>

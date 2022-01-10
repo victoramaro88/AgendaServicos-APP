@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { DiametroFuroModel } from 'src/app/Models/DiametroFuro.Model';
 import { HttpService } from 'src/app/Services/http-service.service';
+import { MsgErroHttp } from 'src/app/Services/msgErroHttp.Service';
 
 @Component({
   selector: 'app-diametro',
@@ -23,7 +24,8 @@ export class DiametroComponent implements OnInit {
   constructor(
     private router: Router,
     private http: HttpService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private errosHttp: MsgErroHttp
   ) {
     this.opcoesStatus = [
       { label: "Inativo", value: false },
@@ -48,16 +50,7 @@ export class DiametroComponent implements OnInit {
       this.msgs = [];
       console.log(error);
       this.boolLoading = false;
-      if(error.status === 401) {
-        this.messageService.add({ severity: 'error', summary: 'Atenção: ', detail: 'Sessão expirada, faça o login novamente!' });
-        setTimeout(() => {
-          this.router.navigate(['/login']);
-        }, 2000);
-      } else if(error.error ==='Parâmetros inválidos.') {
-        this.messageService.add({severity:'warn', summary:'Atenção: ', detail: 'Parâmetros inválidos!'});
-      } else {
-        this.messageService.add({severity:'error', summary:'Erro: ', detail: error.message});
-      }
+      this.messageService.add({severity:'error', summary:'Erro: ', detail: this.errosHttp.RetornaMensagemErro(error)});
     });
   }
 

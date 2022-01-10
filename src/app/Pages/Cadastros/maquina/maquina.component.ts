@@ -108,7 +108,7 @@ export class MaquinaComponent implements OnInit {
 
   SelecionaVeiculo(veicCod: number) {
     let veiculo = this.listaVeiculo.find(v => v.veicCod === veicCod); //-> PAREI AQUI!!!!
-    return veiculo ? veiculo.veicMarca + veiculo.veicModelo + veiculo.veicPlaca : '';
+    return veiculo ? veiculo.veicMarca + ' - ' + veiculo.veicModelo + ' / ' + veiculo.veicPlaca.substring(0,3) + '-' + veiculo.veicPlaca.substring(3) : '';
   }
 
   IniciaEdicao(objMaquina: MaquinaModel) {
