@@ -31,9 +31,9 @@
   </ng-template>
     <ng-template pTemplate="header">
       <tr>
-        <th pSortableColumn="veicMarca">Marca <p-sortIcon field="veicMarca"></p-sortIcon></th>
-        <th pSortableColumn="veicModelo">Modelo <p-sortIcon field="veicModelo"></p-sortIcon></th>
-        <th pSortableColumn="veicModelo">Veículo <p-sortIcon field="veicModelo"></p-sortIcon></th>
+        <th pSortableColumn="maqMarca">Marca <p-sortIcon field="maqMarca"></p-sortIcon></th>
+        <th pSortableColumn="maqModelo">Modelo <p-sortIcon field="maqModelo"></p-sortIcon></th>
+        <th>Veículo</th>
         <th pSortableColumn="veicStatus">Status <p-sortIcon field="veicStatus"></p-sortIcon></th>
         <th>Ações</th>
       </tr>
@@ -62,4 +62,39 @@
       </tr>
     </ng-template>
   </p-table>
+</div>
+
+<!-- MODO INCLUSÃO/ALTERAÇÃO -->
+<div *ngIf="modoEdicao" class="card">
+  <div class="formgrid grid">
+      <div class="field col-12 lg:col-2 md:col-4 sm:col-6">
+          <label for="maqMarca">Marca</label><span class="campoObrigatorio">*</span>
+          <input [(ngModel)]="objMaquina.maqMarca" id="maqMarca" type="text" class="p-inputtext-sm inputfield w-full" pInputText>
+      </div>
+      <div class="field col-12 lg:col-2 md:col-4 sm:col-6">
+        <label for="maqModelo">Modelo</label><span class="campoObrigatorio">*</span>
+        <input [(ngModel)]="objMaquina.maqModelo" id="maqModelo" type="text" class="p-inputtext-sm inputfield w-full" pInputText>
+      </div>
+      <div class="field col-12 lg:col-3 md:col-4 sm:col-6">
+        <label for="diamCod">Diâmetro</label><span class="campoObrigatorio">*</span><br>
+        <p-dropdown id="diamCod" [options]="listaDiametroFuro" [(ngModel)]="objMaquina.diamCod" autoWidth="false" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="diamDesc" optionValue="diamCod" placeholder="Selecione um diâmetro" [showClear]="true"></p-dropdown>
+      </div>
+      <div class="field col-12 lg:col-3 md:col-4 sm:col-6">
+        <label for="veicCod">Veículo</label><span class="campoObrigatorio">*</span><br>
+        <p-dropdown id="veicCod" [options]="listaVeiculo" [(ngModel)]="objMaquina.veicCod" autoWidth="false" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="veicMarca" optionValue="veicCod" placeholder="Selecione um veículo" [showClear]="true"></p-dropdown>
+      </div>
+      <div class="field col-12 lg:col-2 md:col-4 sm:col-6">
+        <label for="maqStatus">Status</label><span class="campoObrigatorio">*</span>
+        <p-selectButton [options]="opcoesStatus" [(ngModel)]="objMaquina.maqStatus" optionLabel="label" optionValue="value"></p-selectButton>
+      </div>
+      <div class="field col-12">
+          <label for="maqObse">Observações</label>
+          <textarea [(ngModel)]="objMaquina.maqObse" id="maqObse" pInputTextarea class="p-inputtext-sm inputfield w-full"></textarea>
+      </div>
+  </div>
+  <div class="text-right">
+    <small><span class="campoObrigatorio">*</span> Campos obrigarórios.</small><br><br>
+    <button (click)="Cancelar();" pButton pRipple type="button" label="Cancelar" class="p-button-raised p-button-danger"></button> &nbsp;
+    <button (click)="Salvar();" pButton pRipple type="button" label="Salvar" class="p-button-raised p-button-success"></button>
+  </div>
 </div>

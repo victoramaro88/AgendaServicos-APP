@@ -38,7 +38,7 @@ export class MaquinaComponent implements OnInit {
     veicPlaca: '',
     veicObse: '',
     veicStatus: true,
-    tipVeicCod: 0,
+    tipVeicCod: 0
   };
   listaDiametroFuro: DiametroFuroModel[] = [];
   modoEdicao: boolean = false;
@@ -65,8 +65,8 @@ export class MaquinaComponent implements OnInit {
       if (response) {
         this.listaMaquina = response;
       }
-      console.log(this.listaMaquina);
       this.boolLoading = false;
+      this.ListaVeiculo(0);
     }, error => {
       this.msgs = [];
       this.boolLoading = false;
@@ -80,9 +80,8 @@ export class MaquinaComponent implements OnInit {
     this.http.ListaDiametroFuro(diamCod).subscribe((response: DiametroFuroModel[]) => {
       if (response) {
         this.listaDiametroFuro = response;
-        this.ListaVeiculo(0);
+        this.ListaMaquina(0);
       }
-      console.log(this.listaDiametroFuro);
     }, error => {
       this.msgs = [];
       this.boolLoading = false;
@@ -94,10 +93,35 @@ export class MaquinaComponent implements OnInit {
     this.boolLoading = true;
     this.http.ListaVeiculo(veicCod).subscribe((response: VeiculoModel[]) => {
       if (response) {
-        this.listaVeiculo = response;
-        this.ListaMaquina(0);
+        console.log(response);
+        for (const itemVeiculo of response) {
+          let busca = this.listaMaquina.find(m => m.veicCod === itemVeiculo.veicCod);
+          if(busca && busca.veicCod !== itemVeiculo.veicCod) {
+            console.log(busca);
+          } else {
+            console.log('noup')
+          }
+
+          let objVeiculo = {
+            veicCod: itemVeiculo.veicCod,
+            veicMarca: itemVeiculo.veicMarca + '-' + itemVeiculo.veicModelo + ' (' + itemVeiculo.veicPlaca + ')',
+            veicModelo: itemVeiculo.veicModelo,
+            veicAno: itemVeiculo.veicAno,
+            veicPlaca: itemVeiculo.veicPlaca,
+            veicObse: itemVeiculo.veicObse,
+            veicStatus: itemVeiculo.veicStatus,
+            tipVeicCod: itemVeiculo.tipVeicCod
+          }
+          this.listaVeiculo.push(objVeiculo);
+        }
+
+        for (const itemMaq of this.listaMaquina) {
+
+        }
+
+
+        // this.listaVeiculo = response;
       }
-      console.log(this.listaVeiculo);
       this.boolLoading = false;
     }, error => {
       this.msgs = [];
@@ -142,11 +166,12 @@ export class MaquinaComponent implements OnInit {
     this.modoEdicao = false;
   }
 
-  AlteraStatus(ojbMaquina: MaquinaModel) {
+  AlteraStatus(objMaquina: MaquinaModel) {
+    console.log(objMaquina);
     this.boolLoading = true;
-    this.http.AlteraStatusVeiculo(ojbMaquina.maqCod, ojbMaquina.maqStatus).subscribe((response: string) => {
+    this.http.AlteraStatusVeiculo(objMaquina.maqCod, objMaquina.maqStatus).subscribe((response: string) => {
       if (response) {
-        this.messageService.add({severity:'success', summary:'Sucesso! ', detail: 'Máquina '+ (ojbMaquina.maqStatus ? 'ativado' : 'inativado') + ' com sucesso!'});
+        this.messageService.add({severity:'success', summary:'Sucesso! ', detail: 'Máquina '+ (objMaquina.maqStatus ? 'ativado' : 'inativado') + ' com sucesso!'});
       }
       this.boolLoading = false;
     }, error => {
@@ -154,6 +179,42 @@ export class MaquinaComponent implements OnInit {
       this.boolLoading = false;
       this.messageService.add({severity:'error', summary:'Erro: ', detail: this.errosHttp.RetornaMensagemErro(error)});
     });
+  }
+
+  Salvar(){
+    // this.boolLoading = true;
+    if (this.ValidaInformacoes(this.objMaquina))
+    {
+      console.log(this.objMaquina);
+    }
+  }
+
+  ValidaInformacoes(objMaquina: MaquinaModel) {
+    if (objMaquina.maqMarca.length > 0) {
+      if (objMaquina.maqModelo.length > 0) {
+        if (objMaquina.diamCod > 0) {
+          if (objMaquina.veicCod > 0) {
+            return true;
+          } else {
+            this.boolLoading = false;
+            this.messageService.add({ severity: 'warn', summary: 'Atenção: ', detail: 'Selecione um veículo!' });
+            return false;
+          }
+        } else {
+          this.boolLoading = false;
+          this.messageService.add({ severity: 'warn', summary: 'Atenção: ', detail: 'Selecione um diâmetro!' });
+          return false;
+        }
+      } else {
+        this.boolLoading = false;
+        this.messageService.add({ severity: 'warn', summary: 'Atenção: ', detail: 'Insira um modelo!' });
+        return false;
+      }
+    } else {
+      this.boolLoading = false;
+      this.messageService.add({ severity: 'warn', summary: 'Atenção: ', detail: 'Insira uma marca!' });
+      return false;
+    }
   }
 
 }
