@@ -30,6 +30,7 @@ export class MaquinaComponent implements OnInit {
     veicCod: 0
   };
   listaVeiculo: VeiculoModel[] = [];
+  listaVeiculoDisponiveis: VeiculoModel[] = [];
   objVeiculo: VeiculoModel = {
     veicCod: 0,
     veicMarca: '',
@@ -93,34 +94,21 @@ export class MaquinaComponent implements OnInit {
     this.boolLoading = true;
     this.http.ListaVeiculo(veicCod).subscribe((response: VeiculoModel[]) => {
       if (response) {
-        console.log(response);
         for (const itemVeiculo of response) {
-          let busca = this.listaMaquina.find(m => m.veicCod === itemVeiculo.veicCod);
-          if(busca && busca.veicCod !== itemVeiculo.veicCod) {
-            console.log(busca);
-          } else {
-            console.log('noup')
+          if (itemVeiculo.veicStatus) {
+            let objVeiculo = {
+              veicCod: itemVeiculo.veicCod,
+              veicMarca: itemVeiculo.veicMarca + '-' + itemVeiculo.veicModelo + ' (' + itemVeiculo.veicPlaca + ')',
+              veicModelo: itemVeiculo.veicModelo,
+              veicAno: itemVeiculo.veicAno,
+              veicPlaca: itemVeiculo.veicPlaca,
+              veicObse: itemVeiculo.veicObse,
+              veicStatus: itemVeiculo.veicStatus,
+              tipVeicCod: itemVeiculo.tipVeicCod
+            }
+            this.listaVeiculo.push(objVeiculo);
           }
-
-          let objVeiculo = {
-            veicCod: itemVeiculo.veicCod,
-            veicMarca: itemVeiculo.veicMarca + '-' + itemVeiculo.veicModelo + ' (' + itemVeiculo.veicPlaca + ')',
-            veicModelo: itemVeiculo.veicModelo,
-            veicAno: itemVeiculo.veicAno,
-            veicPlaca: itemVeiculo.veicPlaca,
-            veicObse: itemVeiculo.veicObse,
-            veicStatus: itemVeiculo.veicStatus,
-            tipVeicCod: itemVeiculo.tipVeicCod
-          }
-          this.listaVeiculo.push(objVeiculo);
         }
-
-        for (const itemMaq of this.listaMaquina) {
-
-        }
-
-
-        // this.listaVeiculo = response;
       }
       this.boolLoading = false;
     }, error => {
@@ -132,10 +120,23 @@ export class MaquinaComponent implements OnInit {
 
   SelecionaVeiculo(veicCod: number) {
     let veiculo = this.listaVeiculo.find(v => v.veicCod === veicCod); //-> PAREI AQUI!!!!
-    return veiculo ? veiculo.veicMarca + ' - ' + veiculo.veicModelo + ' / ' + veiculo.veicPlaca.substring(0,3) + '-' + veiculo.veicPlaca.substring(3) : '';
+    return veiculo ? veiculo.veicMarca : '';
   }
 
   IniciaEdicao(objMaquina: MaquinaModel) {
+    this.listaVeiculoDisponiveis = [];
+    for (const itemVeic of this.listaVeiculo) {
+      this.listaVeiculoDisponiveis.push(itemVeic);
+    }
+    for (const itmMaq of this.listaMaquina) {
+      for (const itmVeic of this.listaVeiculoDisponiveis) {
+        if (itmMaq.veicCod === itmVeic.veicCod && itmMaq.maqCod !== objMaquina.maqCod) {
+          let itmExc = this.listaVeiculoDisponiveis.findIndex(v => v.veicCod === itmMaq.veicCod);
+          this.listaVeiculoDisponiveis.splice(itmExc,1);
+        }
+      }
+    }
+
     this.objMaquina = objMaquina;
     this.modoEdicao = true;
   }

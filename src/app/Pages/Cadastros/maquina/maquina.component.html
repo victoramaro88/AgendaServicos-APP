@@ -42,7 +42,7 @@
       <tr>
         <td><span class="p-column-title"><b>Marca</b></span>{{item.maqMarca}}</td>
         <td><span class="p-column-title"><b>Modelo</b></span>{{item.maqModelo}}</td>
-        <td><span class="p-column-title"><b>Modelo</b></span>{{SelecionaVeiculo(item.veicCod)}}</td>
+        <td><span class="p-column-title"><b>Veículo</b></span>{{SelecionaVeiculo(item.veicCod)}}</td>
         <td><span class="p-column-title"><b>Status</b></span>
           <p-tag severity="{{item.maqStatus ? 'success' : 'danger'}}" value="{{item.maqStatus ? 'Ativo' : 'Inativo'}}"></p-tag>
         </td>
@@ -81,7 +81,7 @@
       </div>
       <div class="field col-12 lg:col-3 md:col-4 sm:col-6">
         <label for="veicCod">Veículo</label><span class="campoObrigatorio">*</span><br>
-        <p-dropdown id="veicCod" [options]="listaVeiculo" [(ngModel)]="objMaquina.veicCod" autoWidth="false" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="veicMarca" optionValue="veicCod" placeholder="Selecione um veículo" [showClear]="true"></p-dropdown>
+        <p-dropdown id="veicCod" [options]="listaVeiculoDisponiveis" [(ngModel)]="objMaquina.veicCod" autoWidth="false" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="veicMarca" optionValue="veicCod" placeholder="Selecione um veículo" [showClear]="true"></p-dropdown>
       </div>
       <div class="field col-12 lg:col-2 md:col-4 sm:col-6">
         <label for="maqStatus">Status</label><span class="campoObrigatorio">*</span>
