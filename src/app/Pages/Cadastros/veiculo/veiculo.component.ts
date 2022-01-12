@@ -93,11 +93,21 @@ export class VeiculoComponent implements OnInit {
       this.msgs = [];
       this.boolLoading = false;
       this.messageService.add({severity:'error', summary:'Erro: ', detail: this.errosHttp.RetornaMensagemErro(error)});
+      this.listaVeiculo = [];
+      this.ListaTipoVeiculo(0);
     });
   }
 
   IniciaEdicao(objVeiculo: VeiculoModel) {
-    this.objVeiculo = objVeiculo;
+    this.objVeiculo.veicCod = objVeiculo.veicCod;
+    this.objVeiculo.veicMarca = objVeiculo.veicMarca;
+    this.objVeiculo.veicModelo = objVeiculo.veicModelo;
+    this.objVeiculo.veicAno = objVeiculo.veicAno;
+    this.objVeiculo.veicPlaca = objVeiculo.veicPlaca;
+    this.objVeiculo.veicObse = objVeiculo.veicObse;
+    this.objVeiculo.veicStatus = objVeiculo.veicStatus;
+    this.objVeiculo.tipVeicCod = objVeiculo.tipVeicCod;
+
     this.modoEdicao = true;
   }
 
@@ -137,6 +147,7 @@ export class VeiculoComponent implements OnInit {
         if (response) {
           this.messageService.add({severity:'success', summary:'Sucesso! ', detail: 'Veículo '+ (this.objVeiculo.veicCod > 0 ? 'alterado' : 'inserido') + ' com sucesso!'});
           setTimeout(() => {
+            this.listaVeiculo = [];
             this.ListaTipoVeiculo(0);
           }, 2000);
         }

@@ -137,11 +137,30 @@ export class MaquinaComponent implements OnInit {
       }
     }
 
-    this.objMaquina = objMaquina;
+    this.objMaquina.maqCod = objMaquina.maqCod;
+    this.objMaquina.maqMarca = objMaquina.maqMarca;
+    this.objMaquina.maqModelo = objMaquina.maqModelo;
+    this.objMaquina.maqObse = objMaquina.maqObse;
+    this.objMaquina.maqStatus = objMaquina.maqStatus;
+    this.objMaquina.diamCod = objMaquina.diamCod;
+    this.objMaquina.veicCod = objMaquina.veicCod;
+
     this.modoEdicao = true;
   }
 
   NovoRegistro() {
+    for (const itemVeic of this.listaVeiculo) {
+      this.listaVeiculoDisponiveis.push(itemVeic);
+    }
+    for (const itmMaq of this.listaMaquina) {
+      for (const itmVeic of this.listaVeiculoDisponiveis) {
+        if (itmMaq.veicCod === itmVeic.veicCod) {
+          let itmExc = this.listaVeiculoDisponiveis.findIndex(v => v.veicCod === itmMaq.veicCod);
+          this.listaVeiculoDisponiveis.splice(itmExc,1);
+        }
+      }
+    }
+
     this.objMaquina = {
       maqCod: 0,
       maqMarca: '',
@@ -168,25 +187,39 @@ export class MaquinaComponent implements OnInit {
   }
 
   AlteraStatus(objMaquina: MaquinaModel) {
-    console.log(objMaquina);
     this.boolLoading = true;
-    this.http.AlteraStatusVeiculo(objMaquina.maqCod, objMaquina.maqStatus).subscribe((response: string) => {
+    this.http.AlteraStatusMaquina(objMaquina.maqCod, objMaquina.maqStatus).subscribe((response: string) => {
       if (response) {
-        this.messageService.add({severity:'success', summary:'Sucesso! ', detail: 'Máquina '+ (objMaquina.maqStatus ? 'ativado' : 'inativado') + ' com sucesso!'});
+        this.messageService.add({severity:'success', summary:'Sucesso! ', detail: 'Máquina '+ (objMaquina.maqStatus ? 'ativada' : 'inativada') + ' com sucesso!'});
       }
       this.boolLoading = false;
     }, error => {
       this.msgs = [];
       this.boolLoading = false;
-      this.messageService.add({severity:'error', summary:'Erro: ', detail: this.errosHttp.RetornaMensagemErro(error)});
+      this.messageService.add({ severity: 'error', summary: 'Erro: ', detail: this.errosHttp.RetornaMensagemErro(error) });
+      this.listaMaquina = [];
+      this.ListaDiametroFuro(0);
     });
   }
 
   Salvar(){
-    // this.boolLoading = true;
+    this.boolLoading = true;
     if (this.ValidaInformacoes(this.objMaquina))
     {
-      console.log(this.objMaquina);
+      this.http.ManterMaquina(this.objMaquina).subscribe((response: string) => {
+        if (response) {
+          this.messageService.add({severity:'success', summary:'Sucesso! ', detail: 'Máquina '+ (this.objMaquina.maqCod > 0 ? 'alterada' : 'inserida') + ' com sucesso!'});
+          setTimeout(() => {
+            this.listaMaquina = [];
+            this.ListaDiametroFuro(0);
+          }, 2000);
+        }
+        this.boolLoading = false;
+      }, error => {
+        this.msgs = [];
+        this.boolLoading = false;
+        this.messageService.add({severity:'error', summary:'Erro: ', detail: this.errosHttp.RetornaMensagemErro(error)});
+      });
     }
   }
 

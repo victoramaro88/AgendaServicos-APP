@@ -8,6 +8,7 @@ import { VeiculoModel } from "../Models/Veiculo.model";
 import { TipoVeiculoModel } from "../Models/TipoVeiculo.model";
 import { DiametroFuroModel } from "../Models/DiametroFuro.Model";
 import { MaquinaModel } from "../Models/Maquina.Model";
+import { AparelhoNavegacaoModel } from "../Models/AparelhoNavegacao.Model";
 
 @Injectable({
   providedIn: 'root'
@@ -77,8 +78,16 @@ export class HttpService {
     return this.http.get<string>(`${environment.urlAPI}/Agenda/AlteraStatusVeiculo/${veicCod}/${veicStatus}`, this.CarregaHeader());
   }
 
+  public AlteraStatusMaquina(maqCod: number, maqStatus: boolean): Observable<string> {
+    return this.http.get<string>(`${environment.urlAPI}/Agenda/AlteraStatusMaquina/${maqCod}/${maqStatus}`, this.CarregaHeader());
+  }
+
   public ManterVeiculo(objVeiculo: VeiculoModel): Observable<string> {
     return this.http.post<string>(`${environment.urlAPI}/Agenda/ManterVeiculo`, objVeiculo, this.CarregaHeader());
+  }
+
+  public ManterMaquina(objMaquina: MaquinaModel): Observable<string> {
+    return this.http.post<string>(`${environment.urlAPI}/Agenda/ManterMaquina`, objMaquina, this.CarregaHeader());
   }
 
   public ListaDiametroFuro(diamCod: number): Observable<DiametroFuroModel[]> {
@@ -87,5 +96,9 @@ export class HttpService {
 
   public ListaMaquina(maqCod: number): Observable<MaquinaModel[]> {
     return this.http.get<MaquinaModel[]>(`${environment.urlAPI}/Agenda/ListaMaquina/${maqCod}`, this.CarregaHeader());
+  }
+
+  public ListaAparelhoNavegacao(apNavCod: number): Observable<AparelhoNavegacaoModel[]> {
+    return this.http.get<AparelhoNavegacaoModel[]>(`${environment.urlAPI}/Agenda/ListaAparelhoNavegacao/${apNavCod}`, this.CarregaHeader());
   }
 }

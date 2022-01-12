@@ -29,6 +29,7 @@ import { UsuarioComponent } from './Pages/Cadastros/usuario/usuario.component';
 import { MaquinaComponent } from './Pages/Cadastros/maquina/maquina.component';
 import { VeiculoComponent } from './Pages/Cadastros/veiculo/veiculo.component';
 import { DiametroComponent } from './Pages/Cadastros/diametro/diametro.component';
+import { EquipeComponent } from './Pages/Cadastros/equipe/equipe.component';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
 
@@ -42,6 +43,7 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
     MaquinaComponent,
     VeiculoComponent,
     DiametroComponent,
+    EquipeComponent,
   ],
   imports: [
     BrowserModule,

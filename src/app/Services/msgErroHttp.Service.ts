@@ -15,12 +15,14 @@ export class MsgErroHttp {
   public RetornaMensagemErro(error: any) {
     console.log(error);
     if (error.status === 400) {
-      return 'Falha ao comunicar com o servidor!';
+      return 'Falha ao comunicar com o servidor!  (Erro 400)';
     } else if(error.status === 401) {
       setTimeout(() => {
         this.router.navigate(['/login']);
       }, 2000);
       return 'Sessão expirada, faça o login novamente!';
+    } else if(error.status === 404) {
+      return 'Requisição não encontrada! (Erro 404)';
     } else if(error.error === 'Parâmetros inválidos.') {
       return 'Parâmetros inválidos!';
     } else {

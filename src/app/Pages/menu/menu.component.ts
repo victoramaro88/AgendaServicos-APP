@@ -26,10 +26,6 @@ export class MenuComponent implements OnInit {
         label: 'Cadastros',
         items: [
           {
-            label: 'Usuário',
-            routerLink: '/usuario'
-          },
-          {
             label: 'CheckList',
             routerLink: '/checkList'
           },
@@ -38,8 +34,16 @@ export class MenuComponent implements OnInit {
             routerLink: '/diametro'
           },
           {
+            label: 'Equipes',
+            routerLink: '/equipe'
+          },
+          {
             label: 'Máquinas',
             routerLink: '/maquina'
+          },
+          {
+            label: 'Usuário',
+            routerLink: '/usuario'
           },
           {
             label: 'Veículos',

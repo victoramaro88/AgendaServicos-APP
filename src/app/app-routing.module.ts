@@ -1,3 +1,4 @@
+import { EquipeComponent } from './Pages/Cadastros/equipe/equipe.component';
 import { DiametroComponent } from './Pages/Cadastros/diametro/diametro.component';
 import { VeiculoComponent } from './Pages/Cadastros/veiculo/veiculo.component';
 import { MaquinaComponent } from './Pages/Cadastros/maquina/maquina.component';
@@ -15,6 +16,7 @@ const routes: Routes = [
   { path: 'maquina', component: MaquinaComponent },
   { path: 'veiculo', component: VeiculoComponent },
   { path: 'diametro', component: DiametroComponent },
+  { path: 'equipe', component: EquipeComponent },
 ];
 
 @NgModule({
