@@ -54,7 +54,15 @@ export class EquipeComponent implements OnInit {
     this.modoEdicao = false;
     this.http.ListaAparelhoNavegacao(apNavCod).subscribe((response: AparelhoNavegacaoModel[]) => {
       if (response) {
-        this.listaApNav = response;
+        for (const itmApNv of response) {
+          let objApNv: AparelhoNavegacaoModel = {
+            apNavCod: itmApNv.apNavCod,
+            apNavMarcMod: itmApNv.apNavMarcMod,
+            apNavObse: itmApNv.apNavObse,
+            apNavStatus: itmApNv.apNavStatus
+          }
+          this.listaApNav.push(objApNv);
+        }
         this.ListaMaquina(0);
       }
       console.log(this.listaApNav);
@@ -92,7 +100,7 @@ export class EquipeComponent implements OnInit {
         for (const itmMaq of response) {
           let objResp: MaquinaModel = {
             maqCod: itmMaq.maqCod,
-            maqMarca: itmMaq.maqMarca,
+            maqMarca: itmMaq.maqMarca + ' / ' + itmMaq.maqModelo,
             maqModelo: itmMaq.maqModelo,
             maqObse: itmMaq.maqObse,
             maqStatus: itmMaq.maqStatus,
@@ -102,6 +110,7 @@ export class EquipeComponent implements OnInit {
           this.listaMaquina.push(objResp);
         }
       }
+      console.log(this.listaMaquina);
       this.boolLoading = false;
       this.ListaEquipe(0);
     }, error => {
@@ -138,6 +147,8 @@ export class EquipeComponent implements OnInit {
   }
 
   NovoRegistro() {
+    this.listaMaquinaDisponiveis = [];
+    this.listaApNavDisponiveis = [];
     for (const itemMaq of this.listaMaquina) {
       this.listaMaquinaDisponiveis.push(itemMaq);
     }
@@ -175,6 +186,7 @@ export class EquipeComponent implements OnInit {
 
   IniciaEdicao(objEquipe: EquipeModel) {
     this.listaMaquinaDisponiveis = [];
+    this.listaApNavDisponiveis = [];
     for (const itemMaq of this.listaMaquina) {
       this.listaMaquinaDisponiveis.push(itemMaq);
     }
@@ -183,6 +195,18 @@ export class EquipeComponent implements OnInit {
         if (itmEqu.maqCod === itmMaq.maqCod && itmEqu.equipCod !== objEquipe.equipCod) {
           let itmExc = this.listaMaquinaDisponiveis.findIndex(v => v.maqCod === itmMaq.maqCod);
           this.listaMaquinaDisponiveis.splice(itmExc,1);
+        }
+      }
+    }
+
+    for (const itemApNav of this.listaApNav) {
+      this.listaApNavDisponiveis.push(itemApNav);
+    }
+    for (const itmEqu of this.listaEquipe) {
+      for (const itmapNav of this.listaApNavDisponiveis) {
+        if (itmEqu.apNavCod === itmapNav.apNavCod && itmEqu.equipCod !== objEquipe.equipCod) {
+          let itmExc = this.listaApNavDisponiveis.findIndex(a => a.apNavCod === itmEqu.apNavCod);
+          this.listaApNavDisponiveis.splice(itmExc,1);
         }
       }
     }
