@@ -3,7 +3,9 @@ import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { AparelhoNavegacaoModel } from 'src/app/Models/AparelhoNavegacao.Model';
 import { EquipeModel } from 'src/app/Models/Equipe.Model';
+import { EquipeUsuarioModel } from 'src/app/Models/EquipeUsuario.Model';
 import { MaquinaModel } from 'src/app/Models/Maquina.Model';
+import { UsuarioTbModel } from 'src/app/Models/UsuarioTb.Model';
 import { HttpService } from 'src/app/Services/http-service.service';
 import { MsgErroHttp } from 'src/app/Services/msgErroHttp.Service';
 
@@ -32,6 +34,9 @@ export class EquipeComponent implements OnInit {
     apNavCod: 0,
     maqCod: 0
   };
+  listaEquipeUsuario: EquipeUsuarioModel[] = [];
+  listaUsuarioTb: UsuarioTbModel[] = [];
+  listaUsuarioTbSelecionados: UsuarioTbModel[] = [];
 
   constructor(
     private router: Router,
@@ -65,7 +70,6 @@ export class EquipeComponent implements OnInit {
         }
         this.ListaMaquina(0);
       }
-      console.log(this.listaApNav);
     }, error => {
       this.msgs = [];
       this.boolLoading = false;
@@ -78,14 +82,10 @@ export class EquipeComponent implements OnInit {
     this.modoEdicao = false;
     this.http.ListaEquipe(equipCod).subscribe((response: EquipeModel[]) => {
       if (response) {
-
         this.listaEquipe = response;
-        // this.ListaMaquina(0);
+        this.ListaUsuario(0);
       }
-
       this.boolLoading = false;
-      console.log(this.listaEquipe);
-
     }, error => {
       this.msgs = [];
       this.boolLoading = false;
@@ -110,7 +110,6 @@ export class EquipeComponent implements OnInit {
           this.listaMaquina.push(objResp);
         }
       }
-      console.log(this.listaMaquina);
       this.boolLoading = false;
       this.ListaEquipe(0);
     }, error => {
@@ -120,13 +119,66 @@ export class EquipeComponent implements OnInit {
     });
   }
 
+  ListaUsuario(usuCod: number) {
+    this.boolLoading = true;
+    this.listaUsuarioTb = [];
+    this.http.ListaUsuario(usuCod).subscribe((response: UsuarioTbModel[]) => {
+      if (response) {
+        for (const itmUsr of response) {
+          let objResp: UsuarioTbModel = {
+            usuCod: itmUsr.usuCod,
+            usuNome: !itmUsr.usuStatus ? '(INATIVO) ' + itmUsr.usuNome : itmUsr.usuNome,
+            usuLogin: itmUsr.usuLogin,
+            usuSenha: itmUsr.usuSenha,
+            usuStatus: itmUsr.usuStatus,
+            perfCod: itmUsr.perfCod
+          };
+          this.listaUsuarioTb.push(objResp);
+        }
+      }
+      this.boolLoading = false;
+    }, error => {
+      this.msgs = [];
+      this.boolLoading = false;
+      this.messageService.add({severity:'error', summary:'Erro: ', detail: this.errosHttp.RetornaMensagemErro(error)});
+    });
+  }
+
+  IniciaEdicao(objEquipe: EquipeModel) {
+    this.boolLoading = true;
+    this.listaEquipeUsuario = [];
+    this.http.ListaEquipeUsuario(objEquipe.equipCod).subscribe((response: EquipeUsuarioModel[]) => {
+      if (response) {
+        for (const itmEqUs of response) {
+          let objResp: EquipeUsuarioModel = {
+            equipCod: itmEqUs.equipCod,
+            equipDesc: itmEqUs.equipDesc,
+            equipStatus: itmEqUs.equipStatus,
+            usuCod: itmEqUs.usuCod,
+            usuNome: itmEqUs.usuNome,
+            usuStatus: itmEqUs.usuStatus,
+            perfCod: itmEqUs.perfCod,
+            perfDesc: itmEqUs.perfDesc
+          };
+          this.listaEquipeUsuario.push(objResp);
+        }
+        this.PreencheInfosEdicao(objEquipe);
+      }
+      this.boolLoading = false;
+    }, error => {
+      this.msgs = [];
+      this.boolLoading = false;
+      this.messageService.add({severity:'error', summary:'Erro: ', detail: this.errosHttp.RetornaMensagemErro(error)});
+    });
+  }
+
   SelecionaMaquina(maqCod: number) {
-    let maquina = this.listaMaquina.find(v => v.veicCod === maqCod); //-> PAREI AQUI!!!!
-    return maquina ? maquina.maqMarca + ' / ' + maquina.maqModelo : '';
+    let maquina = this.listaMaquina.find(v => v.veicCod === maqCod);
+    return maquina ? maquina.maqMarca : '';
   }
 
   SelecionaApNaveg(apNavCod: number) {
-    let apNav = this.listaApNav.find(v => v.apNavCod === apNavCod); //-> PAREI AQUI!!!!
+    let apNav = this.listaApNav.find(v => v.apNavCod === apNavCod);
     return apNav ? apNav.apNavMarcMod : '';
   }
 
@@ -184,9 +236,21 @@ export class EquipeComponent implements OnInit {
     this.modoEdicao = true;
   }
 
-  IniciaEdicao(objEquipe: EquipeModel) {
+  PreencheInfosEdicao(objEquipe: EquipeModel) {
     this.listaMaquinaDisponiveis = [];
     this.listaApNavDisponiveis = [];
+
+    //-> Inserindo Usuários já selecionados, e removendo da lista inicial
+    for (const itmUsrEqu of this.listaEquipeUsuario) {
+      for (const itmUsr of this.listaUsuarioTb) {
+        if(itmUsrEqu.usuCod === itmUsr.usuCod) {
+          this.listaUsuarioTbSelecionados.push(itmUsr);
+          let itmExc = this.listaUsuarioTb.findIndex(u => u.usuCod === itmUsrEqu.usuCod);
+          this.listaUsuarioTb.splice(itmExc,1);
+        }
+      }
+    }
+
     for (const itemMaq of this.listaMaquina) {
       this.listaMaquinaDisponiveis.push(itemMaq);
     }
@@ -221,6 +285,12 @@ export class EquipeComponent implements OnInit {
   }
 
   Cancelar() {
+    this.listaMaquina = [];
+    this.listaApNav = [];
+    this.listaMaquinaDisponiveis = [];
+    this.listaApNavDisponiveis = [];
+    this.listaUsuarioTbSelecionados = [];
+
     this.objEquipe = {
       equipCod: 0,
       equipDesc: '',
@@ -229,6 +299,12 @@ export class EquipeComponent implements OnInit {
       maqCod: 0
     };
     this.modoEdicao = false;
+    this.ListaAparelhoNavegacao(0);
+  }
+
+  Salvar() {
+    console.log(this.objEquipe);
+    console.log(this.listaUsuarioTbSelecionados);
   }
 
 }

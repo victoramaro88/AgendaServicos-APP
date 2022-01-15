@@ -10,6 +10,8 @@ import { DiametroFuroModel } from "../Models/DiametroFuro.Model";
 import { MaquinaModel } from "../Models/Maquina.Model";
 import { AparelhoNavegacaoModel } from "../Models/AparelhoNavegacao.Model";
 import { EquipeModel } from "../Models/Equipe.Model";
+import { UsuarioTbModel } from "../Models/UsuarioTb.Model";
+import { EquipeUsuarioModel } from "../Models/EquipeUsuario.Model";
 
 @Injectable({
   providedIn: 'root'
@@ -109,5 +111,13 @@ export class HttpService {
 
   public ListaEquipe(equipCod: number): Observable<EquipeModel[]> {
     return this.http.get<EquipeModel[]>(`${environment.urlAPI}/Agenda/ListaEquipe/${equipCod}`, this.CarregaHeader());
+  }
+
+  public ListaUsuario(usuCod: number): Observable<UsuarioTbModel[]> {
+    return this.http.get<UsuarioTbModel[]>(`${environment.urlAPI}/Agenda/ListaUsuario/${usuCod}`, this.CarregaHeader());
+  }
+
+  public ListaEquipeUsuario(equipCod: number): Observable<EquipeUsuarioModel[]> {
+    return this.http.get<EquipeUsuarioModel[]>(`${environment.urlAPI}/Agenda/ListaEquipeUsuario/${equipCod}`, this.CarregaHeader());
   }
 }

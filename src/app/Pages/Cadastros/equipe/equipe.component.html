@@ -10,7 +10,7 @@
 <h1>Equipes</h1>
 
 <!-- LISTANDO NA GRID -->
-<div *ngIf="!modoEdicao && listaEquipe.length > 0">
+<div *ngIf="!modoEdicao && listaUsuarioTb.length > 0">
   <p-table #dt1
   [value]="listaEquipe"
   styleClass="p-datatable-striped p-datatable-sm"
@@ -88,9 +88,29 @@
         <p-selectButton [options]="opcoesStatus" [(ngModel)]="objEquipe.equipStatus" optionLabel="label" optionValue="value"></p-selectButton>
       </div>
   </div>
+
+  <!-- INTEGRANTES DA EQUIPE -->
+  <h3>Integrantes:</h3>
+  <p-pickList [source]="listaUsuarioTb" [target]="listaUsuarioTbSelecionados" sourceHeader="Disponíveis" targetHeader="Selecionados" [dragdrop]="true"
+    [responsive]="true" [sourceStyle]="{'height':'10rem'}" [targetStyle]="{'height':'10rem'}" filterBy="usuNome"
+    sourceFilterPlaceholder="Pesquisa por nome" targetFilterPlaceholder="Pesquisa por nome"
+    [showSourceControls] = "false"
+    [showTargetControls] = "false"
+    >
+    <ng-template let-item pTemplate="item">
+        <div class="product-item">
+            <div class="product-list-detail">
+                <span class="p-mb-2">{{item.usuNome}}</span>
+            </div>
+        </div>
+    </ng-template>
+  </p-pickList>
+
   <div class="text-right">
     <small><span class="campoObrigatorio">*</span> Campos obrigarórios.</small><br><br>
     <button (click)="Cancelar();" pButton pRipple type="button" label="Cancelar" class="p-button-raised p-button-danger"></button> &nbsp;
-    <!-- <button (click)="Salvar();" pButton pRipple type="button" label="Salvar" class="p-button-raised p-button-success"></button> -->
+    <button (click)="Salvar();" pButton pRipple type="button" label="Salvar" class="p-button-raised p-button-success"></button>
   </div>
+
 </div>
+
