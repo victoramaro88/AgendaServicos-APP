@@ -37,6 +37,7 @@ export class EquipeComponent implements OnInit {
   listaEquipeUsuario: EquipeUsuarioModel[] = [];
   listaUsuarioTb: UsuarioTbModel[] = [];
   listaUsuarioTbSelecionados: UsuarioTbModel[] = [];
+  listaUsuariosDisponiveis: UsuarioTbModel[] = [];
 
   constructor(
     private router: Router,
@@ -134,6 +135,29 @@ export class EquipeComponent implements OnInit {
             perfCod: itmUsr.perfCod
           };
           this.listaUsuarioTb.push(objResp);
+        }
+      }
+      this.boolLoading = false;
+    }, error => {
+      this.msgs = [];
+      this.boolLoading = false;
+      this.messageService.add({severity:'error', summary:'Erro: ', detail: this.errosHttp.RetornaMensagemErro(error)});
+    });
+  }
+
+  ListaUsuariosDisponiveis() {
+    this.http.ListaUsuariosDisponiveis().subscribe((response: UsuarioTbModel[]) => {
+      if (response) {
+        for (const itmUsr of response) {
+          let objResp: UsuarioTbModel = {
+            usuCod: itmUsr.usuCod,
+            usuNome: itmUsr.usuNome,
+            usuLogin: itmUsr.usuLogin,
+            usuSenha: itmUsr.usuSenha,
+            usuStatus: itmUsr.usuStatus,
+            perfCod: itmUsr.perfCod
+          };
+          this.listaUsuariosDisponiveis.push(objResp);
         }
       }
       this.boolLoading = false;

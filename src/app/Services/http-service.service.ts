@@ -120,4 +120,8 @@ export class HttpService {
   public ListaEquipeUsuario(equipCod: number): Observable<EquipeUsuarioModel[]> {
     return this.http.get<EquipeUsuarioModel[]>(`${environment.urlAPI}/Agenda/ListaEquipeUsuario/${equipCod}`, this.CarregaHeader());
   }
+
+  public ListaUsuariosDisponiveis(): Observable<UsuarioTbModel[]> {
+    return this.http.get<UsuarioTbModel[]>(`${environment.urlAPI}/Agenda/ListaUsuariosDisponiveis`, this.CarregaHeader());
+  }
 }
