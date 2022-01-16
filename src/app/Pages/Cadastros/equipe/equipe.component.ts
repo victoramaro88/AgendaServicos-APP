@@ -5,6 +5,7 @@ import { AparelhoNavegacaoModel } from 'src/app/Models/AparelhoNavegacao.Model';
 import { EquipeModel } from 'src/app/Models/Equipe.Model';
 import { EquipeUsuarioModel } from 'src/app/Models/EquipeUsuario.Model';
 import { MaquinaModel } from 'src/app/Models/Maquina.Model';
+import { UsuarioEnvioModel } from 'src/app/Models/UsuarioEnvio.Model';
 import { UsuarioTbModel } from 'src/app/Models/UsuarioTb.Model';
 import { HttpService } from 'src/app/Services/http-service.service';
 import { MsgErroHttp } from 'src/app/Services/msgErroHttp.Service';
@@ -38,6 +39,17 @@ export class EquipeComponent implements OnInit {
   listaUsuarioTb: UsuarioTbModel[] = [];
   listaUsuarioTbSelecionados: UsuarioTbModel[] = [];
   listaUsuariosDisponiveis: UsuarioTbModel[] = [];
+
+  objEnvio: UsuarioEnvioModel = {
+    objEnvioEquipe: {
+      equipCod: 0,
+      equipDesc: '',
+      equipStatus: true,
+      apNavCod: 0,
+      maqCod: 0
+    },
+    objEnvioListaUsuario: []
+  }
 
   constructor(
     private router: Router,
@@ -146,6 +158,8 @@ export class EquipeComponent implements OnInit {
   }
 
   ListaUsuariosDisponiveis() {
+    this.boolLoading = true;
+    this.listaUsuarioTb = [];
     this.http.ListaUsuariosDisponiveis().subscribe((response: UsuarioTbModel[]) => {
       if (response) {
         for (const itmUsr of response) {
@@ -158,9 +172,12 @@ export class EquipeComponent implements OnInit {
             perfCod: itmUsr.perfCod
           };
           this.listaUsuariosDisponiveis.push(objResp);
+          this.listaUsuarioTb.push(objResp);
         }
+        console.log(this.listaUsuariosDisponiveis);
+        console.log(this.listaUsuarioTb);
+        this.NovoRegistro();
       }
-      this.boolLoading = false;
     }, error => {
       this.msgs = [];
       this.boolLoading = false;
@@ -258,6 +275,7 @@ export class EquipeComponent implements OnInit {
     };
 
     this.modoEdicao = true;
+    this.boolLoading = false;
   }
 
   PreencheInfosEdicao(objEquipe: EquipeModel) {
@@ -329,6 +347,10 @@ export class EquipeComponent implements OnInit {
   Salvar() {
     console.log(this.objEquipe);
     console.log(this.listaUsuarioTbSelecionados);
+
+    this.objEnvio.objEnvioEquipe = this.objEquipe;
+    this.objEnvio.objEnvioListaUsuario = this.listaUsuarioTbSelecionados;
+    console.log(this.objEnvio);
   }
 
 }
