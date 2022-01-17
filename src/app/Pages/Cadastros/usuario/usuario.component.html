@@ -1,3 +1,65 @@
 <app-menu></app-menu>
 
-<h1>Usuário</h1>
+<div *ngIf="boolLoading" class="text-center">
+  <p-progressBar mode="indeterminate"></p-progressBar>
+  <b><p>CARREGANDO...</p></b>
+</div>
+<p-blockUI [blocked]="boolLoading"></p-blockUI>
+<p-toast  position="top-center"></p-toast>
+
+<h1>Usuários</h1>
+
+<!-- LISTANDO NA GRID -->
+<div *ngIf="!modoEdicao && listaUsuario.length > 0">
+  <p-table #dt1
+  [value]="listaUsuario"
+  styleClass="p-datatable-striped p-datatable-sm"
+  [paginator]="true" [rows]="10"
+  [globalFilterFields]="['usuNome','usuLogin']"
+  >
+  <ng-template pTemplate="caption">
+    <div class="p-d-flex text-right">
+      <span class="mb-3">
+        <!-- <button (click)="NovoRegistro()" pButton pRipple pTooltip="Novo Registro" tooltipPosition="left" type="button" label="Novo" class="p-button-raised"></button> -->
+      </span>
+      &nbsp;
+      <span class="p-input-icon-left p-ml-auto">
+        <i class="pi pi-search"></i>
+        <input #Filtro pInputText type="text" (input)="dt1.filterGlobal(Filtro.value, 'contains')" placeholder="Pesquisa Global" class="p-inputtext-sm"/>
+      </span>
+    </div>
+  </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="usuNome">Nome <p-sortIcon field="usuNome"></p-sortIcon></th>
+        <th pSortableColumn="usuLogin">Login <p-sortIcon field="usuLogin"></p-sortIcon></th>
+        <th pSortableColumn="perfCod">Perfil <p-sortIcon field="perfCod"></p-sortIcon></th>
+        <th pSortableColumn="usuStatus">Status <p-sortIcon field="usuStatus"></p-sortIcon></th>
+        <th>Ações</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-item>
+      <tr>
+        <td><span class="p-column-title"><b>Nome</b></span>{{item.usuNome}}</td>
+        <td><span class="p-column-title"><b>Login</b></span>{{item.usuLogin}}</td>
+        <td><span class="p-column-title"><b>Perfil</b></span>{{SelecionaPerfil(item.perfCod)}}</td>
+        <td><span class="p-column-title"><b>Status</b></span>
+          <p-tag severity="{{item.usuStatus ? 'success' : 'danger'}}" value="{{item.usuStatus ? 'Ativo' : 'Inativo'}}"></p-tag>
+        </td>
+        <td>
+          <span class="p-column-title"><b>Ações</b></span>
+          <div>
+            <!-- <button (click)="IniciaEdicao(item);" pTooltip="Editar" tooltipPosition="top" pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-info p-button-text"></button> -->
+            <!-- <button (click)="AlteraStatus(item); item.maqStatus = !item.maqStatus;" *ngIf="item.maqStatus" pTooltip="Desativar" tooltipPosition="top" pButton pRipple type="button" icon="pi pi-lock" class="p-button-rounded p-button-success p-button-text"></button>
+            <button (click)="AlteraStatus(item); item.maqStatus = !item.maqStatus;" *ngIf="!item.maqStatus" pTooltip="Ativar" tooltipPosition="top" pButton pRipple type="button" icon="pi pi-lock-open" class="p-button-rounded p-button-danger p-button-text"></button> -->
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td style="text-align: center;" colspan="6">Sem informações.</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

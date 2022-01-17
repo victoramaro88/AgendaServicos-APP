@@ -13,6 +13,7 @@ import { EquipeModel } from "../Models/Equipe.Model";
 import { UsuarioTbModel } from "../Models/UsuarioTb.Model";
 import { EquipeUsuarioModel } from "../Models/EquipeUsuario.Model";
 import { UsuarioEnvioModel } from "../Models/UsuarioEnvio.Model";
+import { PerfilModel } from "../Models/Perfil.Model";
 
 @Injectable({
   providedIn: 'root'
@@ -120,6 +121,10 @@ export class HttpService {
 
   public ListaUsuario(usuCod: number): Observable<UsuarioTbModel[]> {
     return this.http.get<UsuarioTbModel[]>(`${environment.urlAPI}/Agenda/ListaUsuario/${usuCod}`, this.CarregaHeader());
+  }
+
+  public ListaPerfil(perfCod: number): Observable<PerfilModel[]> {
+    return this.http.get<PerfilModel[]>(`${environment.urlAPI}/Agenda/ListaPerfil/${perfCod}`, this.CarregaHeader());
   }
 
   public ListaEquipeUsuario(equipCod: number): Observable<EquipeUsuarioModel[]> {

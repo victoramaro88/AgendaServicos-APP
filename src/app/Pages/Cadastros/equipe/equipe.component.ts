@@ -220,6 +220,77 @@ export class EquipeComponent implements OnInit {
       });
     }
 
+    PreencheInfosEdicao(objEquipe: EquipeModel) {
+      this.listaMaquinaDisponiveis = [];
+      this.listaApNavDisponiveis = [];
+
+      this.http.ListaUsuariosDisponiveis().subscribe((response: UsuarioTbModel[]) => {
+        if (response) {
+          for (const itemMaq of this.listaMaquina) {
+            this.listaMaquinaDisponiveis.push(itemMaq);
+          }
+          for (const itmEqu of this.listaEquipe) {
+            for (const itmMaq of this.listaMaquinaDisponiveis) {
+              if (itmEqu.maqCod === itmMaq.maqCod && itmEqu.equipCod !== objEquipe.equipCod) {
+                let itmExc = this.listaMaquinaDisponiveis.findIndex(v => v.maqCod === itmMaq.maqCod);
+                this.listaMaquinaDisponiveis.splice(itmExc,1);
+              }
+            }
+          }
+
+          for (const itemApNav of this.listaApNav) {
+            this.listaApNavDisponiveis.push(itemApNav);
+          }
+          for (const itmEqu of this.listaEquipe) {
+            for (const itmapNav of this.listaApNavDisponiveis) {
+              if (itmEqu.apNavCod === itmapNav.apNavCod && itmEqu.equipCod !== objEquipe.equipCod) {
+                let itmExc = this.listaApNavDisponiveis.findIndex(a => a.apNavCod === itmEqu.apNavCod);
+                this.listaApNavDisponiveis.splice(itmExc,1);
+              }
+            }
+          }
+
+          //-> Inserindo Usuários já selecionados, e removendo da lista inicial
+          for (const itmUsrEqu of this.listaEquipeUsuario) {
+            for (const itmUsr of this.listaUsuarioTb) {
+              if(itmUsrEqu.usuCod === itmUsr.usuCod) {
+                this.listaUsuarioTbSelecionados.push(itmUsr);
+                let itmExc = this.listaUsuarioTb.findIndex(u => u.usuCod === itmUsrEqu.usuCod);
+                this.listaUsuarioTb.splice(itmExc,1);
+              }
+            }
+          }
+
+          //-> Limpando a lista de usuários restantes, e adicionando somente os disponíveis.
+          this.listaUsuarioTb = [];
+          for (const itmUsr of response) {
+            let objResp: UsuarioTbModel = {
+              usuCod: itmUsr.usuCod,
+              usuNome: itmUsr.usuNome,
+              usuLogin: itmUsr.usuLogin,
+              usuSenha: itmUsr.usuSenha,
+              usuStatus: itmUsr.usuStatus,
+              perfCod: itmUsr.perfCod
+            };
+            this.listaUsuariosDisponiveis.push(objResp);
+            this.listaUsuarioTb.push(objResp);
+          }
+
+          this.objEquipe.equipCod = objEquipe.equipCod;
+          this.objEquipe.equipDesc = objEquipe.equipDesc;
+          this.objEquipe.equipStatus = objEquipe.equipStatus;
+          this.objEquipe.apNavCod = objEquipe.apNavCod;
+          this.objEquipe.maqCod = objEquipe.maqCod;
+
+          this.modoEdicao = true;
+        }
+      }, error => {
+        this.msgs = [];
+        this.boolLoading = false;
+        this.messageService.add({severity:'error', summary:'Erro: ', detail: this.errosHttp.RetornaMensagemErro(error)});
+      });
+    }
+
     SelecionaMaquina(maqCod: number) {
       let maquina = this.listaMaquina.find(m => m.maqCod === maqCod);
       return maquina ? maquina.maqMarca : '';
@@ -283,56 +354,6 @@ export class EquipeComponent implements OnInit {
 
       this.modoEdicao = true;
       this.boolLoading = false;
-    }
-
-    PreencheInfosEdicao(objEquipe: EquipeModel) {
-      this.listaMaquinaDisponiveis = [];
-      this.listaApNavDisponiveis = [];
-
-
-
-      //-> Inserindo Usuários já selecionados, e removendo da lista inicial
-      for (const itmUsrEqu of this.listaEquipeUsuario) {
-        for (const itmUsr of this.listaUsuarioTb) {
-          if(itmUsrEqu.usuCod === itmUsr.usuCod) {
-            this.listaUsuarioTbSelecionados.push(itmUsr);
-            let itmExc = this.listaUsuarioTb.findIndex(u => u.usuCod === itmUsrEqu.usuCod);
-            this.listaUsuarioTb.splice(itmExc,1);
-          }
-        }
-      }
-
-      for (const itemMaq of this.listaMaquina) {
-        this.listaMaquinaDisponiveis.push(itemMaq);
-      }
-      for (const itmEqu of this.listaEquipe) {
-        for (const itmMaq of this.listaMaquinaDisponiveis) {
-          if (itmEqu.maqCod === itmMaq.maqCod && itmEqu.equipCod !== objEquipe.equipCod) {
-            let itmExc = this.listaMaquinaDisponiveis.findIndex(v => v.maqCod === itmMaq.maqCod);
-            this.listaMaquinaDisponiveis.splice(itmExc,1);
-          }
-        }
-      }
-
-      for (const itemApNav of this.listaApNav) {
-        this.listaApNavDisponiveis.push(itemApNav);
-      }
-      for (const itmEqu of this.listaEquipe) {
-        for (const itmapNav of this.listaApNavDisponiveis) {
-          if (itmEqu.apNavCod === itmapNav.apNavCod && itmEqu.equipCod !== objEquipe.equipCod) {
-            let itmExc = this.listaApNavDisponiveis.findIndex(a => a.apNavCod === itmEqu.apNavCod);
-            this.listaApNavDisponiveis.splice(itmExc,1);
-          }
-        }
-      }
-
-      this.objEquipe.equipCod = objEquipe.equipCod;
-      this.objEquipe.equipDesc = objEquipe.equipDesc;
-      this.objEquipe.equipStatus = objEquipe.equipStatus;
-      this.objEquipe.apNavCod = objEquipe.apNavCod;
-      this.objEquipe.maqCod = objEquipe.maqCod;
-
-      this.modoEdicao = true;
     }
 
     Cancelar() {

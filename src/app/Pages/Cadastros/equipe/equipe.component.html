@@ -67,15 +67,12 @@
 
 <!-- MODO INCLUSÃO/ALTERAÇÃO -->
 <div *ngIf="modoEdicao" class="card">
+  <!-- FORMULÁRIO -->
   <div class="formgrid grid">
       <div class="field col-12 lg:col-2 md:col-4 sm:col-6">
           <label for="equipDesc">Descrição</label><span class="campoObrigatorio">*</span>
           <input [(ngModel)]="objEquipe.equipDesc" id="equipDesc" type="text" class="p-inputtext-sm inputfield w-full" pInputText>
       </div>
-      <!-- <div class="field col-12 lg:col-2 md:col-4 sm:col-6">
-        <label for="maqModelo">Modelo</label><span class="campoObrigatorio">*</span>
-        <input [(ngModel)]="objMaquina.maqModelo" id="maqModelo" type="text" class="p-inputtext-sm inputfield w-full" pInputText>
-      </div> -->
       <div class="field col-12 lg:col-3 md:col-4 sm:col-6">
         <label for="veicCod">Máquina</label><span class="campoObrigatorio">*</span><br>
         <p-dropdown id="veicCod" [options]="listaMaquinaDisponiveis" [(ngModel)]="objEquipe.maqCod" autoWidth="false" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="maqMarca" optionValue="maqCod" placeholder="Selecione uma máquina" [showClear]="true"></p-dropdown>
