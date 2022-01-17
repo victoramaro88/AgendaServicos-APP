@@ -12,6 +12,7 @@ import { AparelhoNavegacaoModel } from "../Models/AparelhoNavegacao.Model";
 import { EquipeModel } from "../Models/Equipe.Model";
 import { UsuarioTbModel } from "../Models/UsuarioTb.Model";
 import { EquipeUsuarioModel } from "../Models/EquipeUsuario.Model";
+import { UsuarioEnvioModel } from "../Models/UsuarioEnvio.Model";
 
 @Injectable({
   providedIn: 'root'
@@ -91,6 +92,10 @@ export class HttpService {
 
   public ManterVeiculo(objVeiculo: VeiculoModel): Observable<string> {
     return this.http.post<string>(`${environment.urlAPI}/Agenda/ManterVeiculo`, objVeiculo, this.CarregaHeader());
+  }
+
+  public ManterEquipe(objEquipeEnvio: UsuarioEnvioModel): Observable<string> {
+    return this.http.post<string>(`${environment.urlAPI}/Agenda/ManterEquipe`, objEquipeEnvio, this.CarregaHeader());
   }
 
   public ManterMaquina(objMaquina: MaquinaModel): Observable<string> {
