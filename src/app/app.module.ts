@@ -16,6 +16,7 @@ import { TooltipModule } from 'primeng/tooltip';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { DropdownModule } from 'primeng/dropdown';
 import { PickListModule } from 'primeng/picklist';
+import { PasswordModule } from 'primeng/password';
 
 import { NgxMaskModule, IConfig } from 'ngx-mask'
 
@@ -69,6 +70,7 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
     SelectButtonModule,
     DropdownModule,
     PickListModule,
+    PasswordModule,
 
   ],
   providers: [],

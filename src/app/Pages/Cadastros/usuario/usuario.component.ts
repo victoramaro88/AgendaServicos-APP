@@ -17,10 +17,20 @@ export class UsuarioComponent implements OnInit {
   boolLoading = false;
   msgs: any[] = [];
   opcoesStatus: any[] = [];
-  modoEdicao: boolean = false;
+  modoEdicao: boolean = true;
 
   listaPerfil: PerfilModel[] = [];
   listaUsuario: UsuarioTbModel[] = [];
+  objUsuario: UsuarioTbModel = {
+    usuCod: 0,
+    usuNome: '',
+    usuLogin: '',
+    usuSenha: '',
+    usuStatus: true,
+    perfCod: 0
+  };
+  confirmaSenha: string = '';
+  boolConfirmaSenha: boolean = true;
 
   constructor(
     private router: Router,
@@ -71,4 +81,111 @@ export class UsuarioComponent implements OnInit {
     return perfil ? perfil.perfDesc : '';
   }
 
+  NovoRegistro() {
+    this.objUsuario = {
+      usuCod: 0,
+      usuNome: '',
+      usuLogin: '',
+      usuSenha: '',
+      usuStatus: true,
+      perfCod: 0
+    };
+    this.modoEdicao = true;
+  }
+
+  IniciaEdicao(objUsr: UsuarioTbModel) {
+    this.objUsuario.usuCod = objUsr.usuCod;
+    this.objUsuario.usuNome = objUsr.usuNome;
+    this.objUsuario.usuLogin = objUsr.usuLogin;
+    this.objUsuario.usuSenha = objUsr.usuSenha;
+    this.objUsuario.usuStatus = objUsr.usuStatus;
+    this.objUsuario.perfCod = objUsr.perfCod;
+
+    this.modoEdicao = true;
+  }
+
+  AlteraStatusUsuario(objUsr: UsuarioTbModel) {
+    this.boolLoading = true;
+    this.http.AlteraStatusUsuario(objUsr.usuCod, objUsr.usuStatus).subscribe((response: string) => {
+      if (response) {
+        this.messageService.add({severity:'success', summary:'Sucesso! ', detail: 'Usuário '+ (objUsr.usuStatus ? 'ativado' : 'inativado') + ' com sucesso!'});
+      }
+      this.boolLoading = false;
+    }, error => {
+      this.msgs = [];
+      this.boolLoading = false;
+      this.messageService.add({ severity: 'error', summary: 'Erro: ', detail: this.errosHttp.RetornaMensagemErro(error) });
+      this.listaUsuario = [];
+      this.ListaPerfil(0);
+    });
+  }
+
+  Cancelar() {
+    this.objUsuario = {
+      usuCod: 0,
+      usuNome: '',
+      usuLogin: '',
+      usuSenha: '',
+      usuStatus: true,
+      perfCod: 0
+    };
+    this.modoEdicao = false;
+  }
+
+  Salvar() {
+    this.boolLoading = true;
+    if (this.ValidaInformacoes(this.objUsuario))
+    {
+      // this.http.ManterMaquina(this.objMaquina).subscribe((response: string) => {
+      //   if (response) {
+      //     this.messageService.add({severity:'success', summary:'Sucesso! ', detail: 'Máquina '+ (this.objMaquina.maqCod > 0 ? 'alterada' : 'inserida') + ' com sucesso!'});
+      //     setTimeout(() => {
+      //       this.listaMaquina = [];
+      //       this.ListaDiametroFuro(0);
+      //     }, 2000);
+      //   }
+      //   this.boolLoading = false;
+      // }, error => {
+      //   this.msgs = [];
+      //   this.boolLoading = false;
+      //   this.messageService.add({severity:'error', summary:'Erro: ', detail: this.errosHttp.RetornaMensagemErro(error)});
+      // });
+    }
+  }
+
+  ValidaSenha() {
+    if (this.confirmaSenha !== this.objUsuario.usuSenha) {
+      this.boolConfirmaSenha = false;
+    } else {
+      this.boolConfirmaSenha = true;
+    }
+  }
+
+  ValidaInformacoes(objUsr: UsuarioTbModel) {
+    if (objUsr.usuNome.length > 0) {
+      if (objUsr.usuLogin.length > 0) {
+        if (objUsr.usuSenha.length > 0) {
+          if (objUsr.perfCod > 0) {
+            return true;
+          } else {
+            this.boolLoading = false;
+            this.messageService.add({ severity: 'warn', summary: 'Atenção: ', detail: 'Selecione um perfil!' });
+            return false;
+          }
+        } else {
+          this.boolLoading = false;
+          this.messageService.add({ severity: 'warn', summary: 'Atenção: ', detail: 'Insira uma senha!' });
+          return false;
+        }
+      } else {
+        this.boolLoading = false;
+        this.messageService.add({ severity: 'warn', summary: 'Atenção: ', detail: 'Insira um login!' });
+        return false;
+      }
+    } else {
+      this.boolLoading = false;
+      this.messageService.add({ severity: 'warn', summary: 'Atenção: ', detail: 'Insira um nome!' });
+      return false;
+    }
+  }
 }

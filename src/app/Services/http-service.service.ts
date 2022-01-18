@@ -91,6 +91,12 @@ export class HttpService {
     return this.http.get<string>(`${environment.urlAPI}/Agenda/AlteraStatusEquipe/${equipCod}/${equipStatus}`, this.CarregaHeader());
   }
 
+  public AlteraStatusUsuario(usuCod: number, usuStatus: boolean): Observable<string> {
+    return this.http.get<string>(`${environment.urlAPI}/Agenda/AlteraStatusUsuario/${usuCod}/${usuStatus}`, this.CarregaHeader());
+  }
+
+  // AlteraStatusUsuario(int usuCod, bool usuStatus)
+
   public ManterVeiculo(objVeiculo: VeiculoModel): Observable<string> {
     return this.http.post<string>(`${environment.urlAPI}/Agenda/ManterVeiculo`, objVeiculo, this.CarregaHeader());
   }

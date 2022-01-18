@@ -42,7 +42,7 @@ export class MenuComponent implements OnInit {
             routerLink: '/maquina'
           },
           {
-            label: 'Usuário',
+            label: 'Usuários',
             routerLink: '/usuario'
           },
           {
