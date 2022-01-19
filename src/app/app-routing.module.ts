@@ -7,6 +7,8 @@ import { HomeComponent } from './Pages/home/home.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './Pages/login/login.component';
+import { ItemChecklistComponent } from './Pages/Cadastros/Checklist/item-checklist/item-checklist.component';
+import { ChecklistComponent } from './Pages/Cadastros/Checklist/checklist/checklist.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -17,6 +19,8 @@ const routes: Routes = [
   { path: 'veiculo', component: VeiculoComponent },
   { path: 'diametro', component: DiametroComponent },
   { path: 'equipe', component: EquipeComponent },
+  { path: 'itemCheckList', component: ItemChecklistComponent },
+  { path: 'checklist', component: ChecklistComponent },
 ];
 
 @NgModule({

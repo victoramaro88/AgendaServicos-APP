@@ -27,12 +27,21 @@ export class MenuComponent implements OnInit {
         items: [
           {
             label: 'CheckList',
-            routerLink: '/checkList'
+            items: [
+              {
+                label: 'Checklist',
+                routerLink: '/checklist'
+              },
+              {
+                label: 'Item Checklist',
+                routerLink: '/itemCheckList'
+              }
+            ]
           },
-          {
-            label: 'Diâmetro',
-            routerLink: '/diametro'
-          },
+          // {
+          //   label: 'Diâmetro',
+          //   routerLink: '/diametro'
+          // },
           {
             label: 'Equipes',
             routerLink: '/equipe'

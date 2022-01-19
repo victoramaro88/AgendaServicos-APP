@@ -109,6 +109,10 @@ export class HttpService {
     return this.http.post<string>(`${environment.urlAPI}/Agenda/ManterMaquina`, objMaquina, this.CarregaHeader());
   }
 
+  public ManterUsuario(objUsuario: UsuarioTbModel): Observable<string> {
+    return this.http.post<string>(`${environment.urlAPI}/Agenda/ManterUsuario`, objUsuario, this.CarregaHeader());
+  }
+
   public ListaDiametroFuro(diamCod: number): Observable<DiametroFuroModel[]> {
     return this.http.get<DiametroFuroModel[]>(`${environment.urlAPI}/Agenda/ListaDiametroFuro/${diamCod}`, this.CarregaHeader());
   }

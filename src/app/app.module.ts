@@ -32,6 +32,8 @@ import { MaquinaComponent } from './Pages/Cadastros/maquina/maquina.component';
 import { VeiculoComponent } from './Pages/Cadastros/veiculo/veiculo.component';
 import { DiametroComponent } from './Pages/Cadastros/diametro/diametro.component';
 import { EquipeComponent } from './Pages/Cadastros/equipe/equipe.component';
+import { ItemChecklistComponent } from './Pages/Cadastros/Checklist/item-checklist/item-checklist.component';
+import { ChecklistComponent } from './Pages/Cadastros/Checklist/checklist/checklist.component';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
 
@@ -46,6 +48,8 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
     VeiculoComponent,
     DiametroComponent,
     EquipeComponent,
+    ItemChecklistComponent,
+    ChecklistComponent,
   ],
   imports: [
     BrowserModule,

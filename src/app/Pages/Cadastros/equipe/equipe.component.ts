@@ -98,7 +98,6 @@ export class EquipeComponent implements OnInit {
     }
 
     ListaMaquina(maqCod: number) {
-      this.boolLoading = true;
       this.http.ListaMaquina(maqCod).subscribe((response: MaquinaModel[]) => {
         if (response) {
           for (const itmMaq of response) {
@@ -114,7 +113,6 @@ export class EquipeComponent implements OnInit {
             this.listaMaquina.push(objResp);
           }
         }
-        this.boolLoading = false;
         this.ListaEquipe(0);
       }, error => {
         this.msgs = [];
@@ -124,14 +122,12 @@ export class EquipeComponent implements OnInit {
     }
 
     ListaEquipe(equipCod: number) {
-      this.boolLoading = true;
       this.modoEdicao = false;
       this.http.ListaEquipe(equipCod).subscribe((response: EquipeModel[]) => {
         if (response) {
           this.listaEquipe = response;
           this.ListaUsuario(0);
         }
-        this.boolLoading = false;
       }, error => {
         this.msgs = [];
         this.boolLoading = false;

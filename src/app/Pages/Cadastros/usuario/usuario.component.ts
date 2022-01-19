@@ -17,7 +17,7 @@ export class UsuarioComponent implements OnInit {
   boolLoading = false;
   msgs: any[] = [];
   opcoesStatus: any[] = [];
-  modoEdicao: boolean = true;
+  modoEdicao: boolean = false;
 
   listaPerfil: PerfilModel[] = [];
   listaUsuario: UsuarioTbModel[] = [];
@@ -52,6 +52,7 @@ export class UsuarioComponent implements OnInit {
 
     ListaPerfil(perfCod: number) {
       this.boolLoading = true;
+      this.modoEdicao = false;
       this.http.ListaPerfil(perfCod).subscribe((response: PerfilModel[]) => {
         if (response) {
           this.listaPerfil = response;
@@ -138,24 +139,23 @@ export class UsuarioComponent implements OnInit {
     }
 
     Salvar() {
-      // this.boolLoading = true;
+      this.boolLoading = true;
       if (this.ValidaInformacoes(this.objUsuario))
       {
-        console.log(this.objUsuario);
-        // this.http.ManterMaquina(this.objMaquina).subscribe((response: string) => {
-        //   if (response) {
-        //     this.messageService.add({severity:'success', summary:'Sucesso! ', detail: 'Máquina '+ (this.objMaquina.maqCod > 0 ? 'alterada' : 'inserida') + ' com sucesso!'});
-        //     setTimeout(() => {
-        //       this.listaMaquina = [];
-        //       this.ListaDiametroFuro(0);
-        //     }, 2000);
-        //   }
-        //   this.boolLoading = false;
-        // }, error => {
-        //   this.msgs = [];
-        //   this.boolLoading = false;
-        //   this.messageService.add({severity:'error', summary:'Erro: ', detail: this.errosHttp.RetornaMensagemErro(error)});
-        // });
+        this.http.ManterUsuario(this.objUsuario).subscribe((response: string) => {
+          if (response) {
+            this.messageService.add({severity:'success', summary:'Sucesso! ', detail: 'Usuário '+ (this.objUsuario.usuCod > 0 ? 'alterado' : 'inserido') + ' com sucesso!'});
+            setTimeout(() => {
+              this.listaUsuario = [];
+              this.ListaPerfil(0);
+            }, 2000);
+          }
+          this.boolLoading = false;
+        }, error => {
+          this.msgs = [];
+          this.boolLoading = false;
+          this.messageService.add({severity:'error', summary:'Erro: ', detail: this.errosHttp.RetornaMensagemErro(error)});
+        });
       }
     }
 
@@ -172,7 +172,18 @@ export class UsuarioComponent implements OnInit {
         if (objUsr.usuLogin.length > 0 && !this.boolLoginValido) {
           if (objUsr.perfCod > 0) {
             if (objUsr.usuSenha === this.confirmaSenha) {
-              return true;
+              if(objUsr.usuCod === 0) {
+                if(objUsr.usuSenha.length > 5) {
+                  return true;
+                }
+                else {
+                  this.boolLoading = false;
+                  this.messageService.add({ severity: 'warn', summary: 'Atenção: ', detail: 'Insira uma senha válida de 6 díigitos!' });
+                  return false;
+                }
+              } else {
+                return true;
+              }
             } else {
               this.boolLoading = false;
               this.messageService.add({ severity: 'warn', summary: 'Atenção: ', detail: 'Verifique a senha!' });
@@ -193,18 +204,17 @@ export class UsuarioComponent implements OnInit {
         this.messageService.add({ severity: 'warn', summary: 'Atenção: ', detail: 'Insira um nome!' });
         return false;
       }
-  }
+    }
 
-  VerificaLogin(usuLogin: string) {
-    // this.boolLoading = true;
-    this.http.VerificaLogin(usuLogin).subscribe((response: boolean) => {
-      // this.boolLoading = false;
-      console.log(response);
-      this.boolLoginValido = response;
-    }, error => {
-      this.msgs = [];
-      this.boolLoading = false;
-      this.messageService.add({ severity: 'error', summary: 'Erro: ', detail: this.errosHttp.RetornaMensagemErro(error) });
-    });
-  }
+    VerificaLogin(usuLogin: string) {
+      if(usuLogin.length > 0) {
+        this.http.VerificaLogin(usuLogin).subscribe((response: boolean) => {
+          this.boolLoginValido = response;
+        }, error => {
+          this.msgs = [];
+          this.boolLoading = false;
+          this.messageService.add({ severity: 'error', summary: 'Erro: ', detail: this.errosHttp.RetornaMensagemErro(error) });
+        });
+      }
+    }
   }

@@ -73,7 +73,7 @@
     </div>
     <div class="field col-12 lg:col-3 md:col-4 sm:col-6">
       <label for="usuLogin">Login</label><span class="campoObrigatorio">*</span>
-      <input (focusout)="VerificaLogin(objUsuario.usuLogin);" [(ngModel)]="objUsuario.usuLogin" id="usuLogin" type="text" class="p-inputtext-sm inputfield w-full" pInputText>
+      <input (focusout)="VerificaLogin(objUsuario.usuLogin);" [ngClass]="{'ng-invalid ng-dirty':boolLoginValido}" [(ngModel)]="objUsuario.usuLogin" id="usuLogin" type="text" class="p-inputtext-sm inputfield w-full" pInputText>
       <br><span style="color: red;" class="ml-2" *ngIf="boolLoginValido"><b><small>Login já existe, insira outro!</small></b></span>
     </div>
     <div class="field col-12 lg:col-2 md:col-4 sm:col-5">
@@ -86,10 +86,10 @@
     </div>
     <!-- ALTERAR A SENHA -->
     <div class="field col-12 lg:col-3 md:col-4 sm:col-3">
-      <button *ngIf="!boolAlterarSenha" (click)="boolAlterarSenha = !boolAlterarSenha;" pButton pRipple type="button" label="Alterar Senha" class="p-button-raised p-button-warning"></button>
-      <button *ngIf="boolAlterarSenha" (click)="boolAlterarSenha = !boolAlterarSenha; confirmaSenha = ''; objUsuario.usuSenha = '';" pButton pRipple type="button" label="Cancelar Senha" class="p-button-raised p-button-warning"></button>
+      <button *ngIf="!boolAlterarSenha && objUsuario.usuCod > 0" (click)="boolAlterarSenha = !boolAlterarSenha;" pButton pRipple type="button" label="Alterar Senha" class="p-button-raised p-button-warning"></button>
+      <button *ngIf="boolAlterarSenha && objUsuario.usuCod > 0" (click)="boolAlterarSenha = !boolAlterarSenha; confirmaSenha = ''; objUsuario.usuSenha = '';" pButton pRipple type="button" label="Cancelar Senha" class="p-button-raised p-button-warning"></button>
     </div>
-    <div *ngIf="boolAlterarSenha" class="field col-12">
+    <div *ngIf="boolAlterarSenha || objUsuario.usuCod === 0" class="field col-12">
       <div class="grid">
         <div class="field col-12 lg:col-3 md:col-4 sm:col-4">
           <label for="usuSenha">Senha</label><span class="campoObrigatorio">*</span>
