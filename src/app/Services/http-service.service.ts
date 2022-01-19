@@ -140,4 +140,8 @@ export class HttpService {
   public ListaUsuariosDisponiveis(): Observable<UsuarioTbModel[]> {
     return this.http.get<UsuarioTbModel[]>(`${environment.urlAPI}/Agenda/ListaUsuariosDisponiveis`, this.CarregaHeader());
   }
+
+  public VerificaLogin(usuLogin: string): Observable<boolean> {
+    return this.http.get<boolean>(`${environment.urlAPI}/Agenda/VerificaLogin/${usuLogin}`, this.CarregaHeader());
+  }
 }
