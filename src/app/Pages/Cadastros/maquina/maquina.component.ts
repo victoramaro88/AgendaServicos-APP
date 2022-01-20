@@ -119,7 +119,7 @@ export class MaquinaComponent implements OnInit {
   }
 
   SelecionaVeiculo(veicCod: number) {
-    let veiculo = this.listaVeiculo.find(v => v.veicCod === veicCod); //-> PAREI AQUI!!!!
+    let veiculo = this.listaVeiculo.find(v => v.veicCod === veicCod);
     return veiculo ? veiculo.veicMarca : '';
   }
 

@@ -15,6 +15,8 @@ import { EquipeUsuarioModel } from "../Models/EquipeUsuario.Model";
 import { UsuarioEnvioModel } from "../Models/UsuarioEnvio.Model";
 import { PerfilModel } from "../Models/Perfil.Model";
 import { ItemCheckListModel } from "../Models/ItemCheckList.Model";
+import { TipoChecklistModel } from "../Models/TipoChecklist.Model";
+import { ChecklistModel } from "../Models/Checklist.Model";
 
 @Injectable({
   providedIn: 'root'
@@ -154,6 +156,14 @@ export class HttpService {
 
   public ListaUsuariosDisponiveis(): Observable<UsuarioTbModel[]> {
     return this.http.get<UsuarioTbModel[]>(`${environment.urlAPI}/Agenda/ListaUsuariosDisponiveis`, this.CarregaHeader());
+  }
+
+  public ListaTipoCheckList(tipChLiCod: number): Observable<TipoChecklistModel[]> {
+    return this.http.get<TipoChecklistModel[]>(`${environment.urlAPI}/Agenda/ListaTipoCheckList/${tipChLiCod}`, this.CarregaHeader());
+  }
+
+  public ListaCheckList(chLsCod: number): Observable<ChecklistModel[]> {
+    return this.http.get<ChecklistModel[]>(`${environment.urlAPI}/Agenda/ListaCheckList/${chLsCod}`, this.CarregaHeader());
   }
 
   public VerificaLogin(usuLogin: string): Observable<boolean> {
