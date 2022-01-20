@@ -14,6 +14,7 @@ import { UsuarioTbModel } from "../Models/UsuarioTb.Model";
 import { EquipeUsuarioModel } from "../Models/EquipeUsuario.Model";
 import { UsuarioEnvioModel } from "../Models/UsuarioEnvio.Model";
 import { PerfilModel } from "../Models/Perfil.Model";
+import { ItemCheckListModel } from "../Models/ItemCheckList.Model";
 
 @Injectable({
   providedIn: 'root'
@@ -95,7 +96,9 @@ export class HttpService {
     return this.http.get<string>(`${environment.urlAPI}/Agenda/AlteraStatusUsuario/${usuCod}/${usuStatus}`, this.CarregaHeader());
   }
 
-  // AlteraStatusUsuario(int usuCod, bool usuStatus)
+  public AlteraStatusItemCheckList(itmChLsCod: number, itmChLsStatus: boolean): Observable<string> {
+    return this.http.get<string>(`${environment.urlAPI}/Agenda/AlteraStatusItemCheckList/${itmChLsCod}/${itmChLsStatus}`, this.CarregaHeader());
+  }
 
   public ManterVeiculo(objVeiculo: VeiculoModel): Observable<string> {
     return this.http.post<string>(`${environment.urlAPI}/Agenda/ManterVeiculo`, objVeiculo, this.CarregaHeader());
@@ -111,6 +114,10 @@ export class HttpService {
 
   public ManterUsuario(objUsuario: UsuarioTbModel): Observable<string> {
     return this.http.post<string>(`${environment.urlAPI}/Agenda/ManterUsuario`, objUsuario, this.CarregaHeader());
+  }
+
+  public ManterItemChecklist(objItemChecklist: ItemCheckListModel): Observable<string> {
+    return this.http.post<string>(`${environment.urlAPI}/Agenda/ManterItemChecklist`, objItemChecklist, this.CarregaHeader());
   }
 
   public ListaDiametroFuro(diamCod: number): Observable<DiametroFuroModel[]> {
@@ -135,6 +142,10 @@ export class HttpService {
 
   public ListaPerfil(perfCod: number): Observable<PerfilModel[]> {
     return this.http.get<PerfilModel[]>(`${environment.urlAPI}/Agenda/ListaPerfil/${perfCod}`, this.CarregaHeader());
+  }
+
+  public ListaItemChecklist(itmChLsCod: number): Observable<ItemCheckListModel[]> {
+    return this.http.get<ItemCheckListModel[]>(`${environment.urlAPI}/Agenda/ListaItemChecklist/${itmChLsCod}`, this.CarregaHeader());
   }
 
   public ListaEquipeUsuario(equipCod: number): Observable<EquipeUsuarioModel[]> {
