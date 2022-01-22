@@ -32,8 +32,7 @@
     <ng-template pTemplate="header">
       <tr>
         <th pSortableColumn="chLsDesc">Descrição <p-sortIcon field="chLsDesc"></p-sortIcon></th>
-        <th pSortableColumn="maqModelo">Modelo <p-sortIcon field="maqModelo"></p-sortIcon></th>
-        <th>Tipo de Checklist</th>
+        <th pSortableColumn="tipChLiCod">Tipo de Checklist <p-sortIcon field="tipChLiCod"></p-sortIcon></th>
         <th pSortableColumn="chLsStatus">Status <p-sortIcon field="chLsStatus"></p-sortIcon></th>
         <th>Ações</th>
       </tr>
@@ -41,7 +40,6 @@
     <ng-template pTemplate="body" let-item>
       <tr>
         <td><span class="p-column-title"><b>Descrição</b></span>{{item.chLsDesc}}</td>
-        <td><span class="p-column-title"><b>Modelo</b></span>{{item.maqModelo}}</td>
         <td><span class="p-column-title"><b>Tipo de Checklist</b></span>{{SelecionaTipoChLi(item.tipChLiCod)}}</td>
         <td><span class="p-column-title"><b>Status</b></span>
           <p-tag severity="{{item.chLsStatus ? 'success' : 'danger'}}" value="{{item.chLsStatus ? 'Ativo' : 'Inativo'}}"></p-tag>
@@ -49,9 +47,9 @@
         <td>
           <span class="p-column-title"><b>Ações</b></span>
           <div>
-            <!-- <button (click)="IniciaEdicao(item);" pTooltip="Editar" tooltipPosition="top" pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-info p-button-text"></button> -->
-            <!-- <button (click)="AlteraStatus(item); item.maqStatus = !item.maqStatus;" *ngIf="item.maqStatus" pTooltip="Desativar" tooltipPosition="top" pButton pRipple type="button" icon="pi pi-lock" class="p-button-rounded p-button-success p-button-text"></button>
-            <button (click)="AlteraStatus(item); item.maqStatus = !item.maqStatus;" *ngIf="!item.maqStatus" pTooltip="Ativar" tooltipPosition="top" pButton pRipple type="button" icon="pi pi-lock-open" class="p-button-rounded p-button-danger p-button-text"></button> -->
+            <button (click)="IniciaEdicao(item);" pTooltip="Editar" tooltipPosition="top" pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-info p-button-text"></button>
+            <button (click)="AlteraStatus(item); item.chLsStatus = !item.chLsStatus;" *ngIf="item.chLsStatus" pTooltip="Desativar" tooltipPosition="top" pButton pRipple type="button" icon="pi pi-lock" class="p-button-rounded p-button-success p-button-text"></button>
+            <button (click)="AlteraStatus(item); item.chLsStatus = !item.chLsStatus;" *ngIf="!item.chLsStatus" pTooltip="Ativar" tooltipPosition="top" pButton pRipple type="button" icon="pi pi-lock-open" class="p-button-rounded p-button-danger p-button-text"></button>
           </div>
         </td>
       </tr>
@@ -62,4 +60,47 @@
       </tr>
     </ng-template>
   </p-table>
+</div>
+
+<!-- MODO INCLUSÃO/ALTERAÇÃO -->
+<div *ngIf="modoEdicao" class="card">
+  <div class="formgrid grid">
+      <div class="field col-12 lg:col-2 md:col-4 sm:col-6">
+          <label for="chLsDesc">Descrição</label><span class="campoObrigatorio">*</span>
+          <input [(ngModel)]="objCheckList.chLsDesc" id="chLsDesc" type="text" class="p-inputtext-sm inputfield w-full" pInputText>
+      </div>
+      <div class="field col-12 lg:col-3 md:col-4 sm:col-6">
+        <label for="ditipChLiCodamCod">Tipo de Checklist</label><span class="campoObrigatorio">*</span><br>
+        <p-dropdown id="tipChLiCod" [options]="listaTpChLi" [(ngModel)]="objCheckList.tipChLiCod" autoWidth="false" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="tipChLiDesc" optionValue="tipChLiCod" placeholder="Selecione um tipo" [showClear]="true"></p-dropdown>
+      </div>
+      <div class="field col-12 lg:col-2 md:col-4 sm:col-6">
+        <label for="chLsStatus">Status</label><span class="campoObrigatorio">*</span>
+        <p-selectButton [options]="opcoesStatus" [(ngModel)]="objCheckList.chLsStatus" optionLabel="label" optionValue="value"></p-selectButton>
+      </div>
+  </div>
+
+  <!-- ITENS DE CHECKLIST -->
+  <h3>Itens do Checklist</h3>
+  <small>(Itens com " * " são obrigatórios!)</small><br><br>
+  <p-pickList [source]="listaItemChecklist" [target]="listaItemChecklistSelecionados" sourceHeader="Disponíveis" targetHeader="Selecionados" [dragdrop]="true"
+    [responsive]="true" [sourceStyle]="{'height':'10rem'}" [targetStyle]="{'height':'10rem'}" filterBy="itmChLsDesc"
+    sourceFilterPlaceholder="Pesquisa por nome" targetFilterPlaceholder="Pesquisa por nome"
+    [showSourceControls] = "false"
+    [showTargetControls] = "false"
+    >
+    <ng-template let-item pTemplate="item">
+        <div class="product-item">
+            <div class="product-list-detail">
+                <span class="p-mb-2">{{item.itmChLsDesc}}</span>
+            </div>
+        </div>
+    </ng-template>
+  </p-pickList>
+
+
+  <div class="text-right">
+    <small><span class="campoObrigatorio">*</span> Campos obrigarórios.</small><br><br>
+    <button (click)="Cancelar();" pButton pRipple type="button" label="Cancelar" class="p-button-raised p-button-danger"></button> &nbsp;
+    <button (click)="Salvar();" pButton pRipple type="button" label="Salvar" class="p-button-raised p-button-success"></button>
+  </div>
 </div>

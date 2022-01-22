@@ -17,6 +17,7 @@ import { PerfilModel } from "../Models/Perfil.Model";
 import { ItemCheckListModel } from "../Models/ItemCheckList.Model";
 import { TipoChecklistModel } from "../Models/TipoChecklist.Model";
 import { ChecklistModel } from "../Models/Checklist.Model";
+import { ChlistItmChlistModel } from "../Models/ChlistItmChlist.Model";
 
 @Injectable({
   providedIn: 'root'
@@ -102,6 +103,10 @@ export class HttpService {
     return this.http.get<string>(`${environment.urlAPI}/Agenda/AlteraStatusItemCheckList/${itmChLsCod}/${itmChLsStatus}`, this.CarregaHeader());
   }
 
+  public AlteraStatusCheckList(chLsCod: number, chLsStatus: boolean): Observable<string> {
+    return this.http.get<string>(`${environment.urlAPI}/Agenda/AlteraStatusCheckList/${chLsCod}/${chLsStatus}`, this.CarregaHeader());
+  }
+
   public ManterVeiculo(objVeiculo: VeiculoModel): Observable<string> {
     return this.http.post<string>(`${environment.urlAPI}/Agenda/ManterVeiculo`, objVeiculo, this.CarregaHeader());
   }
@@ -164,6 +169,10 @@ export class HttpService {
 
   public ListaCheckList(chLsCod: number): Observable<ChecklistModel[]> {
     return this.http.get<ChecklistModel[]>(`${environment.urlAPI}/Agenda/ListaCheckList/${chLsCod}`, this.CarregaHeader());
+  }
+
+  public ListaCheckListItemCheckList(chLsCod: number): Observable<ChlistItmChlistModel[]> {
+    return this.http.get<ChlistItmChlistModel[]>(`${environment.urlAPI}/Agenda/ListaCheckListItemCheckList/${chLsCod}`, this.CarregaHeader());
   }
 
   public VerificaLogin(usuLogin: string): Observable<boolean> {

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { ChecklistModel } from 'src/app/Models/Checklist.Model';
+import { ChlistItmChlistModel } from 'src/app/Models/ChlistItmChlist.Model';
+import { ItemCheckListModel } from 'src/app/Models/ItemCheckList.Model';
 import { TipoChecklistModel } from 'src/app/Models/TipoChecklist.Model';
 import { HttpService } from 'src/app/Services/http-service.service';
 import { MsgErroHttp } from 'src/app/Services/msgErroHttp.Service';
@@ -27,6 +29,9 @@ export class ChecklistComponent implements OnInit {
     tipChLiCod: 0
   };
   listaChLi: ChecklistModel[] = [];
+  listaItemChecklist: ItemCheckListModel[] = [];
+  listaItemChecklistSelecionados: ItemCheckListModel[] = [];
+  listaItmChLstEdit: ChlistItmChlistModel[] = [];
 
   constructor(
     private router: Router,
@@ -52,9 +57,33 @@ export class ChecklistComponent implements OnInit {
           this.listaTpChLi = response;
         }
         console.log(this.listaTpChLi);
+        this.ListaItemChecklist(0);
+      }, error => {
+        this.msgs = [];
+        this.messageService.add({severity:'error', summary:'Erro: ', detail: this.errosHttp.RetornaMensagemErro(error)});
+      });
+    }
+
+    ListaItemChecklist(maqCod: number) {
+      this.boolLoading = true;
+      this.modoEdicao = false;
+      this.http.ListaItemChecklist(maqCod).subscribe((response: ItemCheckListModel[]) => {
+        if (response) {
+          for (const itmChLst of response) {
+            let objItChLs: ItemCheckListModel = {
+              itmChLsCod: itmChLst.itmChLsCod,
+              itmChLsDesc: itmChLst.itmChLsObrig ? itmChLst.itmChLsDesc + '*' : itmChLst.itmChLsDesc,
+              itmChLsObrig: itmChLst.itmChLsObrig,
+              itmChLsStatus: itmChLst.itmChLsStatus
+            };
+            this.listaItemChecklist.push(objItChLs);
+          }
+        }
+        console.log(this.listaItemChecklist);
         this.ListaCheckList(0);
       }, error => {
         this.msgs = [];
+        this.boolLoading = false;
         this.messageService.add({severity:'error', summary:'Erro: ', detail: this.errosHttp.RetornaMensagemErro(error)});
       });
     }
@@ -74,9 +103,24 @@ export class ChecklistComponent implements OnInit {
       });
     }
 
+    ListaCheckListItemCheckList(chLsCod: number) {
+      this.boolLoading = true;
+      this.http.ListaCheckListItemCheckList(chLsCod).subscribe((response: ChlistItmChlistModel[]) => {
+        if (response) {
+          this.listaItmChLstEdit = response;
+        }
+        this.boolLoading = false;
+        console.log(this.listaChLi);
+      }, error => {
+        this.msgs = [];
+        this.boolLoading = false;
+        this.messageService.add({severity:'error', summary:'Erro: ', detail: this.errosHttp.RetornaMensagemErro(error)});
+      });
+    }
+
     SelecionaTipoChLi(tipChLiCod: number) {
       let tipChLi = this.listaTpChLi.find(v => v.tipChLiCod === tipChLiCod);
-      return tipChLi ? tipChLi.tipChLiCod : '';
+      return tipChLi ? tipChLi.tipChLiDesc : '';
     }
 
     NovoRegistro() {
@@ -87,6 +131,75 @@ export class ChecklistComponent implements OnInit {
         tipChLiCod: 0
       };
       this.modoEdicao = true;
+    }
+
+    IniciaEdicao(objChLst: ChecklistModel) {
+
+      this.ListaCheckListItemCheckList(objChLst.chLsCod);
+      this.objCheckList.chLsCod = objChLst.chLsCod;
+      this.objCheckList.chLsDesc = objChLst.chLsDesc;
+      this.objCheckList.chLsStatus = objChLst.chLsStatus;
+      this.objCheckList.tipChLiCod = objChLst.tipChLiCod;
+
+      // ListaCheckListItemCheckList
+
+      this.modoEdicao = true;
+    }
+
+    AlteraStatus(objChLst: ChecklistModel) {
+      this.boolLoading = true;
+      this.http.AlteraStatusCheckList(objChLst.chLsCod, objChLst.chLsStatus).subscribe((response: string) => {
+        if (response) {
+          this.messageService.add({severity:'success', summary:'Sucesso! ', detail: 'Checklist '+ (objChLst.chLsStatus ? 'ativado' : 'inativado') + ' com sucesso!'});
+        }
+        this.boolLoading = false;
+      }, error => {
+        this.msgs = [];
+        this.boolLoading = false;
+        this.messageService.add({ severity: 'error', summary: 'Erro: ', detail: this.errosHttp.RetornaMensagemErro(error) });
+        this.listaChLi = [];
+        this.ListaTipoCheckList(0);
+      });
+    }
+
+    Cancelar() {
+      this.objCheckList = {
+        chLsCod: 0,
+        chLsDesc: '',
+        chLsStatus: true,
+        tipChLiCod: 0
+      };
+      this.listaItemChecklistSelecionados = [];
+      this.modoEdicao = false;
+    }
+
+    Salvar() {
+      if(this.ValidaInformacoes(this.objCheckList)) {
+        console.log(this.objCheckList);
+        console.log(this.listaItemChecklistSelecionados);
+      }
+    }
+
+    ValidaInformacoes(objChLst: ChecklistModel) {
+      if (objChLst.chLsDesc.length > 0) {
+        if (objChLst.tipChLiCod > 0) {
+          if (this.listaItemChecklistSelecionados.length > 0) {
+            return true;
+          } else {
+            this.boolLoading = false;
+            this.messageService.add({ severity: 'warn', summary: 'Atenção: ', detail: 'Selecione ao menos um item para o checklist!' });
+            return false;
+          }
+        } else {
+          this.boolLoading = false;
+          this.messageService.add({ severity: 'warn', summary: 'Atenção: ', detail: 'Selecione um tipo de checklist!' });
+          return false;
+        }
+      } else {
+        this.boolLoading = false;
+        this.messageService.add({ severity: 'warn', summary: 'Atenção: ', detail: 'Insira uma descrição!' });
+        return false;
+      }
     }
 
   }
