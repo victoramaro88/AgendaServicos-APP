@@ -56,7 +56,6 @@ export class ChecklistComponent implements OnInit {
         if (response) {
           this.listaTpChLi = response;
         }
-        console.log(this.listaTpChLi);
         this.ListaItemChecklist(0);
       }, error => {
         this.msgs = [];
@@ -66,6 +65,7 @@ export class ChecklistComponent implements OnInit {
 
     ListaItemChecklist(maqCod: number) {
       this.boolLoading = true;
+      this.listaItemChecklist = [];
       this.modoEdicao = false;
       this.http.ListaItemChecklist(maqCod).subscribe((response: ItemCheckListModel[]) => {
         if (response) {
@@ -79,7 +79,6 @@ export class ChecklistComponent implements OnInit {
             this.listaItemChecklist.push(objItChLs);
           }
         }
-        console.log(this.listaItemChecklist);
         this.ListaCheckList(0);
       }, error => {
         this.msgs = [];
@@ -95,7 +94,6 @@ export class ChecklistComponent implements OnInit {
           this.listaChLi = response;
         }
         this.boolLoading = false;
-        console.log(this.listaChLi);
       }, error => {
         this.msgs = [];
         this.boolLoading = false;
@@ -104,18 +102,7 @@ export class ChecklistComponent implements OnInit {
     }
 
     ListaCheckListItemCheckList(chLsCod: number) {
-      this.boolLoading = true;
-      this.http.ListaCheckListItemCheckList(chLsCod).subscribe((response: ChlistItmChlistModel[]) => {
-        if (response) {
-          this.listaItmChLstEdit = response;
-        }
-        this.boolLoading = false;
-        console.log(this.listaChLi);
-      }, error => {
-        this.msgs = [];
-        this.boolLoading = false;
-        this.messageService.add({severity:'error', summary:'Erro: ', detail: this.errosHttp.RetornaMensagemErro(error)});
-      });
+
     }
 
     SelecionaTipoChLi(tipChLiCod: number) {
@@ -134,16 +121,35 @@ export class ChecklistComponent implements OnInit {
     }
 
     IniciaEdicao(objChLst: ChecklistModel) {
+      this.listaItemChecklistSelecionados = [];
+      this.boolLoading = true;
+      this.http.ListaCheckListItemCheckList(objChLst.chLsCod).subscribe((response: ChlistItmChlistModel[]) => {
+        if (response) {
+          this.listaItmChLstEdit = response;
+          for (const itemChLs of response) {
+            if(objChLst.chLsCod === itemChLs.chLsCod) {
+              let item = this.listaItemChecklist.find(i => i.itmChLsCod === itemChLs.itmChLsCod) as ItemCheckListModel;
+              let indexItem = this.listaItemChecklist.findIndex(i => i.itmChLsCod === itemChLs.itmChLsCod);
+              this.listaItemChecklistSelecionados.push(item);
+              this.listaItemChecklist.splice(indexItem, 1);
+            }
+          }
+          console.log(this.listaItemChecklistSelecionados);
 
-      this.ListaCheckListItemCheckList(objChLst.chLsCod);
-      this.objCheckList.chLsCod = objChLst.chLsCod;
-      this.objCheckList.chLsDesc = objChLst.chLsDesc;
-      this.objCheckList.chLsStatus = objChLst.chLsStatus;
-      this.objCheckList.tipChLiCod = objChLst.tipChLiCod;
+          this.objCheckList.chLsCod = objChLst.chLsCod;
+          this.objCheckList.chLsDesc = objChLst.chLsDesc;
+          this.objCheckList.chLsStatus = objChLst.chLsStatus;
+          this.objCheckList.tipChLiCod = objChLst.tipChLiCod;
 
-      // ListaCheckListItemCheckList
-
-      this.modoEdicao = true;
+          this.modoEdicao = true;
+        }
+        this.boolLoading = false;
+        console.log(this.listaChLi);
+      }, error => {
+        this.msgs = [];
+        this.boolLoading = false;
+        this.messageService.add({severity:'error', summary:'Erro: ', detail: this.errosHttp.RetornaMensagemErro(error)});
+      });
     }
 
     AlteraStatus(objChLst: ChecklistModel) {
@@ -163,6 +169,7 @@ export class ChecklistComponent implements OnInit {
     }
 
     Cancelar() {
+      this.ListaTipoCheckList(0);
       this.objCheckList = {
         chLsCod: 0,
         chLsDesc: '',
