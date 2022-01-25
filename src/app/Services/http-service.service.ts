@@ -18,6 +18,7 @@ import { ItemCheckListModel } from "../Models/ItemCheckList.Model";
 import { TipoChecklistModel } from "../Models/TipoChecklist.Model";
 import { ChecklistModel } from "../Models/Checklist.Model";
 import { ChlistItmChlistModel } from "../Models/ChlistItmChlist.Model";
+import { ChecklistEnvioModel } from "../Models/ChecklistEnvio.Model";
 
 @Injectable({
   providedIn: 'root'
@@ -125,6 +126,10 @@ export class HttpService {
 
   public ManterItemChecklist(objItemChecklist: ItemCheckListModel): Observable<string> {
     return this.http.post<string>(`${environment.urlAPI}/Agenda/ManterItemChecklist`, objItemChecklist, this.CarregaHeader());
+  }
+
+  public ManterCheckList(objChecklistEnvio: ChecklistEnvioModel): Observable<string> {
+    return this.http.post<string>(`${environment.urlAPI}/Agenda/ManterCheckList`, objChecklistEnvio, this.CarregaHeader());
   }
 
   public ListaDiametroFuro(diamCod: number): Observable<DiametroFuroModel[]> {

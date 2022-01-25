@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { ChecklistModel } from 'src/app/Models/Checklist.Model';
+import { ChecklistEnvioModel } from 'src/app/Models/ChecklistEnvio.Model';
 import { ChlistItmChlistModel } from 'src/app/Models/ChlistItmChlist.Model';
 import { ItemCheckListModel } from 'src/app/Models/ItemCheckList.Model';
 import { TipoChecklistModel } from 'src/app/Models/TipoChecklist.Model';
@@ -70,13 +71,15 @@ export class ChecklistComponent implements OnInit {
       this.http.ListaItemChecklist(maqCod).subscribe((response: ItemCheckListModel[]) => {
         if (response) {
           for (const itmChLst of response) {
-            let objItChLs: ItemCheckListModel = {
-              itmChLsCod: itmChLst.itmChLsCod,
-              itmChLsDesc: itmChLst.itmChLsObrig ? itmChLst.itmChLsDesc + '*' : itmChLst.itmChLsDesc,
-              itmChLsObrig: itmChLst.itmChLsObrig,
-              itmChLsStatus: itmChLst.itmChLsStatus
-            };
-            this.listaItemChecklist.push(objItChLs);
+            if(itmChLst.itmChLsStatus === true) {
+              let objItChLs: ItemCheckListModel = {
+                itmChLsCod: itmChLst.itmChLsCod,
+                itmChLsDesc: itmChLst.itmChLsObrig ? itmChLst.itmChLsDesc + '*' : itmChLst.itmChLsDesc,
+                itmChLsObrig: itmChLst.itmChLsObrig,
+                itmChLsStatus: itmChLst.itmChLsStatus
+              };
+              this.listaItemChecklist.push(objItChLs);
+            }
           }
         }
         this.ListaCheckList(0);
@@ -134,7 +137,6 @@ export class ChecklistComponent implements OnInit {
               this.listaItemChecklist.splice(indexItem, 1);
             }
           }
-          console.log(this.listaItemChecklistSelecionados);
 
           this.objCheckList.chLsCod = objChLst.chLsCod;
           this.objCheckList.chLsDesc = objChLst.chLsDesc;
@@ -144,7 +146,6 @@ export class ChecklistComponent implements OnInit {
           this.modoEdicao = true;
         }
         this.boolLoading = false;
-        console.log(this.listaChLi);
       }, error => {
         this.msgs = [];
         this.boolLoading = false;
@@ -181,9 +182,26 @@ export class ChecklistComponent implements OnInit {
     }
 
     Salvar() {
+      this.boolLoading = true;
       if(this.ValidaInformacoes(this.objCheckList)) {
-        console.log(this.objCheckList);
-        console.log(this.listaItemChecklistSelecionados);
+        let objChecklistEnvio: ChecklistEnvioModel = {
+          objChecklist: this.objCheckList,
+          listaItemChecklist: this.listaItemChecklistSelecionados
+        };
+        this.http.ManterCheckList(objChecklistEnvio).subscribe((response: string) => {
+          if (response) {
+            this.messageService.add({severity:'success', summary:'Sucesso! ', detail: 'Checklist '+ (objChecklistEnvio.objChecklist.chLsCod > 0 ? 'alterado' : 'inserido') + ' com sucesso!'});
+            setTimeout(() => {
+              this.listaChLi = [];
+              this.ListaTipoCheckList(0);
+            }, 2000);
+          }
+          this.boolLoading = false;
+        }, error => {
+          this.msgs = [];
+          this.boolLoading = false;
+          this.messageService.add({severity:'error', summary:'Erro: ', detail: this.errosHttp.RetornaMensagemErro(error)});
+        });
       }
     }
 
