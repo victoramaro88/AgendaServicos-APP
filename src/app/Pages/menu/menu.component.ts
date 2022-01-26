@@ -59,7 +59,11 @@ export class MenuComponent implements OnInit {
             routerLink: '/veiculo'
           }
         ]
-      }
+      },
+      {
+        label: 'Eventos',
+        routerLink: '/evento'
+      },
     ];
   }
 

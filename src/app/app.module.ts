@@ -34,6 +34,7 @@ import { DiametroComponent } from './Pages/Cadastros/diametro/diametro.component
 import { EquipeComponent } from './Pages/Cadastros/equipe/equipe.component';
 import { ItemChecklistComponent } from './Pages/Cadastros/Checklist/item-checklist/item-checklist.component';
 import { ChecklistComponent } from './Pages/Cadastros/Checklist/checklist/checklist.component';
+import { EventoComponent } from './Pages/evento/evento.component';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
 
@@ -50,6 +51,7 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
     EquipeComponent,
     ItemChecklistComponent,
     ChecklistComponent,
+    EventoComponent,
   ],
   imports: [
     BrowserModule,

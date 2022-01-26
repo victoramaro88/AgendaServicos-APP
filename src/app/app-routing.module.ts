@@ -1,3 +1,4 @@
+import { EventoComponent } from './Pages/evento/evento.component';
 import { EquipeComponent } from './Pages/Cadastros/equipe/equipe.component';
 import { DiametroComponent } from './Pages/Cadastros/diametro/diametro.component';
 import { VeiculoComponent } from './Pages/Cadastros/veiculo/veiculo.component';
@@ -21,6 +22,7 @@ const routes: Routes = [
   { path: 'equipe', component: EquipeComponent },
   { path: 'itemCheckList', component: ItemChecklistComponent },
   { path: 'checklist', component: ChecklistComponent },
+  { path: 'evento', component: EventoComponent },
 ];
 
 @NgModule({
