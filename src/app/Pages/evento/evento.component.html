@@ -8,3 +8,68 @@
 <p-toast  position="top-center"></p-toast>
 
 <h1>Eventos</h1>
+
+<!-- LISTANDO NA GRID -->
+<div *ngIf="!modoEdicao && listaEvento.length > 0">
+  <p-table #dt1
+  [value]="listaEvento"
+  styleClass="p-datatable-striped p-datatable-sm"
+  [paginator]="true" [rows]="10"
+  [globalFilterFields]="['eventDesc', 'cidaDesc', 'maqMarca', 'usuNome', 'eventLogr', 'eventBairr']"
+  >
+  <ng-template pTemplate="caption">
+    <div class="p-d-flex text-right">
+      <span class="mb-3">
+        <!-- <button (click)="NovoRegistro()" pButton pRipple pTooltip="Novo Registro" tooltipPosition="left" type="button" label="Novo" class="p-button-raised"></button> -->
+      </span>
+      &nbsp;
+      <span class="p-input-icon-left p-ml-auto">
+        <i class="pi pi-search"></i>
+        <input #Filtro pInputText type="text" (input)="dt1.filterGlobal(Filtro.value, 'contains')" placeholder="Pesquisa Global" class="p-inputtext-sm"/>
+      </span>
+    </div>
+  </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="eventDesc">Descrição <p-sortIcon field="eventDesc"></p-sortIcon></th>
+        <th pSortableColumn="eventLogr">Endereço <p-sortIcon field="eventLogr"></p-sortIcon></th>
+        <th pSortableColumn="eventLogr">Bairro <p-sortIcon field="eventBairr"></p-sortIcon></th>
+        <th pSortableColumn="eventDtIn">Período<p-sortIcon field="eventDtIn"></p-sortIcon></th>
+        <th pSortableColumn="evenDtFi">Data Fim. <p-sortIcon field="evenDtFi"></p-sortIcon></th>
+
+
+        <!-- <th>Veículo</th> -->
+        <th pSortableColumn="veicStatus">Status <p-sortIcon field="veicStatus"></p-sortIcon></th>
+        <th>Ações</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-item>
+      <tr>
+        <td><span class="p-column-title"><b>Descrição</b></span>{{item.eventDesc}}</td>
+        <td><span class="p-column-title"><b>Endereço</b></span>{{item.eventLogr}}</td>
+        <td><span class="p-column-title"><b>Bairro</b></span>{{item.eventBairr}}</td>
+        <td><span class="p-column-title"><b>Período</b></span>{{item.eventDtIn | date: 'dd/MM/yyyy'}} / {{item.evenDtFi | date: 'dd/MM/yyyy'}}</td>
+        <td><span class="p-column-title"><b>Data Fim.</b></span>{{item.evenDtFi | date: 'dd/MM/yyyy'}}</td>
+
+
+        <!-- <td><span class="p-column-title"><b>Veículo</b></span>{{SelecionaVeiculo(item.veicCod)}}</td> -->
+        <td><span class="p-column-title"><b>Status</b></span>
+          <p-tag severity="{{item.maqStatus ? 'success' : 'danger'}}" value="{{item.maqStatus ? 'Ativo' : 'Inativo'}}"></p-tag>
+        </td>
+        <td>
+          <span class="p-column-title"><b>Ações</b></span>
+          <div>
+            <!-- <button (click)="IniciaEdicao(item);" pTooltip="Editar" tooltipPosition="top" pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-info p-button-text"></button> -->
+            <!-- <button (click)="AlteraStatus(item); item.maqStatus = !item.maqStatus;" *ngIf="item.maqStatus" pTooltip="Desativar" tooltipPosition="top" pButton pRipple type="button" icon="pi pi-lock" class="p-button-rounded p-button-success p-button-text"></button>
+            <button (click)="AlteraStatus(item); item.maqStatus = !item.maqStatus;" *ngIf="!item.maqStatus" pTooltip="Ativar" tooltipPosition="top" pButton pRipple type="button" icon="pi pi-lock-open" class="p-button-rounded p-button-danger p-button-text"></button> -->
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td style="text-align: center;" colspan="6">Sem informações.</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

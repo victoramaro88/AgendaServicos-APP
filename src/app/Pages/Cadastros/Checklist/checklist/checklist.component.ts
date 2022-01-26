@@ -104,10 +104,6 @@ export class ChecklistComponent implements OnInit {
       });
     }
 
-    ListaCheckListItemCheckList(chLsCod: number) {
-
-    }
-
     SelecionaTipoChLi(tipChLiCod: number) {
       let tipChLi = this.listaTpChLi.find(v => v.tipChLiCod === tipChLiCod);
       return tipChLi ? tipChLi.tipChLiDesc : '';

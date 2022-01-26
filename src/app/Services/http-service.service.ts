@@ -19,6 +19,7 @@ import { TipoChecklistModel } from "../Models/TipoChecklist.Model";
 import { ChecklistModel } from "../Models/Checklist.Model";
 import { ChlistItmChlistModel } from "../Models/ChlistItmChlist.Model";
 import { ChecklistEnvioModel } from "../Models/ChecklistEnvio.Model";
+import { EventoModel } from "../Models/Evento.Model";
 
 @Injectable({
   providedIn: 'root'
@@ -178,6 +179,10 @@ export class HttpService {
 
   public ListaCheckListItemCheckList(chLsCod: number): Observable<ChlistItmChlistModel[]> {
     return this.http.get<ChlistItmChlistModel[]>(`${environment.urlAPI}/Agenda/ListaCheckListItemCheckList/${chLsCod}`, this.CarregaHeader());
+  }
+
+  public ListaEvento(eventCod: number): Observable<EventoModel[]> {
+    return this.http.get<EventoModel[]>(`${environment.urlAPI}/Agenda/ListaEvento/${eventCod}`, this.CarregaHeader());
   }
 
   public VerificaLogin(usuLogin: string): Observable<boolean> {
