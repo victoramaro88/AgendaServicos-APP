@@ -17,6 +17,7 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 import { DropdownModule } from 'primeng/dropdown';
 import { PickListModule } from 'primeng/picklist';
 import { PasswordModule } from 'primeng/password';
+import { CalendarModule } from 'primeng/calendar';
 
 import { NgxMaskModule, IConfig } from 'ngx-mask'
 
@@ -77,6 +78,7 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
     DropdownModule,
     PickListModule,
     PasswordModule,
+    CalendarModule,
 
   ],
   providers: [],

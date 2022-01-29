@@ -181,8 +181,8 @@ export class HttpService {
     return this.http.get<ChlistItmChlistModel[]>(`${environment.urlAPI}/Agenda/ListaCheckListItemCheckList/${chLsCod}`, this.CarregaHeader());
   }
 
-  public ListaEvento(eventCod: number): Observable<EventoModel[]> {
-    return this.http.get<EventoModel[]>(`${environment.urlAPI}/Agenda/ListaEvento/${eventCod}`, this.CarregaHeader());
+  public ListaEventoAtivo(eventCod: number): Observable<EventoModel[]> {
+    return this.http.get<EventoModel[]>(`${environment.urlAPI}/Agenda/ListaEventoAtivo/${eventCod}`, this.CarregaHeader());
   }
 
   public VerificaLogin(usuLogin: string): Observable<boolean> {
