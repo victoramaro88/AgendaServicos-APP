@@ -86,30 +86,46 @@
         <label for="eventBairr">Bairro</label><span class="campoObrigatorio">*</span>
         <input [(ngModel)]="objEvento.eventBairr" id="eventBairr" type="text" class="p-inputtext-sm inputfield w-full" pInputText>
       </div>
-      <div class="field col-12 lg:col-4 md:col-4 sm:col-6">
-        <label for="icon">Data Inicial</label>
-        <p-calendar [(ngModel)]="objEvento.eventDtIn" [minDate]="dataAtual" [showIcon]="true" dateFormat="dd/mm/yy" inputId="icon"></p-calendar>
+      <div class="field col-12 lg:col-3 md:col-4 sm:col-6">
+        <label for="estCod">Estado</label><span class="campoObrigatorio">*</span><br>
+        <p-dropdown (onChange)="ListaCidadeEstado(estadoSelecionado);" id="estCod" [options]="listaEstado" [(ngModel)]="estadoSelecionado" autoWidth="false" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="estSigl" optionValue="estCod" placeholder="Selecione" [showClear]="true"></p-dropdown>
       </div>
-      <!-- <div class="field col-12 lg:col-3 md:col-4 sm:col-6">
+      <div class="field col-12 lg:col-3 md:col-4 sm:col-6">
+        <label for="cidaCod">Cidade</label><span class="campoObrigatorio">*</span><br>
+        <p-dropdown id="cidaCod" [options]="listaCidade" [(ngModel)]="objEvento.cidaCod" autoWidth="false" [filter]="true" filterBy="cidaDesc" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="cidaDesc" optionValue="cidaCod" placeholder="Selecione" [showClear]="true"></p-dropdown>
+      </div>
+      <div class="field col-12 lg:col-3 md:col-4 sm:col-6">
         <label for="diamCod">Diâmetro</label><span class="campoObrigatorio">*</span><br>
-        <p-dropdown id="diamCod" [options]="listaDiametroFuro" [(ngModel)]="objMaquina.diamCod" autoWidth="false" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="diamDesc" optionValue="diamCod" placeholder="Selecione um diâmetro" [showClear]="true"></p-dropdown>
-      </div> -->
-      <!-- <div class="field col-12 lg:col-3 md:col-4 sm:col-6">
-        <label for="veicCod">Veículo</label><span class="campoObrigatorio">*</span><br>
-        <p-dropdown id="veicCod" [options]="listaVeiculoDisponiveis" [(ngModel)]="objMaquina.veicCod" autoWidth="false" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="veicMarca" optionValue="veicCod" placeholder="Selecione um veículo" [showClear]="true"></p-dropdown>
-      </div> -->
-      <!-- <div class="field col-12 lg:col-2 md:col-4 sm:col-6">
-        <label for="maqStatus">Status</label><span class="campoObrigatorio">*</span>
-        <p-selectButton [options]="opcoesStatus" [(ngModel)]="objMaquina.maqStatus" optionLabel="label" optionValue="value"></p-selectButton>
-      </div> -->
-      <!-- <div class="field col-12">
-          <label for="maqObse">Observações</label>
-          <textarea [(ngModel)]="objMaquina.maqObse" id="maqObse" pInputTextarea class="p-inputtext-sm inputfield w-full"></textarea>
-      </div> -->
+        <p-dropdown id="diamCod" [options]="lstDiametroFuro" [(ngModel)]="objEvento.diamCod" autoWidth="false" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="diamDesc" optionValue="diamCod" placeholder="Selecione" [showClear]="true"></p-dropdown>
+      </div>
+      <div class="field col-12 lg:col-2 md:col-4 sm:col-4">
+        <label for="eventStatus">Status</label><span class="campoObrigatorio">*</span>
+        <p-selectButton [options]="opcoesStatus" [(ngModel)]="objEvento.eventStatus" optionLabel="label" optionValue="value"></p-selectButton>
+      </div>
+      <div class="field col-12 lg:col-3 md:col-4 sm:col-4">
+        <label for="eventDtIn">Data Inicial</label><br>
+        <p-calendar [(ngModel)]="objEvento.eventDtIn" [minDate]="dataAtual" [showIcon]="true" dateFormat="dd/mm/yy" inputId="eventDtIn" class="p-inputtext-sm inputfield w-full"></p-calendar>
+      </div>
+      <div class="field col-12 lg:col-3 md:col-4 sm:col-4">
+        <label for="evenDtFi">Data Final</label><br>
+        <p-calendar [(ngModel)]="objEvento.evenDtFi" [minDate]="dataAtual" [showIcon]="true" dateFormat="dd/mm/yy" inputId="evenDtFi" class="p-inputtext-sm inputfield w-full"></p-calendar>
+      </div>
+      <div class="field col-12 lg:col-6 md:col-6 sm:col-6">
+        <label for="maqCod">Máquina</label><span class="campoObrigatorio">*</span><br>
+        <p-dropdown id="maqCod" [options]="listaMaquina" [(ngModel)]="objEvento.maqCod" autoWidth="false" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="maqMarca" optionValue="maqCod" placeholder="Selecione" [showClear]="true"></p-dropdown>
+      </div>
+      <div class="field col-12 lg:col-6 md:col-6 sm:col-6">
+        <label for="usuCod">Responsável</label><span class="campoObrigatorio">*</span><br>
+        <p-dropdown id="usuCod" [options]="listaUsuario" [(ngModel)]="objEvento.usuCod" autoWidth="false" [filter]="true" filterBy="usuNome" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="usuNome" optionValue="usuCod" placeholder="Selecione" [showClear]="true"></p-dropdown>
+      </div>
+      <div class="field col-12 lg:col-6">
+          <label for="eventObse">Observações</label>
+          <textarea [(ngModel)]="objEvento.eventObse" id="eventObse" pInputTextarea class="p-inputtext-sm inputfield w-full"></textarea>
+      </div>
   </div>
   <div class="text-right">
     <small><span class="campoObrigatorio">*</span> Campos obrigarórios.</small><br><br>
     <button (click)="Cancelar();" pButton pRipple type="button" label="Cancelar" class="p-button-raised p-button-danger"></button> &nbsp;
-    <!-- <button (click)="Salvar();" pButton pRipple type="button" label="Salvar" class="p-button-raised p-button-success"></button> -->
+    <button (click)="Salvar();" pButton pRipple type="button" label="Salvar" class="p-button-raised p-button-success"></button>
   </div>
 </div>

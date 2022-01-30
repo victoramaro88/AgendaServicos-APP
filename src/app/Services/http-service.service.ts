@@ -20,6 +20,9 @@ import { ChecklistModel } from "../Models/Checklist.Model";
 import { ChlistItmChlistModel } from "../Models/ChlistItmChlist.Model";
 import { ChecklistEnvioModel } from "../Models/ChecklistEnvio.Model";
 import { EventoModel } from "../Models/Evento.Model";
+import { HorarioModel } from "../Models/Horario.Model";
+import { EstadoModel } from "../Models/Estado.Model";
+import { CidadeModel } from "../Models/Cidade.Model";
 
 @Injectable({
   providedIn: 'root'
@@ -155,6 +158,18 @@ export class HttpService {
 
   public ListaPerfil(perfCod: number): Observable<PerfilModel[]> {
     return this.http.get<PerfilModel[]>(`${environment.urlAPI}/Agenda/ListaPerfil/${perfCod}`, this.CarregaHeader());
+  }
+
+  public ListaHorario(horaCod: number): Observable<HorarioModel[]> {
+    return this.http.get<HorarioModel[]>(`${environment.urlAPI}/Agenda/ListaHorario/${horaCod}`, this.CarregaHeader());
+  }
+
+  public ListaEstado(estCod: number): Observable<EstadoModel[]> {
+    return this.http.get<EstadoModel[]>(`${environment.urlAPI}/Agenda/ListaEstado/${estCod}`, this.CarregaHeader());
+  }
+
+  public ListaCidade(cidaCod: number, estCod: number): Observable<CidadeModel[]> {
+    return this.http.get<CidadeModel[]>(`${environment.urlAPI}/Agenda/ListaCidade/${cidaCod}/${estCod}`, this.CarregaHeader());
   }
 
   public ListaItemChecklist(itmChLsCod: number): Observable<ItemCheckListModel[]> {

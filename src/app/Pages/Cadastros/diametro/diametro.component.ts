@@ -44,7 +44,6 @@ export class DiametroComponent implements OnInit {
       if (response) {
         this.lstDiametroFuro = response;
       }
-      console.log(this.lstDiametroFuro);
       this.boolLoading = false;
     }, error => {
       this.msgs = [];
