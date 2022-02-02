@@ -12,6 +12,7 @@ export interface EventoModel {
   diamCod: number;
   usuCod: number;
   maqCod: number;
+  tipChLiCod: number;
 
   horaDesc: string;
   cidaDesc: string;
@@ -20,4 +21,5 @@ export interface EventoModel {
   usuNome: string;
   maqMarca: string;
   maqModelo: string;
+  tipChLiDesc: string;
 }

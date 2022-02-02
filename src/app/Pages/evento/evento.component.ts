@@ -7,6 +7,7 @@ import { EstadoModel } from 'src/app/Models/Estado.Model';
 import { EventoModel } from 'src/app/Models/Evento.Model';
 import { HorarioModel } from 'src/app/Models/Horario.Model';
 import { MaquinaModel } from 'src/app/Models/Maquina.Model';
+import { TipoChecklistModel } from 'src/app/Models/TipoChecklist.Model';
 import { UsuarioTbModel } from 'src/app/Models/UsuarioTb.Model';
 import { HttpService } from 'src/app/Services/http-service.service';
 import { MsgErroHttp } from 'src/app/Services/msgErroHttp.Service';
@@ -32,6 +33,7 @@ export class EventoComponent implements OnInit {
   listaEstado: EstadoModel[] = [];
   listaCidade: CidadeModel[] = [];
   listaUsuario: UsuarioTbModel[] = [];
+  listaTpChLi: TipoChecklistModel[] = [];
   objEvento: EventoModel = {
     eventCod: 0,
     eventDesc: '',
@@ -46,13 +48,15 @@ export class EventoComponent implements OnInit {
     diamCod: 0,
     usuCod: 0,
     maqCod: 0,
+    tipChLiCod: 0,
     horaDesc: '',
     cidaDesc: '',
     estSigl: '',
     diamDesc: '',
     usuNome: '',
     maqMarca: '',
-    maqModelo: ''
+    maqModelo: '',
+    tipChLiDesc: ''
   };
   estadoSelecionado: any;
 
@@ -145,11 +149,26 @@ export class EventoComponent implements OnInit {
       this.http.ListaUsuario(usuCod).subscribe((response: UsuarioTbModel[]) => {
         if (response) {
           this.listaUsuario = response;
-          this.ListaEventoAtivo(0);
+          this.ListaTipoCheckList(0);
         }
       }, error => {
         this.msgs = [];
         this.boolLoading = false;
+        this.messageService.add({severity:'error', summary:'Erro: ', detail: this.errosHttp.RetornaMensagemErro(error)});
+      });
+    }
+
+    ListaTipoCheckList(tipChLiCod: number) {
+      this.boolLoading = true;
+      this.modoEdicao = false;
+      this.http.ListaTipoCheckList(tipChLiCod).subscribe((response: TipoChecklistModel[]) => {
+        if (response) {
+          this.listaTpChLi = response;
+        }
+        console.log(this.listaTpChLi);
+        this.ListaEventoAtivo(0);
+      }, error => {
+        this.msgs = [];
         this.messageService.add({severity:'error', summary:'Erro: ', detail: this.errosHttp.RetornaMensagemErro(error)});
       });
     }
@@ -191,13 +210,15 @@ export class EventoComponent implements OnInit {
         diamCod: 0,
         usuCod: 0,
         maqCod: 0,
+        tipChLiCod: 0,
         horaDesc: '',
         cidaDesc: '',
         estSigl: '',
         diamDesc: '',
         usuNome: '',
         maqMarca: '',
-        maqModelo: ''
+        maqModelo: '',
+        tipChLiDesc: ''
       };
       this.modoEdicao = true;
     }
@@ -253,13 +274,15 @@ export class EventoComponent implements OnInit {
         diamCod: 0,
         usuCod: 0,
         maqCod: 0,
+        tipChLiCod: 0,
         horaDesc: '',
         cidaDesc: '',
         estSigl: '',
         diamDesc: '',
         usuNome: '',
         maqMarca: '',
-        maqModelo: ''
+        maqModelo: '',
+        tipChLiDesc: ''
       };
       this.modoEdicao = false;
     }
