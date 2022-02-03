@@ -59,16 +59,17 @@ export class ChecklistComponent implements OnInit {
         }
         this.ListaItemChecklist(0);
       }, error => {
+        this.boolLoading = false;
         this.msgs = [];
         this.messageService.add({severity:'error', summary:'Erro: ', detail: this.errosHttp.RetornaMensagemErro(error)});
       });
     }
 
-    ListaItemChecklist(maqCod: number) {
+    ListaItemChecklist(itmChLsCod: number) {
       this.boolLoading = true;
       this.listaItemChecklist = [];
       this.modoEdicao = false;
-      this.http.ListaItemChecklist(maqCod).subscribe((response: ItemCheckListModel[]) => {
+      this.http.ListaItemChecklist(itmChLsCod).subscribe((response: ItemCheckListModel[]) => {
         if (response) {
           for (const itmChLst of response) {
             if(itmChLst.itmChLsStatus === true) {
@@ -128,9 +129,11 @@ export class ChecklistComponent implements OnInit {
           for (const itemChLs of response) {
             if(objChLst.chLsCod === itemChLs.chLsCod) {
               let item = this.listaItemChecklist.find(i => i.itmChLsCod === itemChLs.itmChLsCod) as ItemCheckListModel;
-              let indexItem = this.listaItemChecklist.findIndex(i => i.itmChLsCod === itemChLs.itmChLsCod);
-              this.listaItemChecklistSelecionados.push(item);
-              this.listaItemChecklist.splice(indexItem, 1);
+              if (item) {
+                let indexItem = this.listaItemChecklist.findIndex(i => i.itmChLsCod === itemChLs.itmChLsCod);
+                this.listaItemChecklistSelecionados.push(item);
+                this.listaItemChecklist.splice(indexItem, 1);
+              }
             }
           }
 
