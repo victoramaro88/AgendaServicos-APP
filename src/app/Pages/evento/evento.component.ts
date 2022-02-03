@@ -24,7 +24,7 @@ export class EventoComponent implements OnInit {
   boolLoading = false;
   msgs: any[] = [];
   opcoesStatus: any[] = [];
-  modoEdicao: boolean = false;
+  modoEdicao: boolean = true;//false;
   mensagemTela: string = 'Aguarde...';
 
   dataAtual: Date = new Date();
@@ -275,6 +275,19 @@ export class EventoComponent implements OnInit {
     }
 
     OkDialog() {
+      let checkListValido: boolean = false;
+      for (const itemCL of this.listaChecList) {
+        let valorResp: string = itemCL.chkLstResp.toString();
+        if(valorResp === 'true' && itemCL.itmChLsObrig === true) {
+          checkListValido = true;
+        }
+      }
+
+      if(checkListValido) {
+        this.messageService.add({severity:'success', summary:'Sucesso! ', detail: 'CheckList validado!'});
+      } else {
+        this.messageService.add({severity:'warn', summary:'Atenção! ', detail: 'Selecione todos os itens obrigatórios para continuar.'});
+      }
       // this.displayDialog = false;
       console.log(this.listaChecList);
     }
