@@ -149,3 +149,27 @@
     <button (click)="Salvar();" pButton pRipple type="button" label="Salvar" class="p-button-raised p-button-success"></button>
   </div>
 </div>
+
+
+<!-- DIALOG DO CHECKLIST -->
+<p-dialog header="Header" [(visible)]="displayDialog" [modal]="true" [style]="{width: '80vw'}"
+[draggable]="false" [resizable]="false">
+
+<div *ngFor="let item of listaChecList" class="p-field-checkbox">
+  <p><p-checkbox
+    name="item.itmChLsDesc"
+    value="true"
+    [(ngModel)]="item.chkLstResp"
+    inputId="item.chkLstItmChkLst"
+    ></p-checkbox>
+    &nbsp;
+    <label for="item.chkLstItmChkLst">{{item.itmChLsDesc}}</label>
+    COD.: {{item.chkLstItmChkLst}} |
+    RESP.: {{item.chkLstResp}}
+  </p>
+</div>
+
+<ng-template pTemplate="footer">
+  <p-button icon="pi pi-check" (click)="OkDialog();" label="Ok" styleClass="p-button-text"></p-button>
+</ng-template>
+</p-dialog>

@@ -36,6 +36,7 @@ import { EquipeComponent } from './Pages/Cadastros/equipe/equipe.component';
 import { ItemChecklistComponent } from './Pages/Cadastros/Checklist/item-checklist/item-checklist.component';
 import { ChecklistComponent } from './Pages/Cadastros/Checklist/checklist/checklist.component';
 import { EventoComponent } from './Pages/evento/evento.component';
+import { DialogModule } from 'primeng/dialog';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
 
@@ -79,7 +80,7 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
     PickListModule,
     PasswordModule,
     CalendarModule,
-
+    DialogModule
   ],
   providers: [],
   bootstrap: [AppComponent]

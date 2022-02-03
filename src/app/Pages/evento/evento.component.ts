@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
+import { CheckListItensModel } from 'src/app/Models/CheckListItens.Model';
 import { CidadeModel } from 'src/app/Models/Cidade.Model';
 import { DiametroFuroModel } from 'src/app/Models/DiametroFuro.Model';
 import { EstadoModel } from 'src/app/Models/Estado.Model';
 import { EventoModel } from 'src/app/Models/Evento.Model';
 import { HorarioModel } from 'src/app/Models/Horario.Model';
 import { MaquinaModel } from 'src/app/Models/Maquina.Model';
+import { RespostasCheckListModel } from 'src/app/Models/RespostasCheckList.model';
 import { TipoChecklistModel } from 'src/app/Models/TipoChecklist.Model';
 import { UsuarioTbModel } from 'src/app/Models/UsuarioTb.Model';
 import { HttpService } from 'src/app/Services/http-service.service';
@@ -34,6 +36,8 @@ export class EventoComponent implements OnInit {
   listaCidade: CidadeModel[] = [];
   listaUsuario: UsuarioTbModel[] = [];
   listaTpChLi: TipoChecklistModel[] = [];
+  listaChecList: CheckListItensModel[] = [];
+  listaRespostaChLs: RespostasCheckListModel[] = [];
   objEvento: EventoModel = {
     eventCod: 0,
     eventDesc: '',
@@ -60,6 +64,7 @@ export class EventoComponent implements OnInit {
   };
   estadoSelecionado: any;
   boolChecklistPreenchido: boolean = false;
+  displayDialog: boolean = false;
 
   constructor(
     private router: Router,
@@ -172,8 +177,6 @@ export class EventoComponent implements OnInit {
     }
 
     ListaTipoCheckList(tipChLiCod: number) {
-      this.boolLoading = true;
-      this.modoEdicao = false;
       this.http.ListaTipoCheckList(tipChLiCod).subscribe((response: TipoChecklistModel[]) => {
         if (response) {
           this.listaTpChLi = response;
@@ -235,11 +238,45 @@ export class EventoComponent implements OnInit {
     }
 
     ExibeCheckList() {
-      if(this.objEvento.tipChLiCod > 0) {
-        this.boolChecklistPreenchido = true; //-> ALTERAR SOMENTE PARA QUANDO O CHECKLIST ESTIVER OK, E NÃO NESTE MOMENTO
+      this.boolLoading = true;
+      this.listaChecList = [];
+      this.listaRespostaChLs = [];
+      if (this.objEvento.tipChLiCod > 0) {
+        this.http.ListaChLsByCheckList(this.objEvento.tipChLiCod).subscribe((response: CheckListItensModel[]) => {
+          if (response) {
+            for (const itmCkLs of response) {
+              let objChLs: CheckListItensModel = {
+                chkLstItmChkLst: itmCkLs.chkLstItmChkLst,
+                chLsCod: itmCkLs.chLsCod,
+                itmChLsCod: itmCkLs.itmChLsCod,
+                itmChLsDesc: itmCkLs.itmChLsDesc,
+                itmChLsObrig: itmCkLs.itmChLsObrig,
+                itmChLsStatus: itmCkLs.itmChLsStatus,
+                chkLstResp: false
+              };
+              this.listaChecList.push(objChLs);
+            }
+          }
+          this.showDialog();
+          this.boolLoading = false;
+        }, error => {
+          this.msgs = [];
+          this.messageService.add({severity:'error', summary:'Erro: ', detail: this.errosHttp.RetornaMensagemErro(error)});
+        });
+
+        // this.boolChecklistPreenchido = true; //-> ALTERAR SOMENTE PARA QUANDO O CHECKLIST ESTIVER OK, E NÃO NESTE MOMENTO
       } else {
-        this.boolChecklistPreenchido = false;
+        // this.boolChecklistPreenchido = false;
       }
+    }
+
+    showDialog() {
+      this.displayDialog = true;
+    }
+
+    OkDialog() {
+      // this.displayDialog = false;
+      console.log(this.listaChecList);
     }
 
     NovoRegistro() {

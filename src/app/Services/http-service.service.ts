@@ -23,6 +23,7 @@ import { EventoModel } from "../Models/Evento.Model";
 import { HorarioModel } from "../Models/Horario.Model";
 import { EstadoModel } from "../Models/Estado.Model";
 import { CidadeModel } from "../Models/Cidade.Model";
+import { CheckListItensModel } from "../Models/CheckListItens.Model";
 
 @Injectable({
   providedIn: 'root'
@@ -198,6 +199,10 @@ export class HttpService {
 
   public ListaEventoAtivo(eventCod: number): Observable<EventoModel[]> {
     return this.http.get<EventoModel[]>(`${environment.urlAPI}/Agenda/ListaEventoAtivo/${eventCod}`, this.CarregaHeader());
+  }
+
+  public ListaChLsByCheckList(chLsCod: number): Observable<CheckListItensModel[]> {
+    return this.http.get<CheckListItensModel[]>(`${environment.urlAPI}/Agenda/ListaChLsByCheckList/${chLsCod}`, this.CarregaHeader());
   }
 
   public VerificaLogin(usuLogin: string): Observable<boolean> {
