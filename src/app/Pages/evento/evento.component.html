@@ -30,36 +30,36 @@
       </span>
     </div>
   </ng-template>
-    <ng-template pTemplate="header">
-      <tr>
-        <th pSortableColumn="eventDesc">Descrição <p-sortIcon field="eventDesc"></p-sortIcon></th>
-        <th pSortableColumn="tipChLiDesc">Tipo Furo <p-sortIcon field="tipChLiDesc"></p-sortIcon></th>
-        <th pSortableColumn="eventLogr">Endereço <p-sortIcon field="eventLogr"></p-sortIcon></th>
-        <th pSortableColumn="eventLogr">Bairro <p-sortIcon field="eventBairr"></p-sortIcon></th>
-        <th pSortableColumn="eventDtIn">Período <p-sortIcon field="eventDtIn"></p-sortIcon></th>
-        <th pSortableColumn="usuNome">Responsável <p-sortIcon field="usuNome"></p-sortIcon></th>
-        <th pSortableColumn="maqMarca">Máquina <p-sortIcon field="maqMarca"></p-sortIcon></th>
-        <th pSortableColumn="eventStatus">Status <p-sortIcon field="eventStatus"></p-sortIcon></th>
-        <th>Ações</th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-item>
-      <tr>
-        <td pTooltip="{{item.eventDesc}}" tooltipPosition="top"><span class="p-column-title"><b>Descrição</b></span><small>{{item.eventDesc}}</small></td>
-        <td pTooltip="{{item.tipChLiDesc}}" tooltipPosition="top"><span class="p-column-title"><b>Tipo Furo</b></span><small>{{item.tipChLiDesc}}</small></td>
-        <td pTooltip="{{item.eventLogr}}" tooltipPosition="top"><span class="p-column-title"><b>Endereço</b></span><small>{{item.eventLogr.substring(0, 20)}}...</small></td>
-        <td pTooltip="{{item.eventBairr}}" tooltipPosition="top"><span class="p-column-title"><b>Bairro</b></span><small>{{item.eventBairr.substring(0, 20)}}...</small></td>
-        <td pTooltip="{{item.eventDtIn | date: 'dd/MM/yyyy'}} a {{item.evenDtFi | date: 'dd/MM/yyyy'}}" tooltipPosition="top"><span class="p-column-title"><b>Período</b></span><small>{{item.eventDtIn | date: 'dd/MM/yyyy'}} a {{item.evenDtFi | date: 'dd/MM/yyyy'}}</small></td>
-        <td pTooltip="{{item.usuNome}}" tooltipPosition="top"><span class="p-column-title"><b>Responsável</b></span><small>{{item.usuNome.substring(0, 10)}}...</small></td>
-        <td pTooltip="{{item.maqMarca}}" tooltipPosition="top"><span class="p-column-title"><b>Máquina</b></span><small>{{item.maqMarca.substring(0, 20)}}...</small></td>
-        <td><span class="p-column-title"><b>Status</b></span>
-          <p-tag severity="{{item.eventStatus ? 'success' : 'danger'}}" value="{{item.eventStatus ? 'Ativo' : 'Inativo'}}"></p-tag>
-        </td>
-        <td>
-          <span class="p-column-title"><b>Ações</b></span>
-          <div>
-            <button (click)="IniciaEdicao(item);" pTooltip="Editar" tooltipPosition="top" pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-info p-button-text"></button>
-            <!-- <button (click)="AlteraStatus(item); item.maqStatus = !item.maqStatus;" *ngIf="item.maqStatus" pTooltip="Desativar" tooltipPosition="top" pButton pRipple type="button" icon="pi pi-lock" class="p-button-rounded p-button-success p-button-text"></button>
+  <ng-template pTemplate="header">
+    <tr>
+      <th pSortableColumn="eventDesc">Descrição <p-sortIcon field="eventDesc"></p-sortIcon></th>
+      <th pSortableColumn="tipChLiDesc">Tipo Furo <p-sortIcon field="tipChLiDesc"></p-sortIcon></th>
+      <th pSortableColumn="eventLogr">Endereço <p-sortIcon field="eventLogr"></p-sortIcon></th>
+      <th pSortableColumn="eventLogr">Bairro <p-sortIcon field="eventBairr"></p-sortIcon></th>
+      <th pSortableColumn="eventDtIn">Período <p-sortIcon field="eventDtIn"></p-sortIcon></th>
+      <th pSortableColumn="usuNome">Responsável <p-sortIcon field="usuNome"></p-sortIcon></th>
+      <th pSortableColumn="maqMarca">Máquina <p-sortIcon field="maqMarca"></p-sortIcon></th>
+      <th pSortableColumn="eventStatus">Status <p-sortIcon field="eventStatus"></p-sortIcon></th>
+      <th>Ações</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-item>
+    <tr>
+      <td pTooltip="{{item.eventDesc}}" tooltipPosition="top"><span class="p-column-title"><b>Descrição</b></span><small>{{item.eventDesc}}</small></td>
+      <td pTooltip="{{item.tipChLiDesc}}" tooltipPosition="top"><span class="p-column-title"><b>Tipo Furo</b></span><small>{{item.tipChLiDesc}}</small></td>
+      <td pTooltip="{{item.eventLogr}}" tooltipPosition="top"><span class="p-column-title"><b>Endereço</b></span><small>{{item.eventLogr.substring(0, 20)}}...</small></td>
+      <td pTooltip="{{item.eventBairr}}" tooltipPosition="top"><span class="p-column-title"><b>Bairro</b></span><small>{{item.eventBairr.substring(0, 20)}}...</small></td>
+      <td pTooltip="{{item.eventDtIn | date: 'dd/MM/yyyy'}} a {{item.evenDtFi | date: 'dd/MM/yyyy'}}" tooltipPosition="top"><span class="p-column-title"><b>Período</b></span><small>{{item.eventDtIn | date: 'dd/MM/yyyy'}} a {{item.evenDtFi | date: 'dd/MM/yyyy'}}</small></td>
+      <td pTooltip="{{item.usuNome}}" tooltipPosition="top"><span class="p-column-title"><b>Responsável</b></span><small>{{item.usuNome.substring(0, 10)}}...</small></td>
+      <td pTooltip="{{item.maqMarca}}" tooltipPosition="top"><span class="p-column-title"><b>Máquina</b></span><small>{{item.maqMarca.substring(0, 10)}}...</small></td>
+      <td><span class="p-column-title"><b>Status</b></span>
+        <p-tag severity="{{item.eventStatus ? 'success' : 'danger'}}" value="{{item.eventStatus ? 'Ativo' : 'Inativo'}}"></p-tag>
+      </td>
+      <td>
+        <span class="p-column-title"><b>Ações</b></span>
+        <div>
+          <button (click)="IniciaEdicao(item);" pTooltip="Editar" tooltipPosition="top" pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-info p-button-text"></button>
+          <!-- <button (click)="AlteraStatus(item); item.maqStatus = !item.maqStatus;" *ngIf="item.maqStatus" pTooltip="Desativar" tooltipPosition="top" pButton pRipple type="button" icon="pi pi-lock" class="p-button-rounded p-button-success p-button-text"></button>
             <button (click)="AlteraStatus(item); item.maqStatus = !item.maqStatus;" *ngIf="!item.maqStatus" pTooltip="Ativar" tooltipPosition="top" pButton pRipple type="button" icon="pi pi-lock-open" class="p-button-rounded p-button-danger p-button-text"></button> -->
           </div>
         </td>
@@ -73,57 +73,75 @@
   </p-table>
 </div>
 
+<!-- <div *ngIf="modoEdicao" class="card">
+  <h3>Novo Registro</h3>
+
+  <div class="formgrid grid">
+
+  </div>
+
+  <div class="text-right">
+    <small><span class="campoObrigatorio">*</span> Campos obrigarórios.</small><br><br>
+    <button (click)="Cancelar();" pButton pRipple type="button" label="Cancelar" class="p-button-raised p-button-danger"></button> &nbsp;
+    <button (click)="Salvar();" pButton pRipple type="button" label="Salvar" class="p-button-raised p-button-success"></button>
+  </div>
+</div> -->
+
 <!-- MODO INCLUSÃO/ALTERAÇÃO -->
 <div *ngIf="modoEdicao" class="card">
   <div class="formgrid grid">
-      <div class="field col-12 lg:col-4 md:col-4 sm:col-6">
-          <label for="eventDesc">Descrição</label><span class="campoObrigatorio">*</span>
-          <input [(ngModel)]="objEvento.eventDesc" id="eventDesc" type="text" class="p-inputtext-sm inputfield w-full" pInputText>
-      </div>
-      <div class="field col-12 lg:col-4 md:col-4 sm:col-6">
-        <label for="eventLogr">Endereço</label><span class="campoObrigatorio">*</span>
-        <input [(ngModel)]="objEvento.eventLogr" id="eventLogr" type="text" class="p-inputtext-sm inputfield w-full" pInputText>
-      </div>
-      <div class="field col-12 lg:col-4 md:col-4 sm:col-6">
-        <label for="eventBairr">Bairro</label><span class="campoObrigatorio">*</span>
-        <input [(ngModel)]="objEvento.eventBairr" id="eventBairr" type="text" class="p-inputtext-sm inputfield w-full" pInputText>
-      </div>
-      <div class="field col-12 lg:col-3 md:col-4 sm:col-6">
-        <label for="estCod">Estado</label><span class="campoObrigatorio">*</span><br>
-        <p-dropdown (onChange)="ListaCidadeEstado(estadoSelecionado);" id="estCod" [options]="listaEstado" [(ngModel)]="estadoSelecionado" autoWidth="false" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="estSigl" optionValue="estCod" placeholder="Selecione" [showClear]="true"></p-dropdown>
-      </div>
-      <div class="field col-12 lg:col-3 md:col-4 sm:col-6">
-        <label for="cidaCod">Cidade</label><span class="campoObrigatorio">*</span><br>
-        <p-dropdown id="cidaCod" [options]="listaCidade" [(ngModel)]="objEvento.cidaCod" autoWidth="false" [filter]="true" filterBy="cidaDesc" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="cidaDesc" optionValue="cidaCod" placeholder="Selecione" [showClear]="true"></p-dropdown>
-      </div>
-      <div class="field col-12 lg:col-3 md:col-4 sm:col-6">
-        <label for="diamCod">Diâmetro</label><span class="campoObrigatorio">*</span><br>
-        <p-dropdown id="diamCod" [options]="lstDiametroFuro" [(ngModel)]="objEvento.diamCod" autoWidth="false" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="diamDesc" optionValue="diamCod" placeholder="Selecione" [showClear]="true"></p-dropdown>
-      </div>
-      <div class="field col-12 lg:col-2 md:col-4 sm:col-4">
-        <label for="eventStatus">Status</label><span class="campoObrigatorio">*</span>
-        <p-selectButton [options]="opcoesStatus" [(ngModel)]="objEvento.eventStatus" optionLabel="label" optionValue="value"></p-selectButton>
-      </div>
-      <div class="field col-12 lg:col-3 md:col-4 sm:col-4">
-        <label for="eventDtIn">Data Inicial</label><br>
-        <p-calendar [(ngModel)]="objEvento.eventDtIn" [minDate]="dataAtual" [showIcon]="true" dateFormat="dd/mm/yy" inputId="eventDtIn" class="p-inputtext-sm inputfield w-full"></p-calendar>
-      </div>
-      <div class="field col-12 lg:col-3 md:col-4 sm:col-4">
-        <label for="evenDtFi">Data Final</label><br>
-        <p-calendar [(ngModel)]="objEvento.evenDtFi" [minDate]="dataAtual" [showIcon]="true" dateFormat="dd/mm/yy" inputId="evenDtFi" class="p-inputtext-sm inputfield w-full"></p-calendar>
-      </div>
-      <div class="field col-12 lg:col-6 md:col-6 sm:col-6">
-        <label for="maqCod">Máquina</label><span class="campoObrigatorio">*</span><br>
-        <p-dropdown id="maqCod" [options]="listaMaquina" [(ngModel)]="objEvento.maqCod" autoWidth="false" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="maqMarca" optionValue="maqCod" placeholder="Selecione" [showClear]="true"></p-dropdown>
-      </div>
-      <div class="field col-12 lg:col-6 md:col-6 sm:col-6">
-        <label for="usuCod">Responsável</label><span class="campoObrigatorio">*</span><br>
-        <p-dropdown id="usuCod" [options]="listaUsuario" [(ngModel)]="objEvento.usuCod" autoWidth="false" [filter]="true" filterBy="usuNome" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="usuNome" optionValue="usuCod" placeholder="Selecione" [showClear]="true"></p-dropdown>
-      </div>
-      <div class="field col-12 lg:col-6">
-          <label for="eventObse">Observações</label>
-          <textarea [(ngModel)]="objEvento.eventObse" id="eventObse" pInputTextarea class="p-inputtext-sm inputfield w-full"></textarea>
-      </div>
+    <div class="field col-12 lg:col-3 md:col-3 sm:col-6">
+      <label for="tipChLiCod">Tipo de Furo</label><span class="campoObrigatorio">*</span><br>
+      <p-dropdown (onChange)="ExibeCheckList();" id="tipChLiCod" [options]="listaTpChLi" [(ngModel)]="objEvento.tipChLiCod" autoWidth="false" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="tipChLiDesc" optionValue="tipChLiCod" placeholder="Selecione" [showClear]="true"></p-dropdown>
+    </div>
+    <div class="field col-12 lg:col-3 md:col-3 sm:col-6">
+      <label for="diamCod">Diâmetro</label><span class="campoObrigatorio">*</span><br>
+      <p-dropdown [disabled]="!boolChecklistPreenchido" id="diamCod" [options]="lstDiametroFuro" [(ngModel)]="objEvento.diamCod" autoWidth="false" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="diamDesc" optionValue="diamCod" placeholder="Selecione" [showClear]="true"></p-dropdown>
+    </div>
+    <div class="field col-12 lg:col-3 md:col-3 sm:col-3">
+      <label for="eventDtIn">Data Inicial</label><br>
+      <p-calendar [(ngModel)]="objEvento.eventDtIn" [minDate]="dataAtual" [showIcon]="true" dateFormat="dd/mm/yy" inputId="eventDtIn" class="p-inputtext-sm inputfield w-full"></p-calendar>
+    </div>
+    <div class="field col-12 lg:col-3 md:col-3 sm:col-3">
+      <label for="evenDtFi">Data Final</label><br>
+      <p-calendar [(ngModel)]="objEvento.evenDtFi" [minDate]="dataAtual" [showIcon]="true" dateFormat="dd/mm/yy" inputId="evenDtFi" class="p-inputtext-sm inputfield w-full"></p-calendar>
+    </div>
+    <div class="field col-12 lg:col-6 md:col-7 sm:col-6">
+      <label for="maqCod">Máquina</label><span class="campoObrigatorio">*</span><br>
+      <p-dropdown id="maqCod" [options]="listaMaquina" [(ngModel)]="objEvento.maqCod" autoWidth="false" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="maqMarca" optionValue="maqCod" placeholder="Selecione" [showClear]="true"></p-dropdown>
+    </div>
+    <div class="field col-12 lg:col-6 md:col-5 sm:col-6">
+      <label for="eventDesc">Descrição</label><span class="campoObrigatorio">*</span>
+      <input [(ngModel)]="objEvento.eventDesc" id="eventDesc" type="text" class="p-inputtext-sm inputfield w-full" pInputText>
+    </div>
+    <div class="field col-12 lg:col-5 md:col-4 sm:col-6">
+      <label for="eventLogr">Endereço</label><span class="campoObrigatorio">*</span>
+      <input [(ngModel)]="objEvento.eventLogr" id="eventLogr" type="text" class="p-inputtext-sm inputfield w-full" pInputText>
+    </div>
+    <div class="field col-12 lg:col-5 md:col-4 sm:col-6">
+      <label for="eventBairr">Bairro</label><span class="campoObrigatorio">*</span>
+      <input [(ngModel)]="objEvento.eventBairr" id="eventBairr" type="text" class="p-inputtext-sm inputfield w-full" pInputText>
+    </div>
+    <div class="field col-12 lg:col-2 md:col-4 sm:col-6">
+      <label for="estCod">Estado</label><span class="campoObrigatorio">*</span><br>
+      <p-dropdown (onChange)="ListaCidadeEstado(estadoSelecionado);" id="estCod" [options]="listaEstado" [(ngModel)]="estadoSelecionado" autoWidth="false" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="estSigl" optionValue="estCod" placeholder="Selecione" [showClear]="true"></p-dropdown>
+    </div>
+    <div class="field col-12 lg:col-5 md:col-5 sm:col-5">
+      <label for="cidaCod">Cidade</label><span class="campoObrigatorio">*</span><br>
+      <p-dropdown id="cidaCod" [options]="listaCidade" [(ngModel)]="objEvento.cidaCod" autoWidth="false" [filter]="true" filterBy="cidaDesc" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="cidaDesc" optionValue="cidaCod" placeholder="Selecione" [showClear]="true"></p-dropdown>
+    </div>
+    <div class="field col-12 lg:col-7 md:col-7 sm:col-7">
+      <label for="usuCod">Responsável</label><span class="campoObrigatorio">*</span><br>
+      <p-dropdown id="usuCod" [options]="listaUsuario" [(ngModel)]="objEvento.usuCod" autoWidth="false" [filter]="true" filterBy="usuNome" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="usuNome" optionValue="usuCod" placeholder="Selecione" [showClear]="true"></p-dropdown>
+    </div>
+    <div class="field col-12 lg:col-9 md:col-8 sm:col-8">
+      <label for="eventObse">Observações</label>
+      <textarea [(ngModel)]="objEvento.eventObse" id="eventObse" pInputTextarea class="p-inputtext-sm inputfield w-full"></textarea>
+    </div>
+    <div class="field col-12 lg:col-3 md:col-4 sm:col-4">
+      <label for="eventStatus">Status</label><span class="campoObrigatorio">*</span>
+      <p-selectButton [options]="opcoesStatus" [(ngModel)]="objEvento.eventStatus" optionLabel="label" optionValue="value"></p-selectButton>
+    </div>
   </div>
   <div class="text-right">
     <small><span class="campoObrigatorio">*</span> Campos obrigarórios.</small><br><br>

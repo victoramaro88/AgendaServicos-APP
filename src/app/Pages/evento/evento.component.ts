@@ -59,6 +59,7 @@ export class EventoComponent implements OnInit {
     tipChLiDesc: ''
   };
   estadoSelecionado: any;
+  boolChecklistPreenchido: boolean = false;
 
   constructor(
     private router: Router,
@@ -80,7 +81,19 @@ export class EventoComponent implements OnInit {
       this.boolLoading = true;
       this.http.ListaMaquina(maqCod).subscribe((response: MaquinaModel[]) => {
         if (response) {
-          this.listaMaquina = response;
+          // this.listaMaquina = response;
+          for (const itemMaq of response) {
+            let objMaq: MaquinaModel = {
+              maqCod: itemMaq.maqCod,
+              maqMarca: itemMaq.maqMarca + ' / ' + itemMaq.maqModelo,
+              maqModelo: itemMaq.maqModelo,
+              maqObse: itemMaq.maqObse,
+              maqStatus: itemMaq.maqStatus,
+              diamCod: itemMaq.diamCod,
+              veicCod: itemMaq.veicCod
+            };
+            this.listaMaquina.push(objMaq);
+          }
           this.ListaHorario(0);
         }
       }, error => {
@@ -165,7 +178,6 @@ export class EventoComponent implements OnInit {
         if (response) {
           this.listaTpChLi = response;
         }
-        console.log(this.listaTpChLi);
         this.ListaEventoAtivo(0);
       }, error => {
         this.msgs = [];
@@ -178,7 +190,35 @@ export class EventoComponent implements OnInit {
     ListaEventoAtivo(eventCod: number) {
       this.http.ListaEventoAtivo(eventCod).subscribe((response: EventoModel[]) => {
         if (response) {
-          this.listaEvento = response;
+          // this.listaEvento = response;
+          this.listaEvento = [];
+          for (const itmEv of response) {
+            let objEv: EventoModel = {
+              eventCod: itmEv.eventCod,
+              eventDesc: itmEv.eventDesc,
+              eventLogr: itmEv.eventLogr,
+              eventBairr: itmEv.eventBairr,
+              eventDtIn: itmEv.eventDtIn,
+              evenDtFi: itmEv.evenDtFi,
+              eventObse: itmEv.eventObse,
+              eventStatus: itmEv.eventStatus,
+              horaCod: itmEv.horaCod,
+              cidaCod: itmEv.cidaCod,
+              diamCod: itmEv.diamCod,
+              usuCod: itmEv.usuCod,
+              maqCod: itmEv.maqCod,
+              tipChLiCod: itmEv.tipChLiCod,
+              horaDesc: itmEv.horaDesc,
+              cidaDesc: itmEv.cidaDesc,
+              estSigl: itmEv.estSigl,
+              diamDesc: itmEv.diamDesc,
+              usuNome: itmEv.usuNome,
+              maqMarca: itmEv.maqMarca + ' / ' + itmEv.maqModelo,
+              maqModelo: itmEv.maqModelo,
+              tipChLiDesc: itmEv.tipChLiDesc
+            };
+            this.listaEvento.push(objEv);
+          }
 
           if(this.listaEvento.length === 0) {
             this.mensagemTela = 'Sem informações.';
@@ -192,6 +232,14 @@ export class EventoComponent implements OnInit {
         this.boolLoading = false;
         this.messageService.add({severity:'error', summary:'Erro: ', detail: this.errosHttp.RetornaMensagemErro(error)});
       });
+    }
+
+    ExibeCheckList() {
+      if(this.objEvento.tipChLiCod > 0) {
+        this.boolChecklistPreenchido = true; //-> ALTERAR SOMENTE PARA QUANDO O CHECKLIST ESTIVER OK, E NÃO NESTE MOMENTO
+      } else {
+        this.boolChecklistPreenchido = false;
+      }
     }
 
     NovoRegistro() {
@@ -244,6 +292,7 @@ export class EventoComponent implements OnInit {
       this.objEvento.usuNome = objEven.usuNome;
       this.objEvento.maqMarca = objEven.maqMarca;
       this.objEvento.maqModelo = objEven.maqModelo;
+      this.objEvento.tipChLiCod = objEven.tipChLiCod;
 
       // console.log(this.objEvento);
 
@@ -259,6 +308,7 @@ export class EventoComponent implements OnInit {
     }
 
     Cancelar() {
+      this.ListaMaquina(0);
       this.objEvento = {
         eventCod: 0,
         eventDesc: '',
