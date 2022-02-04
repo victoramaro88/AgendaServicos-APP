@@ -65,6 +65,7 @@ export class EventoComponent implements OnInit {
   estadoSelecionado: any;
   boolChecklistPreenchido: boolean = false;
   displayDialog: boolean = false;
+  boolDatasValidas: boolean = true;
 
   constructor(
     private router: Router,
@@ -239,6 +240,7 @@ export class EventoComponent implements OnInit {
 
     ExibeCheckList() {
       this.boolLoading = true;
+      this.boolChecklistPreenchido = false;
       this.listaChecList = [];
       this.listaRespostaChLs = [];
       if (this.objEvento.tipChLiCod > 0) {
@@ -275,20 +277,23 @@ export class EventoComponent implements OnInit {
     }
 
     OkDialog() {
-      let checkListValido: boolean = false;
+      let checkListValido: boolean = true;
       for (const itemCL of this.listaChecList) {
-        let valorResp: string = itemCL.chkLstResp.toString();
-        if(valorResp === 'true' && itemCL.itmChLsObrig === true) {
-          checkListValido = true;
+        if (itemCL.itmChLsObrig === true) {
+          let valorResp: string = itemCL.chkLstResp.toString();
+          if (valorResp !== 'true') {
+            checkListValido = false;
+          }
         }
       }
 
       if(checkListValido) {
-        this.messageService.add({severity:'success', summary:'Sucesso! ', detail: 'CheckList validado!'});
+        // this.messageService.add({ severity: 'success', summary: 'Sucesso! ', detail: 'CheckList validado!' });
+        this.boolChecklistPreenchido = true;
+        this.displayDialog = false;
       } else {
         this.messageService.add({severity:'warn', summary:'Atenção! ', detail: 'Selecione todos os itens obrigatórios para continuar.'});
       }
-      // this.displayDialog = false;
       console.log(this.listaChecList);
     }
 
@@ -384,11 +389,22 @@ export class EventoComponent implements OnInit {
         maqModelo: '',
         tipChLiDesc: ''
       };
+      this.boolDatasValidas = true;
       this.modoEdicao = false;
     }
 
-    Salvar(){
-      console.log(this.objEvento);
+    ValidaDatas() {
+      if (this.objEvento.eventDtIn > this.objEvento.evenDtFi) {
+        this.boolDatasValidas = false;
+      } else {
+        this.boolDatasValidas = true;
+      }
+    }
+
+    Salvar() {
+      if (this.ValidaInformacoes()) {
+        console.log(this.objEvento);
+      }
 
       // this.boolLoading = true;
       // if (this.ValidaInformacoes(this.objMaquina))
@@ -408,6 +424,16 @@ export class EventoComponent implements OnInit {
       //     this.messageService.add({severity:'error', summary:'Erro: ', detail: this.errosHttp.RetornaMensagemErro(error)});
       //   });
       // }
+    }
+
+    ValidaInformacoes() {
+      if (this.boolDatasValidas) {
+        return true;
+      } else {
+        this.boolLoading = false;
+        this.messageService.add({ severity: 'warn', summary: 'Atenção: ', detail: 'Insira um período de datas válido!' });
+        return false;
+      }
     }
 
   }

@@ -51,6 +51,8 @@ export class UsuarioComponent implements OnInit {
     }
 
     ListaPerfil(perfCod: number) {
+      this.confirmaSenha = '';
+      this.boolAlterarSenha = false;
       this.boolLoading = true;
       this.modoEdicao = false;
       this.http.ListaPerfil(perfCod).subscribe((response: PerfilModel[]) => {
