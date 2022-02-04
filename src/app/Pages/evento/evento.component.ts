@@ -24,7 +24,7 @@ export class EventoComponent implements OnInit {
   boolLoading = false;
   msgs: any[] = [];
   opcoesStatus: any[] = [];
-  modoEdicao: boolean = true;//false;
+  modoEdicao: boolean = false;
   mensagemTela: string = 'Aguarde...';
 
   dataAtual: Date = new Date();
@@ -298,6 +298,7 @@ export class EventoComponent implements OnInit {
     }
 
     NovoRegistro() {
+      this.boolChecklistPreenchido = false;
       this.objEvento = {
         eventCod: 0,
         eventDesc: '',
@@ -349,6 +350,7 @@ export class EventoComponent implements OnInit {
       this.objEvento.maqModelo = objEven.maqModelo;
       this.objEvento.tipChLiCod = objEven.tipChLiCod;
 
+      this.boolChecklistPreenchido = true;
       // console.log(this.objEvento);
 
       this.modoEdicao = true;
