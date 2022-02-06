@@ -8,6 +8,7 @@ import { EstadoModel } from 'src/app/Models/Estado.Model';
 import { EventoModel } from 'src/app/Models/Evento.Model';
 import { HorarioModel } from 'src/app/Models/Horario.Model';
 import { MaquinaModel } from 'src/app/Models/Maquina.Model';
+import { PesqMaqDispModel } from 'src/app/Models/PesqMaqDisp.Model';
 import { RespostasCheckListModel } from 'src/app/Models/RespostasCheckList.model';
 import { TipoChecklistModel } from 'src/app/Models/TipoChecklist.Model';
 import { UsuarioTbModel } from 'src/app/Models/UsuarioTb.Model';
@@ -66,6 +67,12 @@ export class EventoComponent implements OnInit {
   boolChecklistPreenchido: boolean = false;
   displayDialog: boolean = false;
   boolDatasValidas: boolean = true;
+
+  boolTipoFuroBloq: boolean = false;
+  boolDiametroBloq: boolean = false;
+  boolDataInBloq: boolean = false;
+  boolDataFiBloq: boolean = false;
+  boolMaquinaBloq: boolean = true; //-> Começa bloqueada, pois os parâmetros ainda não foram definidos.
 
   constructor(
     private router: Router,
@@ -290,6 +297,7 @@ export class EventoComponent implements OnInit {
       if(checkListValido) {
         // this.messageService.add({ severity: 'success', summary: 'Sucesso! ', detail: 'CheckList validado!' });
         this.boolChecklistPreenchido = true;
+        this.boolTipoFuroBloq = true;
         this.displayDialog = false;
       } else {
         this.messageService.add({severity:'warn', summary:'Atenção! ', detail: 'Selecione todos os itens obrigatórios para continuar.'});
@@ -392,14 +400,63 @@ export class EventoComponent implements OnInit {
         tipChLiDesc: ''
       };
       this.boolDatasValidas = true;
+
+      this.boolTipoFuroBloq = false;
+      this.boolDiametroBloq = false;
+      this.boolDataInBloq = false;
+      this.boolDataFiBloq = false;
+      this.boolMaquinaBloq = true;
       this.modoEdicao = false;
     }
 
-    ValidaDatas() {
+    ValidaDatas(dataIn: boolean, dataFi: boolean) {
+      //-> Bloqueando os inputs de data para evitar alterações.
+      if(dataIn && !dataFi) {
+        this.boolDataInBloq = true;
+      } else {
+        this.boolDataFiBloq = true;
+      }
+
       if (this.objEvento.eventDtIn > this.objEvento.evenDtFi) {
         this.boolDatasValidas = false;
+        this.boolDataFiBloq = false;
       } else {
         this.boolDatasValidas = true;
+
+        if(this.boolDataInBloq && this.boolDataFiBloq) {
+
+          //-> Chamando função para carregar as máquinas disponíveis.
+          this.boolLoading = true;
+          let objPesquisa: PesqMaqDispModel = {
+            diamCod: this.objEvento.diamCod,
+            eventDtIn: this.objEvento.eventDtIn,
+            evenDtFi: this.objEvento.evenDtFi
+          };
+          this.listaMaquina = [];
+          this.http.ListaMaquinasDisponiveis(objPesquisa).subscribe((response: MaquinaModel[]) => {
+            if (response) {
+              for (const itemMaq of response) {
+                let objMaq: MaquinaModel = {
+                  maqCod: itemMaq.maqCod,
+                  maqMarca: itemMaq.maqMarca + ' / ' + itemMaq.maqModelo,
+                  maqModelo: itemMaq.maqModelo,
+                  maqObse: itemMaq.maqObse,
+                  maqStatus: itemMaq.maqStatus,
+                  diamCod: itemMaq.diamCod,
+                  veicCod: itemMaq.veicCod
+                };
+                this.listaMaquina.push(objMaq);
+              }
+              console.log(this.listaMaquina);
+              this.boolMaquinaBloq = false;
+              this.boolLoading = false;
+            }
+          }, error => {
+            this.msgs = [];
+            this.boolLoading = false;
+            this.messageService.add({severity:'error', summary:'Erro: ', detail: this.errosHttp.RetornaMensagemErro(error)});
+          });
+        }
       }
     }
 

@@ -92,24 +92,24 @@
   <div class="formgrid grid">
     <div class="field col-12 lg:col-3 md:col-3 sm:col-6">
       <label for="tipChLiCod">Tipo de Furo</label><span class="campoObrigatorio">*</span><br>
-      <p-dropdown (onChange)="ExibeCheckList();" id="tipChLiCod" [options]="listaTpChLi" [(ngModel)]="objEvento.tipChLiCod" autoWidth="false" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="tipChLiDesc" optionValue="tipChLiCod" placeholder="Selecione" [showClear]="true"></p-dropdown>
+      <p-dropdown [disabled]="boolTipoFuroBloq" (onChange)="ExibeCheckList();" id="tipChLiCod" [options]="listaTpChLi" [(ngModel)]="objEvento.tipChLiCod" autoWidth="false" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="tipChLiDesc" optionValue="tipChLiCod" placeholder="Selecione" [showClear]="true"></p-dropdown>
     </div>
     <div class="field col-12 lg:col-3 md:col-3 sm:col-6">
       <label for="diamCod">Diâmetro</label><span class="campoObrigatorio">*</span><br>
-      <p-dropdown [disabled]="!boolChecklistPreenchido" id="diamCod" [options]="lstDiametroFuro" [(ngModel)]="objEvento.diamCod" autoWidth="false" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="diamDesc" optionValue="diamCod" placeholder="Selecione" [showClear]="true"></p-dropdown>
+      <p-dropdown [disabled]="!boolChecklistPreenchido || objEvento.diamCod > 0" id="diamCod" [options]="lstDiametroFuro" [(ngModel)]="objEvento.diamCod" autoWidth="false" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="diamDesc" optionValue="diamCod" placeholder="Selecione" [showClear]="true"></p-dropdown>
     </div>
     <div class="field col-12 lg:col-3 md:col-3 sm:col-3">
       <label for="eventDtIn">Data Inicial</label><br>
-      <p-calendar (onSelect)="ValidaDatas();" [ngClass]="{'ng-invalid ng-dirty':!boolDatasValidas}" [disabled]="!boolChecklistPreenchido" [(ngModel)]="objEvento.eventDtIn" [minDate]="dataAtual" [showIcon]="true" dateFormat="dd/mm/yy" inputId="eventDtIn" class="p-inputtext-sm inputfield w-full"></p-calendar>
+      <p-calendar (onSelect)="ValidaDatas(true, false);" [ngClass]="{'ng-invalid ng-dirty':!boolDatasValidas}" [disabled]="!boolChecklistPreenchido || boolDataInBloq" [(ngModel)]="objEvento.eventDtIn" [minDate]="dataAtual" [showIcon]="true" dateFormat="dd/mm/yy" inputId="eventDtIn" class="p-inputtext-sm inputfield w-full"></p-calendar>
     </div>
     <div class="field col-12 lg:col-3 md:col-3 sm:col-3">
       <label for="evenDtFi">Data Final</label><br>
-      <p-calendar (onSelect)="ValidaDatas();" [ngClass]="{'ng-invalid ng-dirty':!boolDatasValidas}" [disabled]="!boolChecklistPreenchido" [(ngModel)]="objEvento.evenDtFi" [minDate]="dataAtual" [showIcon]="true" dateFormat="dd/mm/yy" inputId="evenDtFi" class="p-inputtext-sm inputfield w-full"></p-calendar>
+      <p-calendar (onSelect)="ValidaDatas(false, true);" [ngClass]="{'ng-invalid ng-dirty':!boolDatasValidas}" [disabled]="!boolChecklistPreenchido || boolDataFiBloq" [(ngModel)]="objEvento.evenDtFi" [minDate]="dataAtual" [showIcon]="true" dateFormat="dd/mm/yy" inputId="evenDtFi" class="p-inputtext-sm inputfield w-full"></p-calendar>
       <br><span style="color: red;" class="ml-2" *ngIf="!boolDatasValidas"><b><small>Data final não pode ser menor que data inicial!</small></b></span>
     </div>
     <div class="field col-12 lg:col-6 md:col-7 sm:col-6">
       <label for="maqCod">Máquina</label><span class="campoObrigatorio">*</span><br>
-      <p-dropdown [disabled]="!boolChecklistPreenchido" id="maqCod" [options]="listaMaquina" [(ngModel)]="objEvento.maqCod" autoWidth="false" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="maqMarca" optionValue="maqCod" placeholder="Selecione" [showClear]="true"></p-dropdown>
+      <p-dropdown [disabled]="boolMaquinaBloq" id="maqCod" [options]="listaMaquina" [(ngModel)]="objEvento.maqCod" autoWidth="false" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="maqMarca" optionValue="maqCod" placeholder="Selecione" [showClear]="true"></p-dropdown>
     </div>
     <div class="field col-12 lg:col-6 md:col-5 sm:col-6">
       <label for="eventDesc">Descrição</label><span class="campoObrigatorio">*</span>

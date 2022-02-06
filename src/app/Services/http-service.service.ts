@@ -24,6 +24,7 @@ import { HorarioModel } from "../Models/Horario.Model";
 import { EstadoModel } from "../Models/Estado.Model";
 import { CidadeModel } from "../Models/Cidade.Model";
 import { CheckListItensModel } from "../Models/CheckListItens.Model";
+import { PesqMaqDispModel } from "../Models/PesqMaqDisp.Model";
 
 @Injectable({
   providedIn: 'root'
@@ -135,6 +136,10 @@ export class HttpService {
 
   public ManterCheckList(objChecklistEnvio: ChecklistEnvioModel): Observable<string> {
     return this.http.post<string>(`${environment.urlAPI}/Agenda/ManterCheckList`, objChecklistEnvio, this.CarregaHeader());
+  }
+
+  public ListaMaquinasDisponiveis(objPesquisa: PesqMaqDispModel): Observable<MaquinaModel[]> {
+    return this.http.post<MaquinaModel[]>(`${environment.urlAPI}/Agenda/ListaMaquinasDisponiveis`, objPesquisa, this.CarregaHeader());
   }
 
   public ListaDiametroFuro(diamCod: number): Observable<DiametroFuroModel[]> {
