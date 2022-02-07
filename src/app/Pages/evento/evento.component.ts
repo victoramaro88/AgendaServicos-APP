@@ -465,6 +465,8 @@ export class EventoComponent implements OnInit {
         console.log(this.objEvento);
       }
 
+      //ManterEvento
+
       // this.boolLoading = true;
       // if (this.ValidaInformacoes(this.objMaquina))
       // {

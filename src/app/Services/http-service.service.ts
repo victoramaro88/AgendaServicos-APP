@@ -25,6 +25,7 @@ import { EstadoModel } from "../Models/Estado.Model";
 import { CidadeModel } from "../Models/Cidade.Model";
 import { CheckListItensModel } from "../Models/CheckListItens.Model";
 import { PesqMaqDispModel } from "../Models/PesqMaqDisp.Model";
+import { EventoManterModel } from "../Models/EventoManter.Model";
 
 @Injectable({
   providedIn: 'root'
@@ -136,6 +137,10 @@ export class HttpService {
 
   public ManterCheckList(objChecklistEnvio: ChecklistEnvioModel): Observable<string> {
     return this.http.post<string>(`${environment.urlAPI}/Agenda/ManterCheckList`, objChecklistEnvio, this.CarregaHeader());
+  }
+
+  public ManterEvento(objEventoManter: EventoManterModel): Observable<string> {
+    return this.http.post<string>(`${environment.urlAPI}/Agenda/ManterEvento`, objEventoManter, this.CarregaHeader());
   }
 
   public ListaMaquinasDisponiveis(objPesquisa: PesqMaqDispModel): Observable<MaquinaModel[]> {
