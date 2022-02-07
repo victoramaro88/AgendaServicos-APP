@@ -2,10 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { CheckListItensModel } from 'src/app/Models/CheckListItens.Model';
+import { CheckListRespostasModel } from 'src/app/Models/CheckListRespostas.Model';
 import { CidadeModel } from 'src/app/Models/Cidade.Model';
 import { DiametroFuroModel } from 'src/app/Models/DiametroFuro.Model';
 import { EstadoModel } from 'src/app/Models/Estado.Model';
 import { EventoModel } from 'src/app/Models/Evento.Model';
+import { EventoManterModel } from 'src/app/Models/EventoManter.Model';
 import { HorarioModel } from 'src/app/Models/Horario.Model';
 import { MaquinaModel } from 'src/app/Models/Maquina.Model';
 import { PesqMaqDispModel } from 'src/app/Models/PesqMaqDisp.Model';
@@ -447,7 +449,6 @@ export class EventoComponent implements OnInit {
                 };
                 this.listaMaquina.push(objMaq);
               }
-              console.log(this.listaMaquina);
               this.boolMaquinaBloq = false;
               this.boolLoading = false;
             }
@@ -462,7 +463,33 @@ export class EventoComponent implements OnInit {
 
     Salvar() {
       if (this.ValidaInformacoes()) {
-        console.log(this.objEvento);
+        // console.log(this.objEvento);
+        // console.log(this.listaChecList);
+
+        let listaRespostas: CheckListRespostasModel[] = [];
+        for (const itemResp of this.listaChecList) {
+          let valorResp: string = itemResp.chkLstResp.toString();
+          if (valorResp === 'true') {
+            itemResp.chkLstResp = true;
+          } else {
+            itemResp.chkLstResp = false;
+          }
+
+          let objRespostas: CheckListRespostasModel = {
+            chkLsRespCod: 0,
+            eventCod: 0,
+            chkLstItmChkLst: itemResp.chkLstItmChkLst,
+            chkLstResp: itemResp.chkLstResp
+          };
+          listaRespostas.push(objRespostas);
+        }
+
+        let objEnvioServico: EventoManterModel = {
+          objEvento: this.objEvento,
+          listaRespostas: listaRespostas
+        };
+
+        console.log(objEnvioServico);
       }
 
       //ManterEvento
@@ -488,11 +515,59 @@ export class EventoComponent implements OnInit {
     }
 
     ValidaInformacoes() {
-      if (this.boolDatasValidas) {
-        return true;
+      if(this.objEvento.tipChLiCod > 0) {
+        if(this.objEvento.diamCod > 0) {
+          if (this.boolDatasValidas) {
+            if (this.objEvento.maqCod > 0) {
+              if (this.objEvento.eventDesc.length > 0) {
+                if (this.objEvento.eventLogr.length > 0) {
+                  if (this.objEvento.eventBairr.length > 0) {
+                    if (this.objEvento.cidaCod > 0) {
+                      if (this.objEvento.usuCod > 0) {
+                        return true;
+                      } else {
+                        this.boolLoading = false;
+                        this.messageService.add({ severity: 'warn', summary: 'Atenção: ', detail: 'Selecione uma Responsável da obra!' });
+                        return false;
+                      }
+                    } else {
+                      this.boolLoading = false;
+                      this.messageService.add({ severity: 'warn', summary: 'Atenção: ', detail: 'Selecione uma cidade!' });
+                      return false;
+                    }
+                  } else {
+                    this.boolLoading = false;
+                    this.messageService.add({ severity: 'warn', summary: 'Atenção: ', detail: 'Insira um bairro válido!' });
+                    return false;
+                  }
+                } else {
+                  this.boolLoading = false;
+                  this.messageService.add({ severity: 'warn', summary: 'Atenção: ', detail: 'Insira um endereço válido!' });
+                  return false;
+                }
+              } else {
+                this.boolLoading = false;
+                this.messageService.add({ severity: 'warn', summary: 'Atenção: ', detail: 'Insira uma descrição para o evento!' });
+                return false;
+              }
+            } else {
+              this.boolLoading = false;
+              this.messageService.add({ severity: 'warn', summary: 'Atenção: ', detail: 'Selecione uma máquina!' });
+              return false;
+            }
+          } else {
+            this.boolLoading = false;
+            this.messageService.add({ severity: 'warn', summary: 'Atenção: ', detail: 'Insira um período de datas válido!' });
+            return false;
+          }
+        } else {
+          this.boolLoading = false;
+          this.messageService.add({ severity: 'warn', summary: 'Atenção: ', detail: 'Selecione um diâmetro de furo!' });
+          return false;
+        }
       } else {
         this.boolLoading = false;
-        this.messageService.add({ severity: 'warn', summary: 'Atenção: ', detail: 'Insira um período de datas válido!' });
+        this.messageService.add({ severity: 'warn', summary: 'Atenção: ', detail: 'Selecione um tipo de furo!' });
         return false;
       }
     }

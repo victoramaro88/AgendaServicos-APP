@@ -111,6 +111,10 @@
       <label for="maqCod">Máquina</label><span class="campoObrigatorio">*</span><br>
       <p-dropdown [disabled]="boolMaquinaBloq" id="maqCod" [options]="listaMaquina" [(ngModel)]="objEvento.maqCod" autoWidth="false" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="maqMarca" optionValue="maqCod" placeholder="Selecione" [showClear]="true"></p-dropdown>
     </div>
+    <div class="field col-12 lg:col-2 md:col-7 sm:col-6">
+      <label for="horaCod">Horário</label><span class="campoObrigatorio">*</span><br>
+      <p-dropdown [disabled]="!boolChecklistPreenchido" id="horaCod" [options]="listaHorario" [(ngModel)]="objEvento.horaCod" autoWidth="false" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="maqMarca" optionValue="maqCod" placeholder="Selecione" [showClear]="true"></p-dropdown>
+    </div>
     <div class="field col-12 lg:col-6 md:col-5 sm:col-6">
       <label for="eventDesc">Descrição</label><span class="campoObrigatorio">*</span>
       <input [disabled]="!boolChecklistPreenchido" [(ngModel)]="objEvento.eventDesc" id="eventDesc" type="text" class="p-inputtext-sm inputfield w-full" pInputText>
