@@ -299,12 +299,16 @@ export class EventoComponent implements OnInit {
       if(checkListValido) {
         // this.messageService.add({ severity: 'success', summary: 'Sucesso! ', detail: 'CheckList validado!' });
         this.boolChecklistPreenchido = true;
+        this.boolDataInBloq = true;
+        this.boolDataFiBloq = true;
+        if (this.objEvento.eventCod > 0) {
+          this.boolDataInBloq = false;
+        }
         this.boolTipoFuroBloq = true;
         this.displayDialog = false;
       } else {
         this.messageService.add({severity:'warn', summary:'Atenção! ', detail: 'Selecione todos os itens obrigatórios para continuar.'});
       }
-      console.log(this.listaChecList);
     }
 
     NovoRegistro() {
@@ -360,7 +364,13 @@ export class EventoComponent implements OnInit {
       this.objEvento.maqModelo = objEven.maqModelo;
       this.objEvento.tipChLiCod = objEven.tipChLiCod;
 
+      this.ExibeCheckList();
+
       this.boolChecklistPreenchido = true;
+
+      // this.boolDataFiBloq = true;
+      this.boolDataInBloq = false;
+
       // console.log(this.objEvento);
 
       this.modoEdicao = true;
@@ -415,6 +425,7 @@ export class EventoComponent implements OnInit {
       //-> Bloqueando os inputs de data para evitar alterações.
       if(dataIn && !dataFi) {
         this.boolDataInBloq = true;
+        this.boolDataFiBloq = false;
       } else {
         this.boolDataFiBloq = true;
       }
@@ -463,9 +474,7 @@ export class EventoComponent implements OnInit {
 
     Salvar() {
       if (this.ValidaInformacoes()) {
-        // console.log(this.objEvento);
-        // console.log(this.listaChecList);
-
+        this.boolLoading = true;
         let listaRespostas: CheckListRespostasModel[] = [];
         for (const itemResp of this.listaChecList) {
           let valorResp: string = itemResp.chkLstResp.toString();
@@ -477,7 +486,7 @@ export class EventoComponent implements OnInit {
 
           let objRespostas: CheckListRespostasModel = {
             chkLsRespCod: 0,
-            eventCod: 0,
+            eventCod: this.objEvento.eventCod,
             chkLstItmChkLst: itemResp.chkLstItmChkLst,
             chkLstResp: itemResp.chkLstResp
           };
@@ -489,35 +498,30 @@ export class EventoComponent implements OnInit {
           listaRespostas: listaRespostas
         };
 
-        console.log(objEnvioServico);
+        // console.log(objEnvioServico);
+        this.http.ManterEvento(objEnvioServico).subscribe((response: string) => {
+          if (response) {
+            this.messageService.add({severity:'success', summary:'Sucesso! ', detail: 'Evento '+ (this.objEvento.eventCod > 0 ? 'alterado' : 'inserido') + ' com sucesso!'});
+            setTimeout(() => {
+              this.listaEvento = [];
+              this.modoEdicao = false;
+              this.boolTipoFuroBloq = false;
+              this.ListaMaquina(0);
+            }, 2000);
+          }
+          this.boolLoading = false;
+        }, error => {
+          this.msgs = [];
+          this.boolLoading = false;
+          this.messageService.add({severity:'error', summary:'Erro: ', detail: this.errosHttp.RetornaMensagemErro(error)});
+        });
       }
-
-      //ManterEvento
-
-      // this.boolLoading = true;
-      // if (this.ValidaInformacoes(this.objMaquina))
-      // {
-      //   this.http.ManterMaquina(this.objMaquina).subscribe((response: string) => {
-      //     if (response) {
-      //       this.messageService.add({severity:'success', summary:'Sucesso! ', detail: 'Máquina '+ (this.objMaquina.maqCod > 0 ? 'alterada' : 'inserida') + ' com sucesso!'});
-      //       setTimeout(() => {
-      //         this.listaMaquina = [];
-      //         this.ListaDiametroFuro(0);
-      //       }, 2000);
-      //     }
-      //     this.boolLoading = false;
-      //   }, error => {
-      //     this.msgs = [];
-      //     this.boolLoading = false;
-      //     this.messageService.add({severity:'error', summary:'Erro: ', detail: this.errosHttp.RetornaMensagemErro(error)});
-      //   });
-      // }
     }
 
     ValidaInformacoes() {
       if(this.objEvento.tipChLiCod > 0) {
         if(this.objEvento.diamCod > 0) {
-          if (this.boolDatasValidas) {
+          if (this.boolDatasValidas && this.objEvento.eventDtIn >= new Date()) {
             if (this.objEvento.maqCod > 0) {
               if (this.objEvento.eventDesc.length > 0) {
                 if (this.objEvento.eventLogr.length > 0) {
