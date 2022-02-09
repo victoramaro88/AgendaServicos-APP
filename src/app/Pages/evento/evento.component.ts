@@ -176,7 +176,20 @@ export class EventoComponent implements OnInit {
     ListaUsuario(usuCod: number) {
       this.http.ListaUsuario(usuCod).subscribe((response: UsuarioTbModel[]) => {
         if (response) {
-          this.listaUsuario = response;
+          this.listaUsuario = [];
+          for (const itmUsr of response) {
+            if(itmUsr.usuStatus) {
+              let objUsr: UsuarioTbModel = {
+                usuCod: itmUsr.usuCod,
+                usuNome: itmUsr.usuNome,
+                usuLogin: itmUsr.usuLogin,
+                usuSenha: itmUsr.usuSenha,
+                usuStatus: itmUsr.usuStatus,
+                perfCod: itmUsr.perfCod
+              };
+              this.listaUsuario.push(objUsr);
+            }
+          }
           this.ListaTipoCheckList(0);
         }
       }, error => {

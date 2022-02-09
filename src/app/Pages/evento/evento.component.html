@@ -44,7 +44,8 @@
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-item>
-    <tr>
+    <tr [style.background-color]="item.evenDtFi >= dataAtual ? 'red' : 'transparent'">
+    <!-- <tr [style.background-color]="'red'"> -->
       <td pTooltip="{{item.eventDesc}}" tooltipPosition="top"><span class="p-column-title"><b>Descrição</b></span><small>{{item.eventDesc}}</small></td>
       <td pTooltip="{{item.tipChLiDesc}}" tooltipPosition="top"><span class="p-column-title"><b>Tipo Furo</b></span><small>{{item.tipChLiDesc}}</small></td>
       <td pTooltip="{{item.eventLogr}}" tooltipPosition="top"><span class="p-column-title"><b>Endereço</b></span><small>{{item.eventLogr.substring(0, 20)}}...</small></td>
