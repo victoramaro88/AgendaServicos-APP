@@ -589,4 +589,23 @@ export class EventoComponent implements OnInit {
       }
     }
 
+  ValidaPrazoEvento(dataInicio: Date, dataFinal: Date) {
+    // console.log(new Date(dataInicio));
+    // console.log(new Date(dataFinal));
+    // console.log(new Date(new Date().toDateString()));
+      if (new Date(dataFinal) <= new Date(new Date().toDateString())) {
+        return true;
+      }
+      // else if (
+      //   new Date(dataInicio) >= new Date(new Date().toDateString())
+      //   &&
+      //   new Date(dataFinal) <= new Date(new Date().toDateString())
+      // ) {
+      //   return true;
+      // }
+      else {
+        return false;
+      }
+    }
+
   }
