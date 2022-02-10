@@ -44,129 +44,130 @@
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-item>
-    <!-- <tr [style.background-color]="ValidaPrazoEvento(item.eventDtIn, item.evenDtFi) === 'VENCIDO' ? '#E0818D' : 'transparent'" -->
-    <tr [style.background-color]="ValidaPrazoEvento(item.eventDtIn, item.evenDtFi) === 'VENCIDO' ? '#E0818D' : ValidaPrazoEvento(item.eventDtIn, item.evenDtFi) === 'OPERAÇÃO' ? '#FFF579' : 'transparent'"
-        [style.color]="ValidaPrazoEvento(item.eventDtIn, item.evenDtFi) === 'VENCIDO' ? 'white' : 'black'"
+    <tr [style.background-color]="ValidaPrazoEvento(item.eventDtIn, item.evenDtFi) === 'VENCIDO' ? '#ffd1d1'
+    : ValidaPrazoEvento(item.eventDtIn, item.evenDtFi) === 'OPERAÇÃO'
+    ? '#fff9bd' : 'transparent'"
     >
-    <!-- <tr [style.background-color]="item.evenDtFi <= dataAtual ? 'red' : 'transparent'"> -->
-      <!-- {{item.evenDtFi}} / {{dataAtual}} -->
-      <!-- <tr [style.background-color]="'red'"> -->
-        <td pTooltip="{{item.eventDesc}}" tooltipPosition="top"><span class="p-column-title"><b>Descrição</b></span><small>{{item.eventDesc}}</small></td>
-        <td pTooltip="{{item.tipChLiDesc}}" tooltipPosition="top"><span class="p-column-title"><b>Tipo Furo</b></span><small>{{item.tipChLiDesc}}</small></td>
-        <td pTooltip="{{item.eventLogr}}" tooltipPosition="top"><span class="p-column-title"><b>Endereço</b></span><small>{{item.eventLogr.substring(0, 20)}}...</small></td>
-        <td pTooltip="{{item.eventBairr}}" tooltipPosition="top"><span class="p-column-title"><b>Bairro</b></span><small>{{item.eventBairr.substring(0, 20)}}...</small></td>
-        <td pTooltip="{{item.eventDtIn | date: 'dd/MM/yyyy'}} a {{item.evenDtFi | date: 'dd/MM/yyyy'}}" tooltipPosition="top"><span class="p-column-title"><b>Período</b></span><small>{{item.eventDtIn | date: 'dd/MM/yyyy'}} a {{item.evenDtFi | date: 'dd/MM/yyyy'}}</small></td>
-        <td pTooltip="{{item.usuNome}}" tooltipPosition="top"><span class="p-column-title"><b>Responsável</b></span><small>{{item.usuNome.substring(0, 10)}}...</small></td>
-        <td pTooltip="{{item.maqMarca}}" tooltipPosition="top"><span class="p-column-title"><b>Máquina</b></span><small>{{item.maqMarca.substring(0, 10)}}...</small></td>
-        <td><span class="p-column-title"><b>Status</b></span>
-          <p-tag severity="{{item.eventStatus ? 'success' : 'danger'}}" value="{{item.eventStatus ? 'Ativo' : 'Inativo'}}"></p-tag>
-        </td>
-        <td>
-          <span class="p-column-title"><b>Ações</b></span>
-          <div>
-            <button (click)="IniciaEdicao(item);" pTooltip="Editar" tooltipPosition="top" pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-info p-button-text"></button>
-            <!-- <button (click)="AlteraStatus(item); item.maqStatus = !item.maqStatus;" *ngIf="item.maqStatus" pTooltip="Desativar" tooltipPosition="top" pButton pRipple type="button" icon="pi pi-lock" class="p-button-rounded p-button-success p-button-text"></button>
-              <button (click)="AlteraStatus(item); item.maqStatus = !item.maqStatus;" *ngIf="!item.maqStatus" pTooltip="Ativar" tooltipPosition="top" pButton pRipple type="button" icon="pi pi-lock-open" class="p-button-rounded p-button-danger p-button-text"></button> -->
-            </div>
-          </td>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="emptymessage">
-        <tr>
-          <td style="text-align: center;" colspan="9">Sem informações.</td>
-        </tr>
-      </ng-template>
-    </p-table>
-  </div>
-
-  <!-- MODO INCLUSÃO/ALTERAÇÃO -->
-  <div *ngIf="modoEdicao" class="card">
-    <div class="formgrid grid">
-      <div class="field col-12 lg:col-3 md:col-3 sm:col-6">
-        <label for="tipChLiCod">Tipo de Furo</label><span class="campoObrigatorio">*</span><br>
-        <p-dropdown [disabled]="boolTipoFuroBloq" (onChange)="ExibeCheckList();" id="tipChLiCod" [options]="listaTpChLi" [(ngModel)]="objEvento.tipChLiCod" autoWidth="false" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="tipChLiDesc" optionValue="tipChLiCod" placeholder="Selecione" [showClear]="true"></p-dropdown>
-      </div>
-      <div class="field col-12 lg:col-3 md:col-3 sm:col-6">
-        <label for="diamCod">Diâmetro</label><span class="campoObrigatorio">*</span><br>
-        <p-dropdown (onChange)="boolDataInBloq = false;" [disabled]="!boolChecklistPreenchido || objEvento.diamCod > 0" id="diamCod" [options]="lstDiametroFuro" [(ngModel)]="objEvento.diamCod" autoWidth="false" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="diamDesc" optionValue="diamCod" placeholder="Selecione" [showClear]="true"></p-dropdown>
-      </div>
-      <div class="field col-12 lg:col-3 md:col-3 sm:col-3">
-        <label for="eventDtIn">Data Inicial</label><br>
-        <p-calendar (onSelect)="ValidaDatas(true, false);" [ngClass]="{'ng-invalid ng-dirty':!boolDatasValidas}" [disabled]="!boolChecklistPreenchido || boolDataInBloq" [(ngModel)]="objEvento.eventDtIn" [minDate]="dataAtual" [showIcon]="true" dateFormat="dd/mm/yy" inputId="eventDtIn" class="p-inputtext-sm inputfield w-full"></p-calendar>
-      </div>
-      <div class="field col-12 lg:col-3 md:col-3 sm:col-3">
-        <label for="evenDtFi">Data Final</label><br>
-        <p-calendar (onSelect)="ValidaDatas(false, true);" [ngClass]="{'ng-invalid ng-dirty':!boolDatasValidas}" [disabled]="!boolChecklistPreenchido || boolDataFiBloq" [(ngModel)]="objEvento.evenDtFi" [minDate]="dataAtual" [showIcon]="true" dateFormat="dd/mm/yy" inputId="evenDtFi" class="p-inputtext-sm inputfield w-full"></p-calendar>
-        <br><span style="color: red;" class="ml-2" *ngIf="!boolDatasValidas"><b><small>Data final não pode ser menor que data inicial!</small></b></span>
-      </div>
-      <div class="field col-12 lg:col-5 md:col-5 sm:col-6">
-        <label for="maqCod">Máquina</label><span class="campoObrigatorio">*</span><br>
-        <p-dropdown [disabled]="boolMaquinaBloq" id="maqCod" [options]="listaMaquina" [(ngModel)]="objEvento.maqCod" autoWidth="false" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="maqMarca" optionValue="maqCod" placeholder="Selecione" [showClear]="true"></p-dropdown>
-      </div>
-      <div class="field col-12 lg:col-2 md:col-2 sm:col-6">
-        <label for="horaCod">Horário</label><span class="campoObrigatorio">*</span><br>
-        <p-dropdown [disabled]="!boolChecklistPreenchido" id="horaCod" [options]="listaHorario" [(ngModel)]="objEvento.horaCod" autoWidth="false" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="horaDesc" optionValue="horaCod" placeholder="Selecione" [showClear]="true"></p-dropdown>
-      </div>
-      <div class="field col-12 lg:col-5 md:col-5 sm:col-6">
-        <label for="eventDesc">Descrição</label><span class="campoObrigatorio">*</span>
-        <input [disabled]="!boolChecklistPreenchido" [(ngModel)]="objEvento.eventDesc" id="eventDesc" type="text" class="p-inputtext-sm inputfield w-full" pInputText>
-      </div>
-      <div class="field col-12 lg:col-5 md:col-4 sm:col-6">
-        <label for="eventLogr">Endereço</label><span class="campoObrigatorio">*</span>
-        <input [disabled]="!boolChecklistPreenchido" [(ngModel)]="objEvento.eventLogr" id="eventLogr" type="text" class="p-inputtext-sm inputfield w-full" pInputText>
-      </div>
-      <div class="field col-12 lg:col-5 md:col-4 sm:col-6">
-        <label for="eventBairr">Bairro</label><span class="campoObrigatorio">*</span>
-        <input [disabled]="!boolChecklistPreenchido" [(ngModel)]="objEvento.eventBairr" id="eventBairr" type="text" class="p-inputtext-sm inputfield w-full" pInputText>
-      </div>
-      <div class="field col-12 lg:col-2 md:col-4 sm:col-6">
-        <label for="estCod">Estado</label><span class="campoObrigatorio">*</span><br>
-        <p-dropdown [disabled]="!boolChecklistPreenchido" (onChange)="ListaCidadeEstado(estadoSelecionado);" id="estCod" [options]="listaEstado" [(ngModel)]="estadoSelecionado" autoWidth="false" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="estSigl" optionValue="estCod" placeholder="Selecione" [showClear]="true"></p-dropdown>
-      </div>
-      <div class="field col-12 lg:col-5 md:col-5 sm:col-5">
-        <label for="cidaCod">Cidade</label><span class="campoObrigatorio">*</span><br>
-        <p-dropdown [disabled]="!boolChecklistPreenchido" id="cidaCod" [options]="listaCidade" [(ngModel)]="objEvento.cidaCod" autoWidth="false" [filter]="true" filterBy="cidaDesc" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="cidaDesc" optionValue="cidaCod" placeholder="Selecione" [showClear]="true"></p-dropdown>
-      </div>
-      <div class="field col-12 lg:col-7 md:col-7 sm:col-7">
-        <label for="usuCod">Responsável</label><span class="campoObrigatorio">*</span><br>
-        <p-dropdown [disabled]="!boolChecklistPreenchido" id="usuCod" [options]="listaUsuario" [(ngModel)]="objEvento.usuCod" autoWidth="false" [filter]="true" filterBy="usuNome" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="usuNome" optionValue="usuCod" placeholder="Selecione" [showClear]="true"></p-dropdown>
-      </div>
-      <div class="field col-12 lg:col-9 md:col-8 sm:col-8">
-        <label for="eventObse">Observações</label>
-        <textarea [disabled]="!boolChecklistPreenchido" [(ngModel)]="objEvento.eventObse" id="eventObse" pInputTextarea class="p-inputtext-sm inputfield w-full"></textarea>
-      </div>
-      <div class="field col-12 lg:col-3 md:col-4 sm:col-4">
-        <label for="eventStatus">Status</label><span class="campoObrigatorio">*</span>
-        <p-selectButton [disabled]="!boolChecklistPreenchido" [options]="opcoesStatus" [(ngModel)]="objEvento.eventStatus" optionLabel="label" optionValue="value"></p-selectButton>
-      </div>
-    </div>
-    <div class="text-right">
-      <small><span class="campoObrigatorio">*</span> Campos obrigarórios.</small><br><br>
-      <button (click)="Cancelar();" pButton pRipple type="button" label="Cancelar" class="p-button-raised p-button-danger"></button> &nbsp;
-      <button (click)="Salvar();" pButton pRipple type="button" label="Salvar" class="p-button-raised p-button-success"></button>
-    </div>
-  </div>
-
-
-  <!-- DIALOG DO CHECKLIST -->
-  <p-dialog header="Confira o checklist antes de continuar:" [(visible)]="displayDialog" [modal]="true" [style]="{width: '80vw'}"
-  [draggable]="false" [resizable]="false">
-
-  <div *ngFor="let item of listaChecList" class="p-field-checkbox">
-    <p><p-checkbox
-      name="item.itmChLsDesc"
-      value="true"
-      [(ngModel)]="item.chkLstResp"
-      inputId="{{item.chkLstItmChkLst}}"
-      ></p-checkbox>
-      &nbsp;
-      <label for="{{item.chkLstItmChkLst}}">{{item.itmChLsDesc}}<span *ngIf="item.itmChLsObrig" class="campoObrigatorio">*</span></label>
-    </p>
-  </div>
-
-  <small><span class="campoObrigatorio">*</span> Itens obrigarórios.</small>
-
-  <ng-template pTemplate="footer">
-    <p-button icon="pi pi-check" (click)="OkDialog();" label="Ok" styleClass="p-button-text"></p-button>
+    <td pTooltip="{{item.eventDesc}}" tooltipPosition="top"><span class="p-column-title"><b>Descrição</b></span><small>{{item.eventDesc}}</small></td>
+    <td pTooltip="{{item.tipChLiDesc}}" tooltipPosition="top"><span class="p-column-title"><b>Tipo Furo</b></span><small>{{item.tipChLiDesc}}</small></td>
+    <td pTooltip="{{item.eventLogr}}" tooltipPosition="top"><span class="p-column-title"><b>Endereço</b></span><small>{{item.eventLogr.substring(0, 20)}}...</small></td>
+    <td pTooltip="{{item.eventBairr}}" tooltipPosition="top"><span class="p-column-title"><b>Bairro</b></span><small>{{item.eventBairr.substring(0, 20)}}...</small></td>
+    <td pTooltip="{{item.eventDtIn | date: 'dd/MM/yyyy'}} a {{item.evenDtFi | date: 'dd/MM/yyyy'}}" tooltipPosition="top"><span class="p-column-title"><b>Período</b></span><small>{{item.eventDtIn | date: 'dd/MM/yyyy'}} a {{item.evenDtFi | date: 'dd/MM/yyyy'}}</small></td>
+    <td pTooltip="{{item.usuNome}}" tooltipPosition="top"><span class="p-column-title"><b>Responsável</b></span><small>{{item.usuNome.substring(0, 10)}}...</small></td>
+    <td pTooltip="{{item.maqMarca}}" tooltipPosition="top"><span class="p-column-title"><b>Máquina</b></span><small>{{item.maqMarca.substring(0, 10)}}...</small></td>
+    <td><span class="p-column-title"><b>Status</b></span>
+      <!-- <p-tag severity="{{item.eventStatus ? 'success' : 'danger'}}" value="{{item.eventStatus ? 'Ativo' : 'Inativo'}}"></p-tag> -->
+      <p-tag severity="{{ValidaPrazoEvento(item.eventDtIn, item.evenDtFi) === 'VENCIDO' ? 'danger'
+      : ValidaPrazoEvento(item.eventDtIn, item.evenDtFi) === 'OPERAÇÃO'? 'warning' : 'success'}}"
+      value="{{ValidaPrazoEvento(item.eventDtIn, item.evenDtFi) === 'VENCIDO' ? 'Expirado'
+      : ValidaPrazoEvento(item.eventDtIn, item.evenDtFi) === 'OPERAÇÃO'? 'Operando' : 'Aguardando'}}"></p-tag>
+    </td>
+    <td>
+      <span class="p-column-title"><b>Ações</b></span>
+      <div>
+        <button *ngIf="ValidaPrazoEvento(item.eventDtIn, item.evenDtFi) !== 'OPERAÇÃO' && ValidaPrazoEvento(item.eventDtIn, item.evenDtFi) !== 'VENCIDO'" (click)="IniciaEdicao(item);" pTooltip="Editar" tooltipPosition="top" pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-info p-button-text"></button>
+        <button *ngIf="ValidaPrazoEvento(item.eventDtIn, item.evenDtFi) === 'VENCIDO'" pTooltip="Concluído" tooltipPosition="top" pButton pRipple type="button" icon="pi pi-check-circle" class="p-button-rounded p-button-success p-button-text"></button>
+        <button *ngIf="ValidaPrazoEvento(item.eventDtIn, item.evenDtFi) === 'VENCIDO'" pTooltip="Reagendar" tooltipPosition="top" pButton pRipple type="button" icon="pi pi-clock" class="p-button-rounded p-button-secondary p-button-text"></button>
+        </div>
+      </td>
+    </tr>
   </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td style="text-align: center;" colspan="9">Sem informações.</td>
+    </tr>
+  </ng-template>
+</p-table>
+</div>
+
+<!-- MODO INCLUSÃO/ALTERAÇÃO -->
+<div *ngIf="modoEdicao" class="card">
+  <div class="formgrid grid">
+    <div class="field col-12 lg:col-3 md:col-3 sm:col-6">
+      <label for="tipChLiCod">Tipo de Furo</label><span class="campoObrigatorio">*</span><br>
+      <p-dropdown [disabled]="boolTipoFuroBloq" (onChange)="ExibeCheckList();" id="tipChLiCod" [options]="listaTpChLi" [(ngModel)]="objEvento.tipChLiCod" autoWidth="false" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="tipChLiDesc" optionValue="tipChLiCod" placeholder="Selecione" [showClear]="true"></p-dropdown>
+    </div>
+    <div class="field col-12 lg:col-3 md:col-3 sm:col-6">
+      <label for="diamCod">Diâmetro</label><span class="campoObrigatorio">*</span><br>
+      <p-dropdown (onChange)="boolDataInBloq = false;" [disabled]="!boolChecklistPreenchido || objEvento.diamCod > 0" id="diamCod" [options]="lstDiametroFuro" [(ngModel)]="objEvento.diamCod" autoWidth="false" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="diamDesc" optionValue="diamCod" placeholder="Selecione" [showClear]="true"></p-dropdown>
+    </div>
+    <div class="field col-12 lg:col-3 md:col-3 sm:col-3">
+      <label for="eventDtIn">Data Inicial</label><br>
+      <p-calendar (onSelect)="ValidaDatas(true, false);" [ngClass]="{'ng-invalid ng-dirty':!boolDatasValidas}" [disabled]="!boolChecklistPreenchido || boolDataInBloq" [(ngModel)]="objEvento.eventDtIn" [minDate]="dataAtual" [showIcon]="true" dateFormat="dd/mm/yy" inputId="eventDtIn" class="p-inputtext-sm inputfield w-full"></p-calendar>
+    </div>
+    <div class="field col-12 lg:col-3 md:col-3 sm:col-3">
+      <label for="evenDtFi">Data Final</label><br>
+      <p-calendar (onSelect)="ValidaDatas(false, true);" [ngClass]="{'ng-invalid ng-dirty':!boolDatasValidas}" [disabled]="!boolChecklistPreenchido || boolDataFiBloq" [(ngModel)]="objEvento.evenDtFi" [minDate]="dataAtual" [showIcon]="true" dateFormat="dd/mm/yy" inputId="evenDtFi" class="p-inputtext-sm inputfield w-full"></p-calendar>
+      <br><span style="color: red;" class="ml-2" *ngIf="!boolDatasValidas"><b><small>Data final não pode ser menor que data inicial!</small></b></span>
+    </div>
+    <div class="field col-12 lg:col-5 md:col-5 sm:col-6">
+      <label for="maqCod">Máquina</label><span class="campoObrigatorio">*</span><br>
+      <p-dropdown [disabled]="boolMaquinaBloq" id="maqCod" [options]="listaMaquina" [(ngModel)]="objEvento.maqCod" autoWidth="false" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="maqMarca" optionValue="maqCod" placeholder="Selecione" [showClear]="true"></p-dropdown>
+    </div>
+    <div class="field col-12 lg:col-2 md:col-2 sm:col-6">
+      <label for="horaCod">Horário</label><span class="campoObrigatorio">*</span><br>
+      <p-dropdown [disabled]="!boolChecklistPreenchido" id="horaCod" [options]="listaHorario" [(ngModel)]="objEvento.horaCod" autoWidth="false" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="horaDesc" optionValue="horaCod" placeholder="Selecione" [showClear]="true"></p-dropdown>
+    </div>
+    <div class="field col-12 lg:col-5 md:col-5 sm:col-6">
+      <label for="eventDesc">Descrição</label><span class="campoObrigatorio">*</span>
+      <input [disabled]="!boolChecklistPreenchido" [(ngModel)]="objEvento.eventDesc" id="eventDesc" type="text" class="p-inputtext-sm inputfield w-full" pInputText>
+    </div>
+    <div class="field col-12 lg:col-5 md:col-4 sm:col-6">
+      <label for="eventLogr">Endereço</label><span class="campoObrigatorio">*</span>
+      <input [disabled]="!boolChecklistPreenchido" [(ngModel)]="objEvento.eventLogr" id="eventLogr" type="text" class="p-inputtext-sm inputfield w-full" pInputText>
+    </div>
+    <div class="field col-12 lg:col-5 md:col-4 sm:col-6">
+      <label for="eventBairr">Bairro</label><span class="campoObrigatorio">*</span>
+      <input [disabled]="!boolChecklistPreenchido" [(ngModel)]="objEvento.eventBairr" id="eventBairr" type="text" class="p-inputtext-sm inputfield w-full" pInputText>
+    </div>
+    <div class="field col-12 lg:col-2 md:col-4 sm:col-6">
+      <label for="estCod">Estado</label><span class="campoObrigatorio">*</span><br>
+      <p-dropdown [disabled]="!boolChecklistPreenchido" (onChange)="ListaCidadeEstado(estadoSelecionado);" id="estCod" [options]="listaEstado" [(ngModel)]="estadoSelecionado" autoWidth="false" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="estSigl" optionValue="estCod" placeholder="Selecione" [showClear]="true"></p-dropdown>
+    </div>
+    <div class="field col-12 lg:col-5 md:col-5 sm:col-5">
+      <label for="cidaCod">Cidade</label><span class="campoObrigatorio">*</span><br>
+      <p-dropdown [disabled]="!boolChecklistPreenchido" id="cidaCod" [options]="listaCidade" [(ngModel)]="objEvento.cidaCod" autoWidth="false" [filter]="true" filterBy="cidaDesc" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="cidaDesc" optionValue="cidaCod" placeholder="Selecione" [showClear]="true"></p-dropdown>
+    </div>
+    <div class="field col-12 lg:col-7 md:col-7 sm:col-7">
+      <label for="usuCod">Responsável</label><span class="campoObrigatorio">*</span><br>
+      <p-dropdown [disabled]="!boolChecklistPreenchido" id="usuCod" [options]="listaUsuario" [(ngModel)]="objEvento.usuCod" autoWidth="false" [filter]="true" filterBy="usuNome" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="usuNome" optionValue="usuCod" placeholder="Selecione" [showClear]="true"></p-dropdown>
+    </div>
+    <div class="field col-12 lg:col-9 md:col-8 sm:col-8">
+      <label for="eventObse">Observações</label>
+      <textarea [disabled]="!boolChecklistPreenchido" [(ngModel)]="objEvento.eventObse" id="eventObse" pInputTextarea class="p-inputtext-sm inputfield w-full"></textarea>
+    </div>
+    <div class="field col-12 lg:col-3 md:col-4 sm:col-4">
+      <label for="eventStatus">Status</label><span class="campoObrigatorio">*</span>
+      <p-selectButton [disabled]="!boolChecklistPreenchido" [options]="opcoesStatus" [(ngModel)]="objEvento.eventStatus" optionLabel="label" optionValue="value"></p-selectButton>
+    </div>
+  </div>
+  <div class="text-right">
+    <small><span class="campoObrigatorio">*</span> Campos obrigarórios.</small><br><br>
+    <button (click)="Cancelar();" pButton pRipple type="button" label="Cancelar" class="p-button-raised p-button-danger"></button> &nbsp;
+    <button (click)="Salvar();" pButton pRipple type="button" label="Salvar" class="p-button-raised p-button-success"></button>
+  </div>
+</div>
+
+
+<!-- DIALOG DO CHECKLIST -->
+<p-dialog header="Confira o checklist antes de continuar:" [(visible)]="displayDialog" [modal]="true" [style]="{width: '80vw'}"
+[draggable]="false" [resizable]="false">
+
+<div *ngFor="let item of listaChecList" class="p-field-checkbox">
+  <p><p-checkbox
+    name="item.itmChLsDesc"
+    value="true"
+    [(ngModel)]="item.chkLstResp"
+    inputId="{{item.chkLstItmChkLst}}"
+    ></p-checkbox>
+    &nbsp;
+    <label for="{{item.chkLstItmChkLst}}">{{item.itmChLsDesc}}<span *ngIf="item.itmChLsObrig" class="campoObrigatorio">*</span></label>
+  </p>
+</div>
+
+<small><span class="campoObrigatorio">*</span> Itens obrigarórios.</small>
+
+<ng-template pTemplate="footer">
+  <p-button icon="pi pi-check" (click)="OkDialog();" label="Ok" styleClass="p-button-text"></p-button>
+</ng-template>
 </p-dialog>
