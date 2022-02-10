@@ -44,8 +44,9 @@
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-item>
-    <tr [style.background-color]="ValidaPrazoEvento(item.eventDtIn, item.evenDtFi) ? '#E0818D' : 'transparent'"
-        [style.color]="ValidaPrazoEvento(item.eventDtIn, item.evenDtFi) ? 'white' : 'black'"
+    <!-- <tr [style.background-color]="ValidaPrazoEvento(item.eventDtIn, item.evenDtFi) === 'VENCIDO' ? '#E0818D' : 'transparent'" -->
+    <tr [style.background-color]="ValidaPrazoEvento(item.eventDtIn, item.evenDtFi) === 'VENCIDO' ? '#E0818D' : ValidaPrazoEvento(item.eventDtIn, item.evenDtFi) === 'OPERAÇÃO' ? '#FFF579' : 'transparent'"
+        [style.color]="ValidaPrazoEvento(item.eventDtIn, item.evenDtFi) === 'VENCIDO' ? 'white' : 'black'"
     >
     <!-- <tr [style.background-color]="item.evenDtFi <= dataAtual ? 'red' : 'transparent'"> -->
       <!-- {{item.evenDtFi}} / {{dataAtual}} -->
