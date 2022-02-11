@@ -37,6 +37,8 @@ import { ItemChecklistComponent } from './Pages/Cadastros/Checklist/item-checkli
 import { ChecklistComponent } from './Pages/Cadastros/Checklist/checklist/checklist.component';
 import { EventoComponent } from './Pages/evento/evento.component';
 import { DialogModule } from 'primeng/dialog';
+import { ConfirmDialogModule } from 'primeng/confirmdialog'
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
 
@@ -80,9 +82,13 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
     PickListModule,
     PasswordModule,
     CalendarModule,
-    DialogModule
+    DialogModule,
+    ConfirmDialogModule
   ],
-  providers: [],
+  providers: [
+    MessageService,
+    ConfirmationService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

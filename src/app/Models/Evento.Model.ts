@@ -6,7 +6,7 @@ export interface EventoModel {
   eventDtIn: Date;
   evenDtFi: Date;
   eventObse: string;
-  eventStatus: boolean;
+  eventStatus: number;
   horaCod: number;
   cidaCod: number;
   diamCod: number;

@@ -26,6 +26,7 @@ import { CidadeModel } from "../Models/Cidade.Model";
 import { CheckListItensModel } from "../Models/CheckListItens.Model";
 import { PesqMaqDispModel } from "../Models/PesqMaqDisp.Model";
 import { EventoManterModel } from "../Models/EventoManter.Model";
+import { StatusModel } from "../Models/Status.Model";
 
 @Injectable({
   providedIn: 'root'
@@ -113,6 +114,10 @@ export class HttpService {
 
   public AlteraStatusCheckList(chLsCod: number, chLsStatus: boolean): Observable<string> {
     return this.http.get<string>(`${environment.urlAPI}/Agenda/AlteraStatusCheckList/${chLsCod}/${chLsStatus}`, this.CarregaHeader());
+  }
+
+  public AlteraStatusEvento(eventCod: number, eventStatus: number): Observable<string> {
+    return this.http.get<string>(`${environment.urlAPI}/Agenda/AlteraStatusEvento/${eventCod}/${eventStatus}`, this.CarregaHeader());
   }
 
   public ManterVeiculo(objVeiculo: VeiculoModel): Observable<string> {
@@ -213,6 +218,10 @@ export class HttpService {
 
   public ListaChLsByCheckList(chLsCod: number): Observable<CheckListItensModel[]> {
     return this.http.get<CheckListItensModel[]>(`${environment.urlAPI}/Agenda/ListaChLsByCheckList/${chLsCod}`, this.CarregaHeader());
+  }
+
+  public ListaStatus(sttTpCod: number): Observable<StatusModel[]> {
+    return this.http.get<StatusModel[]>(`${environment.urlAPI}/Agenda/ListaStatus/${sttTpCod}`, this.CarregaHeader());
   }
 
   public VerificaLogin(usuLogin: string): Observable<boolean> {

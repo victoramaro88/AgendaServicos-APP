@@ -44,8 +44,8 @@
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-item>
-    <tr [style.background-color]="ValidaPrazoEvento(item.eventDtIn, item.evenDtFi) === 'VENCIDO' ? '#ffd1d1'
-    : ValidaPrazoEvento(item.eventDtIn, item.evenDtFi) === 'OPERAÇÃO'
+    <tr [style.background-color]="item.eventStatus === 3 ? '#ffd1d1'
+    : item.eventStatus === 2
     ? '#fff9bd' : 'transparent'"
     >
     <td pTooltip="{{item.eventDesc}}" tooltipPosition="top"><span class="p-column-title"><b>Descrição</b></span><small>{{item.eventDesc}}</small></td>
@@ -57,18 +57,20 @@
     <td pTooltip="{{item.maqMarca}}" tooltipPosition="top"><span class="p-column-title"><b>Máquina</b></span><small>{{item.maqMarca.substring(0, 10)}}...</small></td>
     <td><span class="p-column-title"><b>Status</b></span>
       <!-- <p-tag severity="{{item.eventStatus ? 'success' : 'danger'}}" value="{{item.eventStatus ? 'Ativo' : 'Inativo'}}"></p-tag> -->
-      <p-tag severity="{{ValidaPrazoEvento(item.eventDtIn, item.evenDtFi) === 'VENCIDO' ? 'danger'
-      : ValidaPrazoEvento(item.eventDtIn, item.evenDtFi) === 'OPERAÇÃO'? 'warning' : 'success'}}"
-      value="{{ValidaPrazoEvento(item.eventDtIn, item.evenDtFi) === 'VENCIDO' ? 'Expirado'
-      : ValidaPrazoEvento(item.eventDtIn, item.evenDtFi) === 'OPERAÇÃO'? 'Operando' : 'Aguardando'}}"></p-tag>
+      <p-tag severity="{{item.eventStatus === 3 ? 'danger'
+      : item.eventStatus === 2 ? 'warning' : 'success'}}"
+      value="{{item.eventStatus === 3 ? 'Expirado'
+      : item.eventStatus === 2 ? 'Operando' : 'Aguardando'}}"></p-tag>
     </td>
     <td>
       <span class="p-column-title"><b>Ações</b></span>
       <div>
-        <button *ngIf="ValidaPrazoEvento(item.eventDtIn, item.evenDtFi) !== 'OPERAÇÃO' && ValidaPrazoEvento(item.eventDtIn, item.evenDtFi) !== 'VENCIDO'" (click)="IniciaEdicao(item);" pTooltip="Editar" tooltipPosition="top" pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-info p-button-text"></button>
-        <button *ngIf="ValidaPrazoEvento(item.eventDtIn, item.evenDtFi) === 'VENCIDO'" pTooltip="Concluído" tooltipPosition="top" pButton pRipple type="button" icon="pi pi-check-circle" class="p-button-rounded p-button-success p-button-text"></button>
-        <button *ngIf="ValidaPrazoEvento(item.eventDtIn, item.evenDtFi) === 'VENCIDO'" pTooltip="Reagendar" tooltipPosition="top" pButton pRipple type="button" icon="pi pi-clock" class="p-button-rounded p-button-secondary p-button-text"></button>
-        </div>
+        <button *ngIf="item.eventStatus !== 2 && item.eventStatus !== 3" (click)="IniciaEdicao(item);" pTooltip="Editar" tooltipPosition="top" pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-info p-button-text"></button>
+        <button *ngIf="item.eventStatus === 3" pTooltip="Concluído" tooltipPosition="top" pButton pRipple type="button" icon="pi pi-check-circle" class="p-button-rounded p-button-success p-button-text"></button>
+        <button *ngIf="item.eventStatus === 3" (click)="Reagendamento(item);" pTooltip="Reagendar" tooltipPosition="top" pButton pRipple type="button" icon="pi pi-clock" class="p-button-rounded p-button-secondary p-button-text"></button>
+        <button *ngIf="item.eventStatus === 3"  (click)="confirm(item.eventCod)"pTooltip="Cancelar" tooltipPosition="top" pButton pRipple type="button" icon="pi pi-times-circle" class="p-button-rounded p-button-danger p-button-text"></button>
+        <!-- (click)="CancelarEvento(item.eventCod);" -->
+      </div>
       </td>
     </tr>
   </ng-template>
@@ -106,39 +108,41 @@
     </div>
     <div class="field col-12 lg:col-2 md:col-2 sm:col-6">
       <label for="horaCod">Horário</label><span class="campoObrigatorio">*</span><br>
-      <p-dropdown [disabled]="!boolChecklistPreenchido" id="horaCod" [options]="listaHorario" [(ngModel)]="objEvento.horaCod" autoWidth="false" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="horaDesc" optionValue="horaCod" placeholder="Selecione" [showClear]="true"></p-dropdown>
+      <p-dropdown [disabled]="!boolChecklistPreenchido || boolHorario" id="horaCod" [options]="listaHorario" [(ngModel)]="objEvento.horaCod" autoWidth="false" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="horaDesc" optionValue="horaCod" placeholder="Selecione" [showClear]="true"></p-dropdown>
     </div>
     <div class="field col-12 lg:col-5 md:col-5 sm:col-6">
       <label for="eventDesc">Descrição</label><span class="campoObrigatorio">*</span>
-      <input [disabled]="!boolChecklistPreenchido" [(ngModel)]="objEvento.eventDesc" id="eventDesc" type="text" class="p-inputtext-sm inputfield w-full" pInputText>
+      <input [disabled]="!boolChecklistPreenchido || boolDescricao" [(ngModel)]="objEvento.eventDesc" id="eventDesc" type="text" class="p-inputtext-sm inputfield w-full" pInputText>
     </div>
     <div class="field col-12 lg:col-5 md:col-4 sm:col-6">
       <label for="eventLogr">Endereço</label><span class="campoObrigatorio">*</span>
-      <input [disabled]="!boolChecklistPreenchido" [(ngModel)]="objEvento.eventLogr" id="eventLogr" type="text" class="p-inputtext-sm inputfield w-full" pInputText>
+      <input [disabled]="!boolChecklistPreenchido || boolEndereco" [(ngModel)]="objEvento.eventLogr" id="eventLogr" type="text" class="p-inputtext-sm inputfield w-full" pInputText>
     </div>
     <div class="field col-12 lg:col-5 md:col-4 sm:col-6">
       <label for="eventBairr">Bairro</label><span class="campoObrigatorio">*</span>
-      <input [disabled]="!boolChecklistPreenchido" [(ngModel)]="objEvento.eventBairr" id="eventBairr" type="text" class="p-inputtext-sm inputfield w-full" pInputText>
+      <input [disabled]="!boolChecklistPreenchido || boolBairro" [(ngModel)]="objEvento.eventBairr" id="eventBairr" type="text" class="p-inputtext-sm inputfield w-full" pInputText>
     </div>
     <div class="field col-12 lg:col-2 md:col-4 sm:col-6">
       <label for="estCod">Estado</label><span class="campoObrigatorio">*</span><br>
-      <p-dropdown [disabled]="!boolChecklistPreenchido" (onChange)="ListaCidadeEstado(estadoSelecionado);" id="estCod" [options]="listaEstado" [(ngModel)]="estadoSelecionado" autoWidth="false" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="estSigl" optionValue="estCod" placeholder="Selecione" [showClear]="true"></p-dropdown>
+      <p-dropdown [disabled]="!boolChecklistPreenchido || boolEstado" (onChange)="ListaCidadeEstado(estadoSelecionado);" id="estCod" [options]="listaEstado" [(ngModel)]="estadoSelecionado" autoWidth="false" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="estSigl" optionValue="estCod" placeholder="Selecione" [showClear]="true"></p-dropdown>
     </div>
     <div class="field col-12 lg:col-5 md:col-5 sm:col-5">
       <label for="cidaCod">Cidade</label><span class="campoObrigatorio">*</span><br>
-      <p-dropdown [disabled]="!boolChecklistPreenchido" id="cidaCod" [options]="listaCidade" [(ngModel)]="objEvento.cidaCod" autoWidth="false" [filter]="true" filterBy="cidaDesc" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="cidaDesc" optionValue="cidaCod" placeholder="Selecione" [showClear]="true"></p-dropdown>
+      <p-dropdown [disabled]="!boolChecklistPreenchido || boolCidade" id="cidaCod" [options]="listaCidade" [(ngModel)]="objEvento.cidaCod" autoWidth="false" [filter]="true" filterBy="cidaDesc" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="cidaDesc" optionValue="cidaCod" placeholder="Selecione" [showClear]="true"></p-dropdown>
     </div>
     <div class="field col-12 lg:col-7 md:col-7 sm:col-7">
       <label for="usuCod">Responsável</label><span class="campoObrigatorio">*</span><br>
-      <p-dropdown [disabled]="!boolChecklistPreenchido" id="usuCod" [options]="listaUsuario" [(ngModel)]="objEvento.usuCod" autoWidth="false" [filter]="true" filterBy="usuNome" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="usuNome" optionValue="usuCod" placeholder="Selecione" [showClear]="true"></p-dropdown>
+      <p-dropdown [disabled]="!boolChecklistPreenchido || boolResponsavel" id="usuCod" [options]="listaUsuario" [(ngModel)]="objEvento.usuCod" autoWidth="false" [filter]="true" filterBy="usuNome" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="usuNome" optionValue="usuCod" placeholder="Selecione" [showClear]="true"></p-dropdown>
     </div>
     <div class="field col-12 lg:col-9 md:col-8 sm:col-8">
       <label for="eventObse">Observações</label>
       <textarea [disabled]="!boolChecklistPreenchido" [(ngModel)]="objEvento.eventObse" id="eventObse" pInputTextarea class="p-inputtext-sm inputfield w-full"></textarea>
     </div>
     <div class="field col-12 lg:col-3 md:col-4 sm:col-4">
-      <label for="eventStatus">Status</label><span class="campoObrigatorio">*</span>
-      <p-selectButton [disabled]="!boolChecklistPreenchido" [options]="opcoesStatus" [(ngModel)]="objEvento.eventStatus" optionLabel="label" optionValue="value"></p-selectButton>
+      <!-- <label for="eventStatus">Status</label><span class="campoObrigatorio">*</span>
+      <p-selectButton [disabled]="!boolChecklistPreenchido" [options]="opcoesStatus" [(ngModel)]="objEvento.eventStatus" optionLabel="label" optionValue="value"></p-selectButton> -->
+      <label for="eventStatus">Status</label><span class="campoObrigatorio">*</span><br>
+      <p-dropdown [disabled]="!boolChecklistPreenchido || boolStatus" id="eventStatus" [options]="listaStatus" [(ngModel)]="objEvento.eventStatus" autoWidth="false" [style]="{'width':'100%'}" class="p-inputtext-sm inputfield w-full" optionLabel="statusDesc" optionValue="statusCod" placeholder="Selecione"></p-dropdown>
     </div>
   </div>
   <div class="text-right">
@@ -151,7 +155,7 @@
 
 <!-- DIALOG DO CHECKLIST -->
 <p-dialog header="Confira o checklist antes de continuar:" [(visible)]="displayDialog" [modal]="true" [style]="{width: '80vw'}"
-[draggable]="false" [resizable]="false">
+[draggable]="false" [resizable]="false" [closable]="false">
 
 <div *ngFor="let item of listaChecList" class="p-field-checkbox">
   <p><p-checkbox
@@ -171,3 +175,7 @@
   <p-button icon="pi pi-check" (click)="OkDialog();" label="Ok" styleClass="p-button-text"></p-button>
 </ng-template>
 </p-dialog>
+
+<!-- PERGUNTA NO CANCELAMENTO DO AGENDAMENTO -->
+<p-confirmDialog header="Atenção" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+<!-- <button (click)="confirm()" pButton icon="pi pi-check" label="Confirm"></button> -->
