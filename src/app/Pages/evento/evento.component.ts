@@ -518,6 +518,8 @@ export class EventoComponent implements OnInit {
         this.boolResponsavel = false;
         this.boolStatus = false;
 
+        this.displayDialog = false;
+
         this.modoEdicao = false;
       }
 
@@ -693,13 +695,39 @@ export class EventoComponent implements OnInit {
         });
       }
 
-      confirm(eventCod: number) {
-        this.confirmationService.confirm({
-          message: 'Deseja Realmente cancelar este agendamento?',
-          accept: () => {
-            this.CancelarEvento(eventCod);
+      ConcluirEvento(eventCod: number) {
+        this.boolLoading = true;
+        this.http.AlteraStatusEvento(eventCod, 9).subscribe((response: string) => {
+          if (response && response.toString() === 'OK') {
+            let indexEvento = this.listaEvento.findIndex(e => e.eventCod === eventCod);
+            if(indexEvento !== -1) {
+              this.listaEvento.splice(indexEvento, 1);
+              this.messageService.add({severity:'success', summary:'Sucesso! ', detail: 'Evento finalizado com sucesso!'});
+            }
           }
+          this.boolLoading = false;
+        }, error => {
+          this.msgs = [];
+          this.messageService.add({severity:'error', summary:'Erro: ', detail: this.errosHttp.RetornaMensagemErro(error)});
         });
+      }
+
+      confirm(eventCod: number, tipo: string) {
+        if(tipo === 'CANCELAR') {
+          this.confirmationService.confirm({
+            message: 'Deseja realmente cancelar este agendamento?',
+            accept: () => {
+              this.CancelarEvento(eventCod);
+            }
+          });
+        } else if(tipo === 'CONCLUIR') {
+          this.confirmationService.confirm({
+            message: 'Deseja realmente concluir este agendamento?',
+            accept: () => {
+              this.ConcluirEvento(eventCod);
+            }
+          });
+        }
       }
 
     }

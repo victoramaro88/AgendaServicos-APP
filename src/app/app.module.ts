@@ -39,6 +39,7 @@ import { EventoComponent } from './Pages/evento/evento.component';
 import { DialogModule } from 'primeng/dialog';
 import { ConfirmDialogModule } from 'primeng/confirmdialog'
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { EventosCanceladosComponent } from './Pages/eventos-cancelados/eventos-cancelados.component';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
 
@@ -56,6 +57,7 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
     ItemChecklistComponent,
     ChecklistComponent,
     EventoComponent,
+    EventosCanceladosComponent,
   ],
   imports: [
     BrowserModule,

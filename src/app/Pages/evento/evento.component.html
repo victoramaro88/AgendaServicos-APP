@@ -46,7 +46,9 @@
   <ng-template pTemplate="body" let-item>
     <tr [style.background-color]="item.eventStatus === 3 ? '#ffd1d1'
     : item.eventStatus === 2
-    ? '#fff9bd' : 'transparent'"
+    ? '#fff9bd'
+    : item.eventStatus === 4
+    ? '#d6e0ff' : 'transparent'"
     >
     <td pTooltip="{{item.eventDesc}}" tooltipPosition="top"><span class="p-column-title"><b>Descrição</b></span><small>{{item.eventDesc}}</small></td>
     <td pTooltip="{{item.tipChLiDesc}}" tooltipPosition="top"><span class="p-column-title"><b>Tipo Furo</b></span><small>{{item.tipChLiDesc}}</small></td>
@@ -58,17 +60,17 @@
     <td><span class="p-column-title"><b>Status</b></span>
       <!-- <p-tag severity="{{item.eventStatus ? 'success' : 'danger'}}" value="{{item.eventStatus ? 'Ativo' : 'Inativo'}}"></p-tag> -->
       <p-tag severity="{{item.eventStatus === 3 ? 'danger'
-      : item.eventStatus === 2 ? 'warning' : 'success'}}"
+      : item.eventStatus === 2 ? 'warning' : item.eventStatus === 4 ? 'info' : 'success'}}"
       value="{{item.eventStatus === 3 ? 'Expirado'
-      : item.eventStatus === 2 ? 'Operando' : 'Aguardando'}}"></p-tag>
+      : item.eventStatus === 2 ? 'Operando' : item.eventStatus === 4 ? 'Reagendado' : 'Aguardando'}}"></p-tag>
     </td>
     <td>
       <span class="p-column-title"><b>Ações</b></span>
       <div>
         <button *ngIf="item.eventStatus !== 2 && item.eventStatus !== 3" (click)="IniciaEdicao(item);" pTooltip="Editar" tooltipPosition="top" pButton pRipple type="button" icon="pi pi-pencil" class="p-button-rounded p-button-info p-button-text"></button>
-        <button *ngIf="item.eventStatus === 3" pTooltip="Concluído" tooltipPosition="top" pButton pRipple type="button" icon="pi pi-check-circle" class="p-button-rounded p-button-success p-button-text"></button>
+        <button *ngIf="item.eventStatus === 3" (click)="confirm(item.eventCod, 'CONCLUIR')" pTooltip="Concluído" tooltipPosition="top" pButton pRipple type="button" icon="pi pi-check-circle" class="p-button-rounded p-button-success p-button-text"></button>
         <button *ngIf="item.eventStatus === 3" (click)="Reagendamento(item);" pTooltip="Reagendar" tooltipPosition="top" pButton pRipple type="button" icon="pi pi-clock" class="p-button-rounded p-button-secondary p-button-text"></button>
-        <button *ngIf="item.eventStatus === 3"  (click)="confirm(item.eventCod)"pTooltip="Cancelar" tooltipPosition="top" pButton pRipple type="button" icon="pi pi-times-circle" class="p-button-rounded p-button-danger p-button-text"></button>
+        <button *ngIf="item.eventStatus === 3" (click)="confirm(item.eventCod, 'CANCELAR')" pTooltip="Cancelar" tooltipPosition="top" pButton pRipple type="button" icon="pi pi-times-circle" class="p-button-rounded p-button-danger p-button-text"></button>
         <!-- (click)="CancelarEvento(item.eventCod);" -->
       </div>
       </td>
@@ -172,10 +174,10 @@
 <small><span class="campoObrigatorio">*</span> Itens obrigarórios.</small>
 
 <ng-template pTemplate="footer">
+  <p-button icon="pi pi-times" (click)="Cancelar();" label="Cancelar" styleClass="p-button-text p-button-danger"></p-button>
   <p-button icon="pi pi-check" (click)="OkDialog();" label="Ok" styleClass="p-button-text"></p-button>
 </ng-template>
 </p-dialog>
 
 <!-- PERGUNTA NO CANCELAMENTO DO AGENDAMENTO -->
 <p-confirmDialog header="Atenção" icon="pi pi-exclamation-triangle"></p-confirmDialog>
-<!-- <button (click)="confirm()" pButton icon="pi pi-check" label="Confirm"></button> -->

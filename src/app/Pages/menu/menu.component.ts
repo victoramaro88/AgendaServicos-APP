@@ -62,7 +62,17 @@ export class MenuComponent implements OnInit {
       },
       {
         label: 'Eventos',
-        routerLink: '/evento'
+        // routerLink: '/evento',
+        items: [
+          {
+            label: 'Cadastro',
+            routerLink: '/evento'
+          },
+          {
+            label: 'Eventos Cancelados',
+            routerLink: '/eventosCancelados'
+          }
+        ]
       },
     ];
   }
