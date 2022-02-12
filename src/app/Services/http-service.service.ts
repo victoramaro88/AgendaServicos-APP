@@ -216,6 +216,10 @@ export class HttpService {
     return this.http.get<EventoModel[]>(`${environment.urlAPI}/Agenda/ListaEventoAtivo/${eventCod}`, this.CarregaHeader());
   }
 
+  public ListaEventoStatus(eventStatus: number): Observable<EventoModel[]> {
+    return this.http.get<EventoModel[]>(`${environment.urlAPI}/Agenda/ListaEventoStatus/${eventStatus}`, this.CarregaHeader());
+  }
+
   public ListaChLsByCheckList(chLsCod: number): Observable<CheckListItensModel[]> {
     return this.http.get<CheckListItensModel[]>(`${environment.urlAPI}/Agenda/ListaChLsByCheckList/${chLsCod}`, this.CarregaHeader());
   }

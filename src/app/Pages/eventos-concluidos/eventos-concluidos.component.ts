@@ -5,11 +5,11 @@ import { HttpService } from 'src/app/Services/http-service.service';
 import { MsgErroHttp } from 'src/app/Services/msgErroHttp.Service';
 
 @Component({
-  selector: 'app-eventos-cancelados',
-  templateUrl: './eventos-cancelados.component.html',
-  styleUrls: ['./eventos-cancelados.component.css']
+  selector: 'app-eventos-concluidos',
+  templateUrl: './eventos-concluidos.component.html',
+  styleUrls: ['./eventos-concluidos.component.css']
 })
-export class EventosCanceladosComponent implements OnInit {
+export class EventosConcluidosComponent implements OnInit {
 
   boolLoading = false;
   msgs: any[] = [];
@@ -26,7 +26,7 @@ export class EventosCanceladosComponent implements OnInit {
     ) {}
 
   ngOnInit(): void {
-    this.ListaEventoStatus(10);
+    this.ListaEventoStatus(9);
   }
 
   ListaEventoStatus(eventStatus: number) {

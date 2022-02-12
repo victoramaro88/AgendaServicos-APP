@@ -11,6 +11,7 @@ import { LoginComponent } from './Pages/login/login.component';
 import { ItemChecklistComponent } from './Pages/Cadastros/Checklist/item-checklist/item-checklist.component';
 import { ChecklistComponent } from './Pages/Cadastros/Checklist/checklist/checklist.component';
 import { EventosCanceladosComponent } from './Pages/eventos-cancelados/eventos-cancelados.component';
+import { EventosConcluidosComponent } from './Pages/eventos-concluidos/eventos-concluidos.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -25,6 +26,7 @@ const routes: Routes = [
   { path: 'checklist', component: ChecklistComponent },
   { path: 'evento', component: EventoComponent },
   { path: 'eventosCancelados', component: EventosCanceladosComponent },
+  { path: 'eventosConcluidos', component: EventosConcluidosComponent },
 ];
 
 @NgModule({

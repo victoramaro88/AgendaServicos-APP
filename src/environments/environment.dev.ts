@@ -1,5 +1,7 @@
 export const environment = {
   production: false,
 
-  versaoData: '1.0.0|22/12/2021-07:05|Dev',
+  versaoData: '1.0.0|12/02/2022-10:03|Dev',
+
+  urlAPI: 'http://www.victoramaro.com.br/AgendaServicos/API/api',
 };

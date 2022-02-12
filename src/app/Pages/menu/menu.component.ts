@@ -38,10 +38,6 @@ export class MenuComponent implements OnInit {
               }
             ]
           },
-          // {
-          //   label: 'Diâmetro',
-          //   routerLink: '/diametro'
-          // },
           {
             label: 'Equipes',
             routerLink: '/equipe'
@@ -62,15 +58,18 @@ export class MenuComponent implements OnInit {
       },
       {
         label: 'Eventos',
-        // routerLink: '/evento',
         items: [
           {
-            label: 'Cadastro',
+            label: 'Gerenciar',
             routerLink: '/evento'
           },
           {
-            label: 'Eventos Cancelados',
+            label: 'Cancelados',
             routerLink: '/eventosCancelados'
+          },
+          {
+            label: 'Concluídos',
+            routerLink: '/eventosConcluidos'
           }
         ]
       },
