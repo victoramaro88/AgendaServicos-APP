@@ -625,35 +625,41 @@ export class EventoComponent implements OnInit {
           if(this.objEvento.diamCod > 0) {
             if (this.boolDatasValidas && this.objEvento.eventDtIn >= new Date()) {
               if (this.objEvento.maqCod > 0) {
-                if (this.objEvento.eventDesc.length > 0) {
-                  if (this.objEvento.eventLogr.length > 0) {
-                    if (this.objEvento.eventBairr.length > 0) {
-                      if (this.objEvento.cidaCod > 0) {
-                        if (this.objEvento.usuCod > 0) {
-                          return true;
+                if (this.objEvento.horaCod > 0) {
+                  if (this.objEvento.eventDesc.length > 0) {
+                    if (this.objEvento.eventLogr.length > 0) {
+                      if (this.objEvento.eventBairr.length > 0) {
+                        if (this.objEvento.cidaCod > 0) {
+                          if (this.objEvento.usuCod > 0) {
+                            return true;
+                          } else {
+                            this.boolLoading = false;
+                            this.messageService.add({ severity: 'warn', summary: 'Atenção: ', detail: 'Selecione uma Responsável da obra!' });
+                            return false;
+                          }
                         } else {
                           this.boolLoading = false;
-                          this.messageService.add({ severity: 'warn', summary: 'Atenção: ', detail: 'Selecione uma Responsável da obra!' });
+                          this.messageService.add({ severity: 'warn', summary: 'Atenção: ', detail: 'Selecione uma cidade!' });
                           return false;
                         }
                       } else {
                         this.boolLoading = false;
-                        this.messageService.add({ severity: 'warn', summary: 'Atenção: ', detail: 'Selecione uma cidade!' });
+                        this.messageService.add({ severity: 'warn', summary: 'Atenção: ', detail: 'Insira um bairro válido!' });
                         return false;
                       }
                     } else {
                       this.boolLoading = false;
-                      this.messageService.add({ severity: 'warn', summary: 'Atenção: ', detail: 'Insira um bairro válido!' });
+                      this.messageService.add({ severity: 'warn', summary: 'Atenção: ', detail: 'Insira um endereço válido!' });
                       return false;
                     }
                   } else {
                     this.boolLoading = false;
-                    this.messageService.add({ severity: 'warn', summary: 'Atenção: ', detail: 'Insira um endereço válido!' });
+                    this.messageService.add({ severity: 'warn', summary: 'Atenção: ', detail: 'Insira uma descrição para o evento!' });
                     return false;
                   }
                 } else {
                   this.boolLoading = false;
-                  this.messageService.add({ severity: 'warn', summary: 'Atenção: ', detail: 'Insira uma descrição para o evento!' });
+                  this.messageService.add({ severity: 'warn', summary: 'Atenção: ', detail: 'Selecione um horário!' });
                   return false;
                 }
               } else {

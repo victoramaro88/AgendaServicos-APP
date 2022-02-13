@@ -52,7 +52,7 @@ export class LoginComponent implements OnInit {
       } else if(error.error ==='Parâmetros inválidos.') {
         this.messageService.add({severity:'warn', summary:'Atenção: ', detail: 'Parâmetros inválidos!'});
       } else {
-        this.messageService.add({severity:'error', summary:'Erro: ', detail: error.message});
+        this.messageService.add({severity:'error', summary:'Erro: ', detail: 'Falha na comunicação com o servidor. Contate o administrador.'});
       }
     });
   }
