@@ -2,3 +2,7 @@
   color: red;
   font-weight: bold;
 }
+
+* {
+  font-family: "Source Sans Pro", sans-serif;
+}

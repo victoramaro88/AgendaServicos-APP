@@ -67,7 +67,6 @@ export class MaquinaComponent implements OnInit {
         this.listaMaquina = response;
       }
       this.boolLoading = false;
-      this.ListaVeiculo(0);
     }, error => {
       this.msgs = [];
       this.boolLoading = false;
@@ -81,7 +80,7 @@ export class MaquinaComponent implements OnInit {
     this.http.ListaDiametroFuro(diamCod).subscribe((response: DiametroFuroModel[]) => {
       if (response) {
         this.listaDiametroFuro = response;
-        this.ListaMaquina(0);
+        this.ListaVeiculo(0);
       }
     }, error => {
       this.msgs = [];
@@ -94,11 +93,12 @@ export class MaquinaComponent implements OnInit {
     this.boolLoading = true;
     this.http.ListaVeiculo(veicCod).subscribe((response: VeiculoModel[]) => {
       if (response) {
+        this.listaVeiculo = [];
         for (const itemVeiculo of response) {
           if (itemVeiculo.veicStatus) {
             let objVeiculo = {
               veicCod: itemVeiculo.veicCod,
-              veicMarca: itemVeiculo.veicMarca + '-' + itemVeiculo.veicModelo + ' (' + itemVeiculo.veicPlaca + ')',
+              veicMarca: itemVeiculo.veicCod != 1 ? itemVeiculo.veicMarca + '-' + itemVeiculo.veicModelo + ' (' + itemVeiculo.veicPlaca + ')' : itemVeiculo.veicMarca,
               veicModelo: itemVeiculo.veicModelo,
               veicAno: itemVeiculo.veicAno,
               veicPlaca: itemVeiculo.veicPlaca,
@@ -109,6 +109,7 @@ export class MaquinaComponent implements OnInit {
             this.listaVeiculo.push(objVeiculo);
           }
         }
+        this.ListaMaquina(0);
       }
       this.boolLoading = false;
     }, error => {
@@ -154,7 +155,7 @@ export class MaquinaComponent implements OnInit {
     }
     for (const itmMaq of this.listaMaquina) {
       for (const itmVeic of this.listaVeiculoDisponiveis) {
-        if (itmMaq.veicCod === itmVeic.veicCod) {
+        if (itmMaq.veicCod === itmVeic.veicCod && itmVeic.veicCod != 1) {
           let itmExc = this.listaVeiculoDisponiveis.findIndex(v => v.veicCod === itmMaq.veicCod);
           this.listaVeiculoDisponiveis.splice(itmExc,1);
         }

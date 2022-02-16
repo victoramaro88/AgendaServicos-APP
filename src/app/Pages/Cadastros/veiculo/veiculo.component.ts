@@ -37,119 +37,52 @@ export class VeiculoComponent implements OnInit {
     private http: HttpService,
     private messageService: MessageService,
     private errosHttp: MsgErroHttp
-  ) {
-    this.opcoesStatus = [
-      { label: "Inativo", value: false },
-      { label: "Ativo", value: true }
-    ];
-  }
+    ) {
+      this.opcoesStatus = [
+        { label: "Inativo", value: false },
+        { label: "Ativo", value: true }
+      ];
+    }
 
-  ngOnInit(): void {
-    this.ListaTipoVeiculo(0);
-  }
-
-  ListaTipoVeiculo(tipVeicCod: number) {
-    this.boolLoading = true;
-    this.modoEdicao = false;
-    this.http.ListaTipoVeiculo(tipVeicCod).subscribe((response: TipoVeiculoModel[]) => {
-      if (response) {
-        this.listaTipoVeiculo = response;
-        this.ListaVeiculo(0);
-      }
-    }, error => {
-      this.msgs = [];
-      this.boolLoading = false;
-      this.messageService.add({severity:'error', summary:'Erro: ', detail: this.errosHttp.RetornaMensagemErro(error)});
-    });
-  }
-
-  ListaVeiculo(veicCod: number) {
-    this.boolLoading = true;
-    this.http.ListaVeiculo(veicCod).subscribe((response: VeiculoModel[]) => {
-      if (response) {
-        this.listaVeiculo = response;
-      }
-      this.boolLoading = false;
-    }, error => {
-      this.msgs = [];
-      this.boolLoading = false;
-      this.messageService.add({severity:'error', summary:'Erro: ', detail: this.errosHttp.RetornaMensagemErro(error)});
-    });
-  }
-
-  SelecionaTipoVeiculo(tipVeicCod: number) {
-    let tipoVeiculo = this.listaTipoVeiculo.find(v => v.tipVeicCod === tipVeicCod);
-    return tipoVeiculo?.tipVeicDesc;
-  }
-
-  AlteraStatus(ojbVeiculo: VeiculoModel) {
-    this.boolLoading = true;
-    this.http.AlteraStatusVeiculo(ojbVeiculo.veicCod, ojbVeiculo.veicStatus).subscribe((response: string) => {
-      if (response) {
-        this.messageService.add({severity:'success', summary:'Sucesso! ', detail: 'Veículo '+ (ojbVeiculo.veicStatus ? 'ativado' : 'inativado') + ' com sucesso!'});
-      }
-      this.boolLoading = false;
-    }, error => {
-      this.msgs = [];
-      this.boolLoading = false;
-      this.messageService.add({severity:'error', summary:'Erro: ', detail: this.errosHttp.RetornaMensagemErro(error)});
-      this.listaVeiculo = [];
+    ngOnInit(): void {
       this.ListaTipoVeiculo(0);
-    });
-  }
+    }
 
-  IniciaEdicao(objVeiculo: VeiculoModel) {
-    this.objVeiculo.veicCod = objVeiculo.veicCod;
-    this.objVeiculo.veicMarca = objVeiculo.veicMarca;
-    this.objVeiculo.veicModelo = objVeiculo.veicModelo;
-    this.objVeiculo.veicAno = objVeiculo.veicAno;
-    this.objVeiculo.veicPlaca = objVeiculo.veicPlaca;
-    this.objVeiculo.veicObse = objVeiculo.veicObse;
-    this.objVeiculo.veicStatus = objVeiculo.veicStatus;
-    this.objVeiculo.tipVeicCod = objVeiculo.tipVeicCod;
-
-    this.modoEdicao = true;
-  }
-
-  NovoRegistro() {
-    this.objVeiculo = {
-      veicCod: 0,
-      veicMarca: '',
-      veicModelo: '',
-      veicAno: 0,
-      veicPlaca: '',
-      veicObse: '',
-      veicStatus: true,
-      tipVeicCod: 0,
-    };
-    this.modoEdicao = true;
-  }
-
-  Cancelar() {
-    this.objVeiculo = {
-      veicCod: 0,
-      veicMarca: '',
-      veicModelo: '',
-      veicAno: 0,
-      veicPlaca: '',
-      veicObse: '',
-      veicStatus: true,
-      tipVeicCod: 0,
-    };
-    this.modoEdicao = false;
-  }
-
-  Salvar() {
-    this.boolLoading = true;
-    if (this.ValidaInformacoes(this.objVeiculo))
-    {
-      this.http.ManterVeiculo(this.objVeiculo).subscribe((response: string) => {
+    ListaTipoVeiculo(tipVeicCod: number) {
+      this.boolLoading = true;
+      this.modoEdicao = false;
+      this.http.ListaTipoVeiculo(tipVeicCod).subscribe((response: TipoVeiculoModel[]) => {
         if (response) {
-          this.messageService.add({severity:'success', summary:'Sucesso! ', detail: 'Veículo '+ (this.objVeiculo.veicCod > 0 ? 'alterado' : 'inserido') + ' com sucesso!'});
-          setTimeout(() => {
-            this.listaVeiculo = [];
-            this.ListaTipoVeiculo(0);
-          }, 2000);
+          this.listaTipoVeiculo = response;
+          this.ListaVeiculo(0);
+        }
+      }, error => {
+        this.msgs = [];
+        this.boolLoading = false;
+        this.messageService.add({severity:'error', summary:'Erro: ', detail: this.errosHttp.RetornaMensagemErro(error)});
+      });
+    }
+
+    ListaVeiculo(veicCod: number) {
+      this.boolLoading = true;
+      this.http.ListaVeiculo(veicCod).subscribe((response: VeiculoModel[]) => {
+        if (response) {
+          this.listaVeiculo = [];
+          for (const itmVeic of response) {
+            if (itmVeic.veicCod != 1) {
+              let objVeic: VeiculoModel = {
+                veicCod: itmVeic.veicCod,
+                veicMarca: itmVeic.veicMarca,
+                veicModelo: itmVeic.veicModelo,
+                veicAno: itmVeic.veicAno,
+                veicPlaca: itmVeic.veicPlaca,
+                veicObse: itmVeic.veicObse,
+                veicStatus: itmVeic.veicStatus,
+                tipVeicCod: itmVeic.tipVeicCod
+              }
+              this.listaVeiculo.push(objVeic);
+            }
+          }
         }
         this.boolLoading = false;
       }, error => {
@@ -158,33 +91,115 @@ export class VeiculoComponent implements OnInit {
         this.messageService.add({severity:'error', summary:'Erro: ', detail: this.errosHttp.RetornaMensagemErro(error)});
       });
     }
-  }
 
-  ValidaInformacoes(objVeiculo: VeiculoModel) {
-    if (objVeiculo.veicMarca.length > 0) {
-      if (objVeiculo.veicModelo.length > 0) {
-        if (objVeiculo.veicAno >= 1900) {
-          if (objVeiculo.tipVeicCod > 0) {
-            return true;
+    SelecionaTipoVeiculo(tipVeicCod: number) {
+      let tipoVeiculo = this.listaTipoVeiculo.find(v => v.tipVeicCod === tipVeicCod);
+      return tipoVeiculo?.tipVeicDesc;
+    }
+
+    AlteraStatus(ojbVeiculo: VeiculoModel) {
+      this.boolLoading = true;
+      this.http.AlteraStatusVeiculo(ojbVeiculo.veicCod, ojbVeiculo.veicStatus).subscribe((response: string) => {
+        if (response) {
+          this.messageService.add({severity:'success', summary:'Sucesso! ', detail: 'Veículo '+ (ojbVeiculo.veicStatus ? 'ativado' : 'inativado') + ' com sucesso!'});
+        }
+        this.boolLoading = false;
+      }, error => {
+        this.msgs = [];
+        this.boolLoading = false;
+        this.messageService.add({severity:'error', summary:'Erro: ', detail: this.errosHttp.RetornaMensagemErro(error)});
+        this.listaVeiculo = [];
+        this.ListaTipoVeiculo(0);
+      });
+    }
+
+    IniciaEdicao(objVeiculo: VeiculoModel) {
+      this.objVeiculo.veicCod = objVeiculo.veicCod;
+      this.objVeiculo.veicMarca = objVeiculo.veicMarca;
+      this.objVeiculo.veicModelo = objVeiculo.veicModelo;
+      this.objVeiculo.veicAno = objVeiculo.veicAno;
+      this.objVeiculo.veicPlaca = objVeiculo.veicPlaca;
+      this.objVeiculo.veicObse = objVeiculo.veicObse;
+      this.objVeiculo.veicStatus = objVeiculo.veicStatus;
+      this.objVeiculo.tipVeicCod = objVeiculo.tipVeicCod;
+
+      this.modoEdicao = true;
+    }
+
+    NovoRegistro() {
+      this.objVeiculo = {
+        veicCod: 0,
+        veicMarca: '',
+        veicModelo: '',
+        veicAno: 0,
+        veicPlaca: '',
+        veicObse: '',
+        veicStatus: true,
+        tipVeicCod: 0,
+      };
+      this.modoEdicao = true;
+    }
+
+    Cancelar() {
+      this.objVeiculo = {
+        veicCod: 0,
+        veicMarca: '',
+        veicModelo: '',
+        veicAno: 0,
+        veicPlaca: '',
+        veicObse: '',
+        veicStatus: true,
+        tipVeicCod: 0,
+      };
+      this.modoEdicao = false;
+    }
+
+    Salvar() {
+      this.boolLoading = true;
+      if (this.ValidaInformacoes(this.objVeiculo))
+      {
+        this.http.ManterVeiculo(this.objVeiculo).subscribe((response: string) => {
+          if (response) {
+            this.messageService.add({severity:'success', summary:'Sucesso! ', detail: 'Veículo '+ (this.objVeiculo.veicCod > 0 ? 'alterado' : 'inserido') + ' com sucesso!'});
+            setTimeout(() => {
+              this.listaVeiculo = [];
+              this.ListaTipoVeiculo(0);
+            }, 2000);
+          }
+          this.boolLoading = false;
+        }, error => {
+          this.msgs = [];
+          this.boolLoading = false;
+          this.messageService.add({severity:'error', summary:'Erro: ', detail: this.errosHttp.RetornaMensagemErro(error)});
+        });
+      }
+    }
+
+    ValidaInformacoes(objVeiculo: VeiculoModel) {
+      if (objVeiculo.veicMarca.length > 0) {
+        if (objVeiculo.veicModelo.length > 0) {
+          if (objVeiculo.veicAno >= 1900) {
+            if (objVeiculo.tipVeicCod > 0) {
+              return true;
+            } else {
+              this.boolLoading = false;
+              this.messageService.add({ severity: 'warn', summary: 'Atenção: ', detail: 'Selecione o tipo do veículo!' });
+              return false;
+            }
           } else {
             this.boolLoading = false;
-            this.messageService.add({ severity: 'warn', summary: 'Atenção: ', detail: 'Selecione o tipo do veículo!' });
+            this.messageService.add({ severity: 'warn', summary: 'Atenção: ', detail: 'Insira um ano!' });
             return false;
           }
         } else {
           this.boolLoading = false;
-          this.messageService.add({ severity: 'warn', summary: 'Atenção: ', detail: 'Insira um ano!' });
+          this.messageService.add({ severity: 'warn', summary: 'Atenção: ', detail: 'Insira um modelo!' });
           return false;
         }
       } else {
         this.boolLoading = false;
-        this.messageService.add({ severity: 'warn', summary: 'Atenção: ', detail: 'Insira um modelo!' });
+        this.messageService.add({ severity: 'warn', summary: 'Atenção: ', detail: 'Insira uma marca!' });
         return false;
       }
-    } else {
-      this.boolLoading = false;
-      this.messageService.add({ severity: 'warn', summary: 'Atenção: ', detail: 'Insira uma marca!' });
-      return false;
     }
   }
-}
