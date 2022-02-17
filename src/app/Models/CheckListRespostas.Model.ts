@@ -1,6 +1,7 @@
 export interface CheckListRespostasModel {
   chkLsRespCod: number;
   eventCod: number;
-  chkLstItmChkLst: number;
+  chLsCod: number;
+  itmChLsCod: number;
   chkLstResp: boolean;
 }

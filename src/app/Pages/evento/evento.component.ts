@@ -589,7 +589,8 @@ export class EventoComponent implements OnInit {
             let objRespostas: CheckListRespostasModel = {
               chkLsRespCod: 0,
               eventCod: this.objEvento.eventCod,
-              chkLstItmChkLst: itemResp.chkLstItmChkLst,
+              chLsCod: itemResp.chLsCod,
+              itmChLsCod: itemResp.itmChLsCod,
               chkLstResp: itemResp.chkLstResp
             };
             listaRespostas.push(objRespostas);
