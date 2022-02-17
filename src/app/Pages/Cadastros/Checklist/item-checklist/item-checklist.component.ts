@@ -108,26 +108,23 @@ export class ItemChecklistComponent implements OnInit {
       this.modoEdicao = false;
     }
 
-    Salvar() {
+  Salvar() {
       if (this.ValidaInformacoes(this.objItmChkLst)) {
         this.boolLoading = true;
-        if (this.ValidaInformacoes(this.objItmChkLst))
-        {
-          this.http.ManterItemChecklist(this.objItmChkLst).subscribe((response: string) => {
-            if (response) {
-              this.messageService.add({severity:'success', summary:'Sucesso! ', detail: 'Item '+ (this.objItmChkLst.itmChLsCod > 0 ? 'alterado' : 'inserido') + ' com sucesso!'});
-              setTimeout(() => {
-                this.listaItmChkLst = [];
-                this.ListaItemChecklist(0);
-              }, 2000);
-            }
-            this.boolLoading = false;
-          }, error => {
-            this.msgs = [];
-            this.boolLoading = false;
-            this.messageService.add({severity:'error', summary:'Erro: ', detail: this.errosHttp.RetornaMensagemErro(error)});
-          });
-        }
+        this.http.ManterItemChecklist(this.objItmChkLst).subscribe((response: string) => {
+          if (response) {
+            this.messageService.add({severity:'success', summary:'Sucesso! ', detail: 'Item '+ (this.objItmChkLst.itmChLsCod > 0 ? 'alterado' : 'inserido') + ' com sucesso!'});
+            setTimeout(() => {
+              this.listaItmChkLst = [];
+              this.ListaItemChecklist(0);
+            }, 2000);
+          }
+          this.boolLoading = false;
+        }, error => {
+          this.msgs = [];
+          this.boolLoading = false;
+          this.messageService.add({severity:'error', summary:'Erro: ', detail: this.errosHttp.RetornaMensagemErro(error)});
+        });
       }
     }
 
