@@ -402,7 +402,7 @@ export class EventoComponent implements OnInit {
         this.objEvento.cidaCod = objEven.cidaCod;
         this.objEvento.diamCod = objEven.diamCod;
         this.objEvento.usuCod = objEven.usuCod;
-        this.objEvento.maqCod = objEven.maqCod;
+        this.objEvento.maqCod = 0;
         this.objEvento.horaDesc = objEven.horaDesc;
         this.objEvento.cidaDesc = objEven.cidaDesc;
         this.objEvento.estSigl = objEven.estSigl;
